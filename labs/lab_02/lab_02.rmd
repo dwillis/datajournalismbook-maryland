@@ -1,0 +1,60 @@
+---
+title: "lab_02"
+author: "derek willis"
+date: "8/09/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load libraries and establish settings
+```{r}
+# Turn off scientific notation
+options(scipen=999)
+
+# Load the tidyverse. If you have not installed the tidyverse already, remove the # from the next line and run it first.  
+# install.packages('tidyverse')
+library(tidyverse)
+library(lubridate)
+```
+
+## Load Data
+
+Let's keep working with the slice of WinRed contribution data from West Virginia.  
+
+```{r}
+wv_winred_contribs <- read_rds("data/lab_02.rds")
+```
+
+## Examine Data
+
+## Answer questions
+
+**Q1** Create a new column that divides the contribution amounts into the following options - less than $10, $10-$25, $26-$50, $51_$100, $101-$500, $501 and up - and calculates how many contributions are in each group. How would you describe the distribution of contributions in a sentence?
+A1. 
+
+```{r}
+```
+
+Q2. Which West Virginia donors made the most contributions of less than $10? You'll need to use a combination of columns to get unique donors.  
+A2. 
+
+```{r}
+```
+
+Q3. What questions do the results of Q2 raise in your mind? How could you use the data to explore them? No code here, just your questions.
+A3. 
+
+Q4. Which month saw the most contributions?
+A4. 
+
+```{r}
+```
+
+Q5. How many contributions of $2,900 - the individual maximum donation - were there, and who did they go to? How many of the recipients are from West Virginia? Do some googling to find out.
+A5. 
+
+```{r}
+```
