@@ -147,7 +147,7 @@ The term labeled `202208`, representing the Fall 2022 term, has the most classes
 
 We can, if we want, group by more than one thing. The courses data contains a column detailing the department.
 
-We can group by "term" and "department" to see how many courses each department offered in each term. We'll sort by department and term. 
+We can group by "term" and "department" to see how many courses each department offered in each term. We'll sort by department and term.
 
 ```{r}
 umd_courses %>%

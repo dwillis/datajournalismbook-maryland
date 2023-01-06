@@ -6,7 +6,7 @@ More often than not, we have more data than we want. Sometimes we need to be rid
 
 **Selecting simply returns only the fields named**. So if you only want to see city and amount, you select those fields. When you look at your data again, you'll have two columns. If you try to use one of your columns that you had before you used select, you'll get an error. **Selecting works with columns. You will have the same number of records when you are done, but fewer columns of data to work with.**
 
-Now we'll import a dataset of county-level election results from Maryland's 2018 primary that is in the data folder in this chapter's pre-lab directory. It has results from all across the state, so one place to begin is by looking at individual jurisdictions - Maryland has 23 counties and one independent city, Baltimore. Let's start by loading tidyverse and reading in the Maryland data:
+Let's continue to work with the UMD course data we used in the previous chapter. First, we need to load the tidyverse:
 
 ```{r}
 #| output: false
@@ -14,61 +14,63 @@ library(tidyverse)
 ```
 
 ```{r}
-primary_18 <- read_csv('data/maryland_primary_2018.csv')
+umd_courses <- read_rds("data/umd_courses.rds")
 ```
 
-The data we want to filter on is in `jurisdiction`. So we're going to use filter and something called a comparison operator. We need to filter all records equal to "Prince George's". The comparison operators in R, like most programming languages, are == for equal to, != for not equal to, > for greater than, >= for greater than or equal to and so on.
+If we want to see only those courses offered a particular department, we can use the `filter` function to isolate just those records. Filter works with something called a comparison operator. We need to filter all records equal to "Journalism". The comparison operators in R, like most programming languages, are == for equal to, != for not equal to, \> for greater than, \>= for greater than or equal to and so on.
 
 **Be careful: `=` is not `==` and `=` is not "equal to". `=` is an assignment operator in most languages -- how things get named.**
 
 ```{r}
-prince_georges <- primary_18 %>% filter(jurisdiction == "Prince George's")
+journalism_courses <- umd_courses %>% filter(department == "Journalism")
 
-head(prince_georges)
+head(journalism_courses)
 ```
 
-And just like that, we have just Prince George's results, which we can verify looking at the head, the first six rows.
+And just like that, we have just Journalism results, which we can verify looking at the head, the first six rows.
 
-We also have more data than we might want. For example, we may only want to work with the office, district, candidate name, party and votes.
+We also have more data than we might want. For example, we may only want to work with the course id and title.
 
 To simplify our dataset, we can use select.
 
 ```{r}
-selected_prince_georges <- prince_georges %>% select(office, district, name_raw, party, votes)
+selected_journalism_courses <- journalism_courses %>% select(id, title)
 
-head(selected_prince_georges)
+head(selected_journalism_courses)
 ```
 
-And now we only have five columns of data for whatever analysis we might want to do.
+And now we only have two columns of data for whatever analysis we might want to do.
 
 ## Combining filters
 
-So let's say we wanted to see all the candidates for governor and the number of votes each received in Prince George's County. We can do this a number of ways. The first is we can chain together a whole lot of filters.
+So let's say we wanted to see all the courses in the Theatre department with at least 15 seats. We can do this a number of ways. The first is we can chain together a whole lot of filters.
 
 ```{r}
-prince_georges_governor <- primary_18 %>% filter(jurisdiction == "Prince George's") %>% filter(office == "Governor / Lt. Governor")
+theatre_seats_15 <- umd_courses %>% filter(department == "Theatre") %>% filter(seats >= 15)
 
-nrow(prince_georges_governor)
+nrow(theatre_seats_15)
 ```
 
-That gives us 10 applicants. But that's repetitive, no? We can do better using boolean operators -- AND and OR. In this case, AND is `&` and OR is `|`.
+That gives us 213 records But that's repetitive, no? We can do better using a single filter and boolean operators -- AND and OR. In this case, AND is `&` and OR is `|`.
 
-The difference? With AND, all three things must be true to be included. With OR, any of those three things can be true and it will be included. A Prince George's corporation will get included because it applied for more than $150k. One of the conditions is true.
+The difference? With AND, all conditions must be true to be included. With OR, any of those conditions things can be true and it will be included.
 
 Here's the difference.
 
 ```{r}
-and_prince_georges <- primary_18 %>% filter(jurisdiction == "Prince George's" & office == "Governor / Lt. Governor")
+and_theatre_seats_15 <- umd_courses %>% filter(department == "Theatre" & seats >= 15)
 
-nrow(and_prince_georges)
+nrow(and_theatre_seats_15)
 ```
+
 So AND gives us the same answer we got before. What does OR give us?
 
 ```{r}
-or_prince_georges <- primary_18 %>% filter(jurisdiction == "Prince George's" | office == "Governor / Lt. Governor")
+and_theatre_seats_15 <- umd_courses %>% filter(department == "Theatre" | seats >= 15)
 
-nrow(or_prince_georges)
+nrow(and_theatre_seats_15)
 ```
-So there's 355 rows that are EITHER in Prince George's OR are governor results. OR is additive; AND is restrictive.
+
+So there's 37,480 rows that are EITHER Theatre classes OR have at least 15 seats. OR is additive; AND is restrictive.
 
 A general tip about using filter: it's easier to work your way towards the filter syntax you need rather than try and write it once and trust the result. Each time you modify your filter, check the results to see if they make sense. This adds a little time to your process but you'll thank yourself for doing it because it helps avoid mistakes.

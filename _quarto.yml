@@ -22,9 +22,9 @@ book:
     - r-basics.qmd
     - replication.qmd
     - aggregates.qmd
+    - filters.qmd
     - mutating.qmd
     - workingwithdates.qmd
-    - filters.qmd
     - data-cleaning-part-i.qmd
     - data-cleaning-part-ii.qmd
     - open-refine.qmd

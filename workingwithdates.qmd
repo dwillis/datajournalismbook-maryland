@@ -6,7 +6,6 @@ First, there's the right way to display dates in data. Most of the rest of the w
 
 Luckily, this problem is so common that the Tidyverse has an entire library for dealing with it: [lubridate](https://lubridate.tidyverse.org/).
 
-
 We're going to do this two ways. First I'm going to show you how to use base R to solve a tricky problem. And then we'll use a library called `lubridate` to solve a more common and less tricky problem. And then we'll use a new library to solve most of the common problems before they start. If it's not already installed, just run `install.packages('lubridate')`
 
 ## Making dates dates again
@@ -34,6 +33,7 @@ maryland_expenses <- maryland_expenses %>% mutate(expenditure_date=mdy(expenditu
 
 head(maryland_expenses)
 ```
+
 Now look at the expenditure_date column: R says it's a date column and it looks like we want it to: YYYY-MM-DD. Accept no substitutes.
 
 Lubridate has functions for basically any type of character date format: mdy, ymd, even datetimes like ymd_hms.
@@ -61,4 +61,5 @@ maryland_expenses %>%
   summarise(total_amount = sum(amount)) %>%
   arrange(desc(total_amount))
 ```
-So the month of June 2022 had the most expenditures by far in this data. We'll be learning more about the calendar of campaigns and how it impacts campaign finance data.
+
+So the month of June 2022 had the most expenditures by far in this data.

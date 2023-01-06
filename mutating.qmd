@@ -1,6 +1,6 @@
 # Mutating data
 
-Often the data you have will prompt questions that it doesn't immediately answer. The PPP loan applications include a total amount column but also columns for different categories the money would be used for: payroll, utilities, rent, etc. Amounts are great, but comparing absolute numbers to each other is only useful if you have a very small number. We need percentages!
+Often the data you have will prompt questions that it doesn't immediately answer. Election results, for example, have raw vote totals but we often don't use those to make comparisons between candidates unless the numbers are small. We need percentages!
 
 To do that in R, we can use `dplyr` and `mutate` to calculate new metrics in a new field using existing fields of data. That's the essence of `mutate` - using the data you have to answer a new question.
 
@@ -11,74 +11,70 @@ So first we'll import the tidyverse so we can read in our data and begin to work
 library(tidyverse)
 ```
 
-Now we'll import a dataset of county-level election results from Maryland's 2018 primary that is in the data folder in this chapter's pre-lab directory. We'll use this to explore ways to create new information from existing data.
+Now we'll import a dataset of county-level gubernatorial results from Maryland's 2022 general election that is in the data folder in this chapter's pre-lab directory. We'll use this to explore ways to create new information from existing data.
 
 ```{r}
-primary_18 <- read_csv('data/maryland_primary_2018.csv')
+general_22 <- read_csv('data/md_gov_county.csv')
 ```
 
-First, let's add a column called `percent_election_day` for the percentage of votes that were cast on election day for each candidate result in a county. The code to calculate a percentage is pretty simple. Remember, with `summarize`, we used `n()` to count things. With `mutate`, we use very similar syntax to calculate a new value -- a new column of data -- using other values in our dataset.
+Let's add a column called `percent_moore` for the percentage of votes that went to Wes Moore, the Democratic candidate who won the election, in each county. The code to calculate a percentage is pretty simple. Remember, with `summarize`, we used `n()` to count things. With `mutate`, we use very similar syntax to calculate a new value -- a new column of data -- using other values in our dataset.
 
-If we look at what we got when we imported the data, you'll see there's `election_day` as the numerator, and we'll use `votes` as the denominator. We can simply things by only selecting a few columns.
+To calculate a percentage, we need both the number of votes for Moore but also the total number of votes. We'll use mutate to create both columns. The first will be total votes. The key here is to save the dataframe to itself so that our changes stick.
 
 ```{r}
-primary_18 %>%
-  select(office, district, name_raw, party, jurisdiction, election_day, votes) %>%
+general_22 <- general_22 %>%
   mutate(
-  percent_election_day = election_day/votes
-)
+    total_votes = cox + moore + lashar + wallace + write_ins,
+    pct_moore = moore/total_votes
+  )
 ```
 
-Now we've got our `percent_election_day` column. But what do you see right away? Do those numbers look like we expect them to? No. They're a decimal expressed as a percentage. So let's fix that by multiplying by 100.
+But what do you see right away? Do those numbers look like we expect them to? No. They're a decimal expressed as a percentage. So let's fix that by multiplying by 100. Since we're replacing the contents of our new `pct_moore` column, we can just update our previous code and run it again:
 
 ```{r}
-primary_18 %>%
-  select(office, district, name_raw, party, jurisdiction, election_day, votes) %>%
+general_22 <- general_22 %>%
   mutate(
-  percent_election_day = (election_day/votes)*100
-)
+    pct_moore = (moore/total_votes)*100
+  )
 ```
 
 Now, does this ordering do anything for us? No. Let's fix that with arrange.
 
 ```{r}
-primary_18 %>%
-  select(office, district, name_raw, party, jurisdiction, election_day, votes) %>%
+general_22 <- general_22 %>%
   mutate(
-  percent_election_day = (election_day/votes)*100
-)  %>% arrange(desc(percent_election_day))
+    pct_moore = (moore/total_votes)*100
+  ) %>% 
+  arrange(desc(pct_moore))
 ```
 
-So now we have results ordered by `percent_election_day` with the highest percentage first. To see the lowest percentage first, we can reverse that `arrange` function.
+So now we have results ordered by `pct_moore` with the highest percentage first. To see the lowest percentage first, we can reverse that `arrange` function - we don't need to recalculate the column:
 
 ```{r}
-primary_18 %>%
-  select(office, district, name_raw, party, jurisdiction, election_day, votes) %>%
-  mutate(
-  percent_election_day = (election_day/votes)*100
-)  %>% arrange(percent_election_day)
+general_22 %>%
+  arrange(pct_moore)
 ```
 
-Only a handful of candidates got less than 50 percent of their total votes in a county on election day. What a difference a pandemic makes.
+Moore had his weakest performance in Garrett County, at the far western edge of the state.
 
 ## Another use of mutate
 
-Mutate is also useful for standardizing data - for example, making different spellings of, say, cities into a single one.
+Mutate is also useful for standardizing data - for example, making different spellings of, say, campaign spending recipients.
 
-Let's load some campaign contribution data - in this case Maryland donors to Republican committees via WinRed's online platform earlier this year - and take a look at the `city` column in our data.
+Let's take a look at that `maryland_expenses` dataframe, and in particular the `payee_name` column.
 
 ```{r}
-maryland_cities <- read_csv("data/winred_md_cities.csv")
+maryland_expenses
 ```
 
-You'll notice that there's a mix of styles: "Baltimore" and "BALTIMORE" for example. R will think those are two different cities, and that will mean that any aggregates we create based on city won't be accurate.
+You'll notice that there's a mix of styles: lower-case and upper-case names like "Anedot" and "ANEDOT", for example. R will think those are two different payees, and that will mean that any aggregates we create based on payee_name won't be accurate.
 
-So how can we fix that? Mutate - it's not just for math! And a function called `str_to_upper` that will convert a character column into all uppercase. Now we can say exactly how many donations came from Baltimore (I mean, of course, BALTIMORE).
+So how can we fix that? Mutate - it's not just for math! And a function called `str_to_upper` that will convert a character column into all uppercase.
 
 ```{r}
-standardized_maryland_cities <- maryland_cities %>%
+standardized_maryland_expenses <- maryland_expenses %>%
   mutate(
-    upper_city = str_to_upper(city)
+    payee_upper = str_to_upper(payee_name)
 )
 ```
 
@@ -86,44 +82,56 @@ There are lots of potential uses for standardization - addresses, zip codes, any
 
 ## A more powerful use
 
-Mutate is even more useful when combined with some additional functions. Let's focus on individual contributions from Maryland donors via WinRed; we'd like to group their donations by amount into one of four categories:
-
-1.  Under \$100
-2.  \$101-\$499
-3.  \$500-\$2,900
-4.  More than \$2,901
-
-Mutate can make that happen by creating a new column and putting in a category value *based on the amount* of each record. First, let's load the individual contributions:
+Mutate is even more useful when combined with some additional functions. Let's wind up where we started: with our UMD course data. We have those values for terms, but it's not clear what semesters they actually refer to. We'd like to have columns for year and semester based on the values we have for `term`. Let's look at those unique values using a function called `distinct`:
 
 ```{r}
-maryland_winred <- read_csv("data/winred_md_q2_2022.csv")
-
-head(maryland_winred)
+umd_courses %>% distinct(term)
 ```
 
-Now that we've gotten a look, we can use `case_when` to give our new category column a value using some standard numeric logic:
+We can see that each term value begins with a year and ends with two digits: "01", "05", "08" and "12". We can turn those into semester equivalents by looking them up: "01" indicates Spring semesters, like [the current one](https://app.testudo.umd.edu/soc/search?courseId=&sectionId=&termId=202301).
+
+Mutate can make that happen by creating a new column and putting in a value *based on the term value* of each record. We can use the `case_when` function to give our new columns a value using some standard logic:
 
 ```{r}
-maryland_winred_categories <- maryland_winred %>%
+umd_courses_terms <- umd_courses %>%
   mutate(
-    amount_category = case_when(
-        amount < 100 ~ "Less than $100",
-        amount >= 100 & amount <= 500 ~ "Between $100 and $500",
-        amount > 500 & amount <= 2900 ~ "Between $501 and $2900",
-        amount > 2900 ~ "More than $2,900"
+    term_name = case_when(
+        term == 202305 ~ "Summer",
+        term == 202301 ~ "Spring",
+        term == 202212 ~ "Winter",
+        term == 202208 ~ "Fall",
+        term == 202205 ~ "Summer",
+        term == 202201 ~ "Spring",
+        term == 202112 ~ "Winter",
+        term == 202108 ~ "Fall",
+        term == 202105 ~ "Summer",
+        term == 202101 ~ "Spring",
+        term == 202012 ~ "Winter",
+        term == 202008 ~ "Fall",
+        term == 202005 ~ "Summer",
+        term == 202001 ~ "Spring",
+        term == 201912 ~ "Winter",
+        term == 201908 ~ "Fall",
+        term == 201905 ~ "Summer",
+        term == 201901 ~ "Spring",
+        term == 201812 ~ "Winter",
+        term == 201808 ~ "Fall",
+        term == 201805 ~ "Summer",
+        term == 201801 ~ "Spring",
+        term == 201712 ~ "Winter",
       )
   )
 ```
 
-We can then use our new `amount_category` column in group_by statements to make summarizing easier:
+We can then use our new `term_name` column in group_by statements to make summarizing easier:
 
 ```{r}
-maryland_winred_categories %>%
-  group_by(amount_category) %>%
-  summarize(total_amount = sum(amount)) %>%
-  arrange(desc(total_amount))
+umd_courses_terms %>%
+  group_by(term_name) %>%
+  summarize(count_classes = n()) %>%
+  arrange(desc(count_classes))
 ```
 
-The largest category - by far - in dollar amount is the sub-\$100 category, which makes sense for an online fundraising platform. Big little money.
+More courses in the fall, which makes sense, although the difference between the Fall and Spring semesters isn't huge.
 
 Mutate is there to make your data more useful and to make it easier for you to ask more and better questions of it.
