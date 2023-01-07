@@ -73,7 +73,6 @@ courses_2023 <- umd_courses %>% filter(term > 202300)
 head(courses_2023)
 ```
 
-
 ### Task 5: Select
 
 We also have more data than we might want. For example, we may only want to work with the course id and title.
@@ -126,7 +125,7 @@ and_theatre_seats_15 <- umd_courses %>% filter(department == "Theatre" | seats >
 nrow(and_theatre_seats_15)
 ```
 
-**Answer** 
+**Answer**
 
 When it comes to filters, OR is additive; AND is restrictive.
 
@@ -140,6 +139,8 @@ Sometimes you need to find rows that contain a certain pattern rather than an ex
 umd_courses %>% 
   filter(str_detect(title, "Shakespeare"))
 ```
+
+The latest version of the tidyverse also has a function called `str_like` which uses the wildcard search operator % to do partial matching.
 
 A general tip about using filter: it's easier to work your way towards the filter syntax you need rather than try and write it once and trust the result. Each time you modify your filter, check the results to see if they make sense. This adds a little time to your process but you'll thank yourself for doing it because it helps avoid mistakes. Note that whatever you're trying to match using `filter` - whether an exact match or a partial one - R is case-sensitive by default. Go back and try the previous block, changing the pattern to "shakespeare" to see this.
 
@@ -207,11 +208,11 @@ Describe the values in the new `month` column - what do you think is going on th
 
 ### Task 10: Mutate
 
-Often the data you have will prompt questions that it doesn't immediately answer. Election results, for example, have raw vote totals but we often don't use those to make comparisons between candidates unless the numbers are small. We need percentages! 
+Often the data you have will prompt questions that it doesn't immediately answer. Election results, for example, have raw vote totals but we often don't use those to make comparisons between candidates unless the numbers are small. We need percentages!
 
 First, we'll import a dataset of county-level gubernatorial results from Maryland's 2022 general election that is in the data folder in this chapter's pre-lab directory. We'll use this to explore ways to create new information from existing data.
 
-**Task** 
+**Task**
 
 ```{r}
 general_22 <- read_csv('data/md_gov_county.csv')
@@ -221,7 +222,7 @@ Let's add a column called `percent_moore` for the percentage of votes that went 
 
 To calculate a percentage, we need both the number of votes for Moore but also the total number of votes. We'll use mutate to create both columns. The first will be total votes, and the second will be the percentage for Moore. The key here is to save the dataframe to itself so that our changes stick.
 
-**Task** Let's add a new column based on an existing column. Run the following code to create a new column called `total_votes` based on the votes cast for each candidate, and then to create a new column called 
+**Task** Let's add a new column based on an existing column. Run the following code to create a new column called `total_votes` based on the votes cast for each candidate, and then to create a new column called
 
 ```{r}
 general_22 <- general_22 %>%
@@ -373,7 +374,6 @@ Does this answer make sense to you? Why or why not?
 
 **Answer**
 
-
 Mutate is there to make your data more useful and to make it easier for you to ask more and better questions of it.
 
 ### Task 16: More questions
@@ -387,4 +387,3 @@ Now that you have seen how to use mutate, filtering and dates, give me three que
 2.  
 
 3.  
-
