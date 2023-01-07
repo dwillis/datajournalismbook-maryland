@@ -53,7 +53,7 @@ More often than not, we have more data than we want. Sometimes we need to be rid
 
 **Selecting simply returns only the fields named**. So if you only want to see department and course ID, you select those fields. When you look at your data again, you'll have two columns. If you try to use one of your columns that you had before you used select, you'll get an error. **Selecting works with columns. You will have the same number of records when you are done, but fewer columns of data to work with.**
 
-### Task 4: Filter by department
+### Task 4: Filter by one column
 
 **Task** Run the following code to limit our courses to the Journalism school.
 
@@ -63,7 +63,16 @@ journalism_courses <- umd_courses %>% filter(department == "Journalism")
 head(journalism_courses)
 ```
 
-And just like that, we have just Journalism results, which we can verify looking at the head, the first six rows.
+And just like that, we have just Journalism results, which we can verify looking at the head, the first six rows. We also could filter by a numeric column like `term`, so we could see just courses in 2023:
+
+**Task** Run the following code to limit our courses to those in terms in 2023:
+
+```{r}
+courses_2023 <- umd_courses %>% filter(term > 202300)
+
+head(courses_2023)
+```
+
 
 ### Task 5: Select
 
@@ -119,10 +128,20 @@ nrow(and_theatre_seats_15)
 
 **Answer** 
 
-
 When it comes to filters, OR is additive; AND is restrictive.
 
-A general tip about using filter: it's easier to work your way towards the filter syntax you need rather than try and write it once and trust the result. Each time you modify your filter, check the results to see if they make sense. This adds a little time to your process but you'll thank yourself for doing it because it helps avoid mistakes.
+### Task 7: Filter on partial match
+
+Sometimes you need to find rows that contain a certain pattern rather than an exact match - like if you're looking for all of the courses with "Shakespeare" in the title. There are several ways to do this using R, but one way is to use the function `str_detect`, which stands for "string detect". You use it inside a `filter` by supplying the column and the pattern you want to match, like so:
+
+**Task** Run the following code
+
+```{r}
+umd_courses %>% 
+  filter(str_detect(title, "Shakespeare"))
+```
+
+A general tip about using filter: it's easier to work your way towards the filter syntax you need rather than try and write it once and trust the result. Each time you modify your filter, check the results to see if they make sense. This adds a little time to your process but you'll thank yourself for doing it because it helps avoid mistakes. Note that whatever you're trying to match using `filter` - whether an exact match or a partial one - R is case-sensitive by default. Go back and try the previous block, changing the pattern to "shakespeare" to see this.
 
 ## Dates
 
@@ -138,7 +157,7 @@ head(maryland_expenses)
 
 Take a look at that first column, expenditure_date. It *looks* like a date, but see the `<chr` right below the column name? That means R thinks it's actually a character column. What we need to do is make it into an actual date column, which lubridate is very good at doing. It has a variety of functions that match the format of the data you have. In this case, the current format is `m/d/y`, and the lubridate function is called `mdy` that we can use with mutate:
 
-### Task 7: Turning a character date into a real date
+### Task 8: Turning a character date into a real date
 
 **Task** Run the following code and describe the change in the expenditure_date column.
 
@@ -160,7 +179,7 @@ Still, there's got to be a better way. And there is.
 
 Fortunately, `readr` anticipates some date formatting and can automatically handle many of these issues (indeed it uses lubridate under the hood). When you are importing a CSV file, be sure to use `read_csv`, not `read.csv`.
 
-### Task 8: Creating a new date column from existing dates using mutate
+### Task 9: Creating a new date column from existing dates using mutate
 
 But you're not done with lubridate yet. It has some interesting pieces parts we'll use elsewhere.
 
@@ -186,7 +205,7 @@ Describe the values in the new `month` column - what do you think is going on th
 
 **Answer**
 
-### Task 9: Mutate
+### Task 10: Mutate
 
 Often the data you have will prompt questions that it doesn't immediately answer. Election results, for example, have raw vote totals but we often don't use those to make comparisons between candidates unless the numbers are small. We need percentages! 
 
@@ -216,7 +235,7 @@ Describe what you think this code is doing below.
 
 **Answer**
 
-### Task 10: Better percentage calculation
+### Task 11: Better percentage calculation
 
 **Task** Run the following code to make our new column called `pct_moore` show a percentage instead of a decimal.
 
@@ -228,7 +247,7 @@ general_22 <- general_22 %>%
   )
 ```
 
-### Task 11: Mutate with ordering
+### Task 12: Mutate with ordering
 
 **Task** Run the following code to order by our new column.
 
@@ -245,7 +264,7 @@ How did the answer change from the previous task, and why?
 
 **Answer**
 
-### Task 12: Mutate with ordering, part 2
+### Task 13: Mutate with ordering, part 2
 
 **Task** Run the following code to order by our new column, but in ascending order
 
@@ -259,7 +278,7 @@ Is this a more interesting or useful answer? Why?
 
 **Answer**
 
-### Task 13: Standardize existing data using mutate
+### Task 14: Standardize existing data using mutate
 
 Mutate is also useful for standardizing data - for example, making different spellings of, say, campaign spending recipients.
 
@@ -288,7 +307,7 @@ standardized_maryland_expenses <- maryland_expenses %>%
 
 There are lots of potential uses for standardization - addresses, zip codes, anything that can be misspelled or abbreviated.
 
-### Task 14: Create a new column using case_when
+### Task 15: Create a new column using case_when
 
 Mutate is even more useful when combined with some additional functions. Let's wind up where we started: with our UMD course data. We have those values for terms, but it's not clear what semesters they actually refer to. We'd like to have columns for year and semester based on the values we have for `term`. Let's look at those unique values using a function called `distinct`:
 
@@ -357,7 +376,7 @@ Does this answer make sense to you? Why or why not?
 
 Mutate is there to make your data more useful and to make it easier for you to ask more and better questions of it.
 
-### Task 15: More questions
+### Task 16: More questions
 
 Now that you have seen how to use mutate, filtering and dates, give me three questions about the UMD course data that you could ask that would make use of some or all of those new functions. They can be better versions of the questions from the previous pre-lab.
 
