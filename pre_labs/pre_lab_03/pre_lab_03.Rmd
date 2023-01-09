@@ -1,7 +1,7 @@
 ---
 title: "pre_lab_03.Rmd"
-author: ""
-date: ""
+author: "Derek Willis"
+date: "2023-01-09"
 output: html_document
 ---
 
@@ -33,11 +33,11 @@ library(tidyverse)
 
 ### Task 2: Load data
 
-**Task** Load some precinct-level election results data from Texas for the 2020 general election by running the following code. We'll use the guess_max() function as an argument to use the first 10 rows to set the data type. What does the first line of the red Warning message that prints out when you load the data say? Answer below. 
+**Task** Load some [Maryland state government payments data](https://opendata.maryland.gov/Budget/State-of-Maryland-Payments-Data-FY2008-to-FY2023/7syw-q4cy) by running the following code. We'll use the guess_max() function as an argument to use the first 10 rows to set the data type. What does the first line of the red Warning message that prints out when you load the data say? What happens when you follow its instructions? Answer below. 
 **Answer**
 
 ```{r}
-rosters <- read_csv("https://raw.githubusercontent.com/Sports-Roster-Data/womens-college-basketball/main/wbb_rosters_2022_23.csv", guess_max=10)
+payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2023.csv", guess_max=10)
 ```
 
 ### Task 3: Reload data
@@ -45,107 +45,74 @@ rosters <- read_csv("https://raw.githubusercontent.com/Sports-Roster-Data/womens
 **Task** Run the following codeblock to reload the data, using every row to set the data types. Does it show any parsing errors when you run? Answer below **Answer**
 
 ```{r}
-md_precinct_results_22 <- read_csv("data/GG22_AllPrecincts.csv", guess_max=123049)
+payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2023.csv", guess_max=322138)
 ```
 
 ### Task 4: Examine the data with glimpse
 
-**Task** Run the following codeblock to glimpse the data. What data type is the "district" field? What data type is the "precinct" field? What data type is the "mail" column? Answer below. **Answer**
+**Task** Run the following codeblock to glimpse the data. What data type is the "district" field? What data type is the "precinct" field? What data type is the "mail" column? Answer below. 
+**Answer**
 
 ```{r}
-glimpse(md_precinct_results_22)
+glimpse(payments)
 ```
 
-Things that should be characters -- like county, precinct, candidate -- are characters (chr). Things that should be numbers (dbl) -- like votes -- are numbers.
+Things that should be characters -- like agency name, vendor name -- are characters (chr). Things that should be numbers (dbl) -- like amount and fiscal year -- are numbers. We've seen before that sometimes dates aren't defined as date datatypes by R - we can fix that using `lubridate`.
 
-There are some minor problems. The election_day column is a good example. It read in as a number (chr), even though there clearly are numbers in it judging from our initial inspection. Here's why: the original file has a single value in that column that is "5+".
 
-```{r}
-texas_precinct_20 %>% filter(election_day == "5+")
-```
+### Task 5: Detect wrong spatial data
 
-Because this is just one result that's weird, we can fix it by comparing the other votes Castaneda received in Anderson to the county totals for her. The difference should be what that "5+" value should be. I've done those calculations and it turns out that 49 is the actual likely value.
+The second smell we can find in code is **wrong spatial data**. Spatial data means data that refers to some geography; in this dataset the only geographical element is the vendor's zip code. Zip codes should be, at a minimum, five characters long (although composed of numbers, zip codes aren't used as numbers).
 
-We can fix that pretty easily, by changing that value to "49" using `case_when` and then using `mutate` to make the entire column numeric.
+We can check to see if any of the zip codes are less than five characters by using [a function called `str_length`](https://stringr.tidyverse.org/reference/str_length.html) inside a filter.
 
-### Task 6: Fix that "election_day" value and change the "election_day" field data type
-
-**Task** Run the following codeblock to change the data type of the "election_day" field from a character (chr) to a number, and then glimpse the data, to see the change. Add a description of what the mutate code does to your reference notebook.
+**Task** Run the following codeblock to group by the vendor's zip code and show any that are less than five characters in length. How many zip codes do not have five characters? What do you think is happening with this data?
+**Answer** 
 
 ```{r}
-texas_precinct_20 <- texas_precinct_20 %>%
-  mutate(election_day = case_when(
-    election_day == '5+' ~ '49',
-    TRUE ~ election_day
-  ))
-
-texas_precinct_20 <- texas_precinct_20 %>% mutate(election_day = as.numeric(election_day))
-
-glimpse(texas_precinct_20)
-```
-
-### Task 7: Examine the franchise column for missing values.
-
-**Task** Run the following codeblock to group by mail votes, count the number of precinct results, then sort from highest to lowest on count. How many results are there where mail is NA? What's the implication there? Answer below. **Answer**:
-
-```{r}
-
-texas_precinct_20 %>% 
-  group_by(mail) %>% 
+payments %>%
+  group_by(`Vendor Zip`) %>%
+  filter(str_length(`Vendor Zip`) < 5) %>% 
   summarise(
     count=n()
   ) %>%
   arrange(desc(count))
 ```
 
-### Task 8: Install lubridate (if you haven't already)
+### Task 6: Load Maryland grant and loan data
 
-**Task** Run the following codeblock to install the lubridate package.
+Let's now look at **gaps in data**. These often occur when you have a date or time element in your data, but there are other potential gaps, too. To illustrate those, we're going to introduce some Maryland state grant and loan data from 2009 forward. Let's load it and take a look:
+
+**Task** Run the following codeblock to load Maryland state government grant and loan data
 
 ```{r}
-# skip this if you already have it installed.
-install.packages('lubridate')
+md_grants_loans <- read_csv("data/State_of_Maryland_Grant_and_Loan_Data__FY2009_to_FY2022.csv")
 ```
 
-### Task 9: Load lubridate
+Each row represents a recipient of state grant or loan, along with information about their location and the state agency that provided the money. When we talk about gaps, often they indicate the administrative rules. Here's an example: let's count the number of payments in each category (Grant or Loan) by year in this dataset.
 
-**Task** Run the following code to load the lubridate library.
+### Task 7: Count the number of payments in each category by year:
+
+**Task** Run the following codeblock to count the number of payments. Looking at the result, what jumps out at you as potentially problematic?
+**Answer** 
 
 ```{r}
-library(lubridate)
+md_grants_loans %>% 
+  group_by(`Fiscal Year`, Category) %>% 
+  summarize(count = n()) %>% 
+  arrange(`Fiscal Year`)
 ```
 
-### Task 10: Load Yadkin voter data
+Any time you are going to focus on a column for analysis, you should check for unusual values. Are there any unusually large values or unusually small values? Are there any values that raise immediate questions about the data? Let's look at the smallest amounts in the grants and loan data.
 
-**Task** Run the following codeblock to load data on registered voters in Yadkin County, North Carolina.
+### Task 8: Find outliers
 
-```{r}
-yadkin_voters <- read_csv("data/yadkin_voters.csv")
-```
-
-### Task 11: Look for date gaps in data
-
-**Task** Run the following codeblock to create a new column called "registration_month" that extracts the month and year from the "registr_dt" column. Group by the new "registration_month" column, count, and sort by "registration_month". How many registrations are there in the data for January 1900? What do you think the first 20 results suggests? Answer below. **Answer**
+**Task** Run the following code to arrange the grants & loan data so that the smallest amount is first. Describe what you see.
+**Answer** 
 
 ```{r}
-yadkin_voters %>% 
-  mutate(registration_month = floor_date(registr_dt, "month")) %>%
-  group_by(registration_month) %>% 
-   summarise(
-    count=n()
-  ) %>%
-  arrange(registration_month)
-```
-
-### Task 14: Check for suspicious outliers
-
-**Task** Run the following codeblock to find the number of registered voters grouped by voter status reason, using summarise() to count. Are any of these worthy of exploration to you? Why or why not? Answer below. **Answer**
-
-```{r}
-
-yadkin_voters %>%
-  group_by(voter_status_reason_desc) %>% 
-  summarise(count = n())
+md_grants_loans %>% 
+  arrange(Amount)
 ```
 
 ## Data Cleaning, Part II
@@ -158,223 +125,170 @@ yadkin_voters %>%
 install.packages('janitor')
 ```
 
-### Task 2: Load janitor and the tidyverse
+### Task 2: Load janitor
 
-**Task** Run the following code to load the tidyverse and janitor.
+**Task** Run the following code to load janitor.
 
 ```{r}
-library(tidyverse)
 library(janitor)
 ```
 
-### Task 3: Load Arnold, Maryland demonstration data
+Let's continue with our Maryland grants and loans data that we worked with in the previous chapter. There are a number of issues with this data set that might get in the way of asking questions and receiving accurate answers. They are:
 
-**Task** Run the following codeblock to load a demonstration slice of the WinRed contribution data from Conowingo, Maryland. How many rows are in this demonstration data set? **Answer**
+-   The column names have spaces in them. This isn't a deal-breaker, as we used this dataframe previously. But it does require that you do some things differently when writing code, and ideally you don't want spaces in your column names.
+-   Inconsistent capitalization across multiple columns. Sometimes the grantee is capitalized, and other times not. Portions of the grantor name are sometimes capitalized. This issue will ruin your ability to count and add things using those columns.
+-   The zip field mixes five digit ZIP codes and nine digit ZIP codes, and some of the records include spaces. If we wanted to group and count the number of loans in a given ZIP code, this inconsistency would not let us do that correctly.
+-   The category column is inconsistent and has some missing values.
 
-```{r}
-conowingo <- read_rds("data/conowingo.rds")
-```
+Let's get cleaning. Our goal will be to build up one block of code that does all the necessary cleaning in order to answer this question: which zip code has gotten the most amount of money from the Maryland Tourism Board?
 
-### Task 4: Examine the data with glimpse
+### Task 3: Use clean_names()
 
-**Task** Run the following codeblock to glimpse the data. What data type is the "amount" field? Answer below. **Answer**
-
-```{r}
-glimpse(conowingo)
-```
-
-And let's examine the full data set.
-
-### Task 5: Examine the data table
-
-**Task** Run the following codeblock to examine the data. Name three problems the book chapter says exist in this data set that could prevent us from answering questions? Answer below **Answer**
-
-```{r}
-conowingo
-```
-
-### Task 6: Use clean_names()
-
-**Task** Run the following codeblock to use the `clean_names()` function from janitor to standardize column names. How does the function change the name of the column "1_linenumber"? Answer below. Add a description of what this code does to your reference notebook. **Answer**
+**Task** Run the following codeblock to use the `clean_names()` function from janitor to standardize column names. How does the function change the headers? Answer below.
+**Answer**
 
 ```{r}
 # cleaning function
-cleaned_conowingo <- conowingo %>%
+cleaned_md_grants_loans <- md_grants_loans %>%
   clean_names()
 
 # display the cleaned dataset
-cleaned_conowingo
+cleaned_md_grants_loans
 ```
 
-### Task 7: Use rename()
+### Task 4: Use rename()
 
-**Task** Run the following codeblock to use the clean_names() function from janitor to standardize column names and then use rename() to change the "x1_id" column. Add a description of what this code does to your reference notebook.
+**Task** Run the following codeblock to use the clean_names() function from janitor to standardize column names and then use rename() to change the "grantor" column to "source". With `rename()` the new name comes first!
 
 ```{r}
-cleaned_conowingo <- conowingo %>%
+# cleaning function
+cleaned_md_grants_loans <- md_grants_loans %>%
   clean_names() %>% 
-  rename(linenumber = x1_linenumber)
+  rename(source = grantor)
 
 # display the cleaned dataset
-cleaned_conowingo
+cleaned_md_grants_loans
 ```
 
-### Task 8: Try summarizing the amount column
+Right now the `source`, `grantee` and `description` columns have inconsistent capitalization. We can fix that using a mutate statement and a function that changes the case of text called `str_to_upper()`. We'll use the same columns, overwriting what's in there since all we're doing is changing case.
 
-**Task** Run the following codeblock to attempt to add up the amount of all contributions. What does the error say when you run this code? What do you think the error means? Answer below. **Answer**
+### Task 5: Using str_to_upper() to standardize case
+
+**Task** Run the following codeblock to use str_to_upper() to make the source, grantee and description columns upper-cased.
 
 ```{r}
 # cleaning function
-total_conowingo <- cleaned_conowingo %>%
-  summarise(total_amount = sum(amount))
-
-# display the cleaned dataset
-total_conowingo
-
-
-```
-
-### Task 9: Change data type for amount
-
-**Task** Run the following codeblock to attempt to change the datatype for the amount field to a number. What is the new data type (three letter code) for amount? Answer below. **Answer**
-
-```{r}
-# cleaning function
-cleaned_conowingo <- conowingo %>%
+cleaned_md_grants_loans <- md_grants_loans %>%
   clean_names() %>% 
-  rename(linenumber = x1_linenumber) %>% 
-  mutate(amount = as.numeric(amount))
-  
+  rename(source = grantor) %>% 
+  mutate(source = str_to_upper(source), grantee = str_to_upper(grantee), description = str_to_upper(description))
 
 # display the cleaned dataset
-cleaned_conowingo
-
+cleaned_md_grants_loans
 ```
 
-### Task 10: Try again to summarize the amount column
+### Task 6: Check for duplicate rows
 
-**Task** Run the following codeblock to add up the amount of all contributions in this data. What is the total? Answer below. **Answer**
-
-```{r}
-# cleaning function
-total_conowingo <- cleaned_conowingo %>%
-  summarise(total_amount = sum(amount))
-
-# display the cleaned dataset
-total_conowingo
-
-
-```
-
-### Task 11: Check for duplicate rows
-
-**Task** Run the following codeblock to check for duplicate rows using get_dupes(). How many are there? What is the donor name? Answer below. **Answer**
+**Task** Run the following codeblock to check for duplicate rows using get_dupes(). How many duplicates are possible? 
+**Answer**
 
 ```{r}
-cleaned_conowingo %>% 
+cleaned_md_grants_loans %>%
   get_dupes()
 ```
 
-### Task 12: Check for duplicate rows
+### Task 7: Get rid of duplicate rows
 
-**Task** Run the following codeblock to use distinct() to get rid of duplicate rows. How many rows does the new dataframe have? Answer below. Add a description of what this code does to your reference notebook. **Answer**
+**Task** Run the following codeblock to use distinct() to get rid of duplicate rows. How many rows does the new dataframe have? Answer below. 
+**Answer**
 
 ```{r}
 # cleaning function
-cleaned_conowingo <- conowingo %>%
+cleaned_md_grants_loans <- md_grants_loans %>%
   clean_names() %>% 
-  rename(linenumber = x1_linenumber) %>% 
-  mutate(amount = as.numeric(amount)) %>% 
+  rename(source = grantor) %>% 
+  mutate(source = str_to_upper(source), grantee = str_to_upper(grantee), description = str_to_upper(description)) %>% 
   distinct()
-  
 
 # display the cleaned dataset
-cleaned_conowingo
-
+cleaned_md_grants_loans
 ```
 
-### Task 13: Clean up ZIP code
+### Task 8: Clean up ZIP code
 
-**Task** Run the following codeblock to use str_sub() to convert the ZIP codes that have nine digits to five digits, standardizing the field. Look at the difference in the result - what changed? **Answer**
+The rest of the problems with this data set all have to do with inconsistent format of values in a few of the columns. To fix these problems, we're going to make use of mutate() in concert with "string functions" -- special functions that allow us to clean up columns stored as character strings. The tidyverse package `stringr` has lots of useful string functions that you can look up!
+
+Let's start by cleaning up the zip field. Remember, some of the rows had a five-digit ZIP code, while others had a nine-digit ZIP code, separated by a hyphen or not.
+
+We're going to write code that tells R to make a new column for our zips, keeping the first five digits on the left, and get rid of anything after that by using `mutate()` in concert with `str_sub()`, from the `stringr` package.
+
+**Task** Run the following codeblock to use str_sub() to convert the ZIP codes that have nine digits to five digits, creating a new column. Look at the difference in the result - what changed? 
+**Answer**
 
 ```{r}
 # cleaning function
-cleaned_conowingo <- conowingo %>%
+cleaned_md_grants_loans <- md_grants_loans %>%
   clean_names() %>% 
-  rename(linenumber = x1_linenumber) %>% 
-  mutate(amount = as.numeric(amount)) %>% 
+  rename(source = grantor) %>% 
+  mutate(source = str_to_upper(source), grantee = str_to_upper(grantee), description = str_to_upper(description)) %>% 
   distinct() %>%
-  mutate(zip = str_sub(zip, start=1L, end=5L))
-  
+  mutate(zip5 = str_sub(zip_code, start=1L, end=5L))
+
 
 # display the cleaned dataset
-cleaned_conowingo
-
+cleaned_md_grants_loans
 ```
 
-### Task 14: Clean up city field
+### Task 9: Clean up zip5 field more with case_when()
 
-**Task** Run the following codeblock to use str_tot_title() to standarize capitalization in the "city" field. How many mispellings of Conowingo remain after running this code? Answer below. Add a description of what this code does to your reference notebook.
+**Task** Run the following codeblock to use case_when() to change clear non-zip codes into NA values.
 
 ```{r}
 # cleaning function
-cleaned_conowingo <- conowingo %>%
+cleaned_md_grants_loans <- md_grants_loans %>%
   clean_names() %>% 
-  rename(linenumber = x1_linenumber) %>% 
-  mutate(amount = as.numeric(amount)) %>% 
+  rename(source = grantor) %>% 
+  mutate(source = str_to_upper(source), grantee = str_to_upper(grantee), description = str_to_upper(description)) %>% 
   distinct() %>%
-  mutate(zip = str_sub(zip, start=1L, end=5L)) %>%
-  mutate(city = str_to_title(city))
-  
-
-# display the cleaned dataset
-cleaned_conowingo
-
-```
-
-### Task 15: Clean up city field more with case_when()
-
-**Task** Run the following codeblock to use case_when() to fix misspellings of Conowingo in the "city" field. How many mispellings of Conowingo remain after running this code? Answer below. **Answer**
-
-```{r}
-# cleaning function
-cleaned_conowingo <- conowingo %>%
-  clean_names() %>% 
-  rename(linenumber = x1_linenumber) %>% 
-  mutate(amount = as.numeric(amount)) %>% 
-  distinct() %>%
-  mutate(zip = str_sub(zip, start=1L, end=5L)) %>%
-  mutate(city = str_to_title(city)) %>%
-  mutate(city = case_when(
-    city == "Conowing" ~ "Conowingo",
-    TRUE ~ city
+  mutate(zip5 = str_sub(zip_code, start=1L, end=5L)) %>%
+  mutate(zip5 = case_when(
+    zip5 == "Vario" ~ as.character(NA),
+    zip5 == "UB7 O" ~ as.character(NA),
+    zip5 == "UB7 " ~ as.character(NA),
+    TRUE ~ zip5
   ))
 
 # display the cleaned dataset
-cleaned_conowingo
-
+cleaned_md_grants_loans
 ```
 
-### Task 16: Clean up city field more with case_when()
+### Task 10: Clean up city field more with case_when()
 
-**Task** Run the following codeblock to use case_when() to fix misspellings of Conowingo in the "city" field using both the exact match method and the str_detect() method. How many mispellings of Conowingo remain after running this code? Answer below. Add a description of what this code does to your reference notebook. **Answer**
+**Task** Run the following codeblock to use case_when() to fix zip5 issues using both the exact match method and the str_detect() method.
 
 ```{r}
 # cleaning function
-cleaned_conowingo <- conowingo %>%
+cleaned_md_grants_loans <- md_grants_loans %>%
   clean_names() %>% 
-  rename(linenumber = x1_linenumber) %>% 
-  mutate(amount = as.numeric(amount)) %>% 
+  rename(source = grantor) %>% 
+  mutate(source = str_to_upper(source), grantee = str_to_upper(grantee), description = str_to_upper(description)) %>% 
   distinct() %>%
-  mutate(zip = str_sub(zip, start=1L, end=5L)) %>%
-  mutate(city = str_to_title(city)) %>%
-  mutate(city = case_when(
-    str_detect(city,"^Conowing") ~ "Conowingo",
-    TRUE ~ city
+  mutate(zip5 = str_sub(zip_code, start=1L, end=5L)) %>%
+  mutate(zip5 = case_when(
+    zip5 == "Vario" ~ as.character(NA),
+    str_detect(zip5, "^UB7") ~ as.character(NA),
+    TRUE ~ zip5
   ))
-  
 
 # display the cleaned dataset
-cleaned_conowingo
+cleaned_md_grants_loans
+```
+
+### Task 11: Answer our question!
+
+**Task** Write and run code to answer our original question: which zip code has gotten the most amount of money from the Maryland Tourism Board?
+
+```{r}
 
 ```
+

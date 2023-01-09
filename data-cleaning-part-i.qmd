@@ -25,7 +25,7 @@ Not all of these data smells are detectable in code. You may have to ask people 
 
 But with several of these data smells, we can do them first, before we do anything else.
 
-We're going to examine three here as they apply to some [Maryland state government payments data](https://opendata.maryland.gov/Budget/State-of-Maryland-Payments-Data-FY2008-to-FY2023/7syw-q4cy): wrong type, wrong spatial data and potentially unusable data.
+We're going to examine several here as they apply to some [Maryland state government payments data](https://opendata.maryland.gov/Budget/State-of-Maryland-Payments-Data-FY2008-to-FY2023/7syw-q4cy) and [Maryland state government grant & loan data](https://opendata.maryland.gov/Budget/State-of-Maryland-Grant-and-Loan-Data-FY2009-to-FY/absk-avps).
 
 ## Wrong Type
 
@@ -52,6 +52,7 @@ We're also going to introduce a new argument to our function that reads in the d
 # Load the data
 payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2023.csv", guess_max=10)
 ```
+
 Pay attention to the red warning that signals "one or more parsing issues." It advises us to run the problems() function to see what went wrong. Let's do that.
 
 ```{r}
@@ -65,6 +66,7 @@ The easy way to fix this is to set the guess_max argument higher. It will take a
 ```{r}
 payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2023.csv", guess_max=322138)
 ```
+
 No parsing errors this time! You can see what the columns are using the `glimpse` function:
 
 ```{r}
@@ -89,56 +91,32 @@ payments %>%
   arrange(desc(count))
 ```
 
-So, yes, we definitely have some zip codes that are less than 5 characters long, which is not good, particularly because we don't have any other geographical information that would tell us whether we're missing a leading zero or some other character.
+So, yes, we definitely have some zip codes that are less than 5 characters long, which is not good, particularly because we don't have any other geographical information (such as a state) that would tell us whether we're missing a leading zero or some other character.
 
-## Gaps in data
+## Gaps in data & Missing data
 
 Let's now look at **gaps in data**. These often occur when you have a date or time element in your data, but there are other potential gaps, too. To illustrate those, we're going to introduce some Maryland state grant and loan data from 2009 forward. Let's load it and take a look:
 
 ```{r}
 md_grants_loans <- read_csv("data/State_of_Maryland_Grant_and_Loan_Data__FY2009_to_FY2022.csv")
 ```
-Each row represents a recipient of state grant or loan, along with information about their location and the state agency that provided the money. When we talk about gaps, often they indicate the administrative rules. Here's an example: let's find the smallest amount in this dataset:
+Each row represents a recipient of state grant or loan, along with information about their location and the state agency that provided the money. When we talk about gaps, often they indicate the administrative rules. Here's an example: let's count the number of payments in each category (Grant or Loan) by year in this dataset:
 
 ```{r}
 md_grants_loans %>% 
-  group_by(Category) %>% 
+  group_by(`Fiscal Year`, Category) %>% 
   summarize(count = n()) %>% 
   arrange(`Fiscal Year`)
 ```
+We can see a couple of issues here: first, there is no loan data for FY 2009. That's mentioned in [the source page for the data](https://opendata.maryland.gov/Budget/State-of-Maryland-Grant-and-Loan-Data-FY2009-to-FY/absk-avps). It's good to be aware of all gaps in data, but they don't always represent a problem. Second, and more problematic, there are a few records where the Category is NA - that data is missing. There also are some inconsistent values - there are 50 records in FY2013 with the category of "L" (probably loans) and one in FY 2017 that is listed as "Contract".
 
-It's July 14, 2022. That means that this dataset doesn't have any records newer than that, so if we were describing it we'd need to include that information.
+## Unusual Outliers
 
-What about the most recent `birth_year`?
-
-```{r}
-yadkin_voters %>% arrange(desc(birth_year))
-```
-
-Lots of 2004 records in there, which makes sense, since those folks are just becoming eligible to vote in North Carolina, where the minimum age is 18. In other words, we shouldn't see records in here where the "birth_year" is greater than 2004. If we do, we should ask some questions.
-
-It's good to be aware of all gaps in data, but they don't always represent a problem.
-
-## Suspicious Outliers
-
-Any time you are going to focus on a column for analysis, you should check for suspicious values. Are there any unusually large values or unusually small values? Are there any values that should not exist in the data?
-
-Finally, let's first look at "registr_dt" again, so we can see if there's any missing months, or huge differences in the number of registrations by month. If we're going to work with dates, we should have `lubridate` handy for `floor_date`.
+Any time you are going to focus on a column for analysis, you should check for unusual values. Are there any unusually large values or unusually small values? Are there any values that raise immediate questions about the data? Let's look at the smallest amounts in the grants and loan data.
 
 ```{r}
-library(lubridate)
+md_grants_loans %>% 
+  arrange(Amount)
 ```
 
-The `floor_date` function will allow us to group by month, instead of a single day.
-
-```{r}
-yadkin_voters %>%
-  mutate(registration_month = floor_date(registr_dt, "month")) %>%
-  group_by(registration_month) %>%
-   summarise(
-    count=n()
-  ) %>%
-  arrange(registration_month)
-```
-
-So, uh, if this data is accurate, then we have 13 registered voters who are more than 120 years old in Yadkin County. What's the most likely explanation for this? Some data systems have placeholder values when certain information isn't known or available. The next oldest registration month is from 1933, which seems plausible.
+There are two grants for less than $100, which might not be problematic at all, but given that just two of 17,000 are for very small amounts you might wonder if there are suggested amounts for applicants and how tiny ones get evaluated compared to very large requests. As journalists, we should be skeptical of information put in front of us and ask why or what it says about the data itself.
