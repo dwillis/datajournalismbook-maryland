@@ -33,36 +33,27 @@ library(tidyverse)
 
 ### Task 2: Load data
 
-**Task** Load some precinct-level election results data from Texas for the 2020 general election by running the following code. We'll use the guess_max() function as an argument to use the first 10 rows to set the data type. What does the first line of the red Warning message that prints out when you load the data say? Answer below. **Answer**
+**Task** Load some precinct-level election results data from Texas for the 2020 general election by running the following code. We'll use the guess_max() function as an argument to use the first 10 rows to set the data type. What does the first line of the red Warning message that prints out when you load the data say? Answer below. 
+**Answer**
 
 ```{r}
-texas_precinct_20 <- read_csv("data/tx_precinct_2020.csv", guess_max=10)
+rosters <- read_csv("https://raw.githubusercontent.com/Sports-Roster-Data/womens-college-basketball/main/wbb_rosters_2022_23.csv", guess_max=10)
 ```
 
-### Task 3: Check for problems on load
-
-**Task** Check for problems that occurred when loading the Texas precinct results by running the following code. How many problems were there, as shown by the number of rows in the output table showing errors? What do you think the problem is that R is describing? Answer below. **Answer**
-
-```{r}
-
-problems(texas_precinct_20)
-
-```
-
-### Task 4: Reload data
+### Task 3: Reload data
 
 **Task** Run the following codeblock to reload the data, using every row to set the data types. Does it show any parsing errors when you run? Answer below **Answer**
 
 ```{r}
-texas_precinct_20 <- read_csv("data/tx_precinct_2020.csv", guess_max=476915)
+md_precinct_results_22 <- read_csv("data/GG22_AllPrecincts.csv", guess_max=123049)
 ```
 
-### Task 5: Examine the data with glimpse
+### Task 4: Examine the data with glimpse
 
 **Task** Run the following codeblock to glimpse the data. What data type is the "district" field? What data type is the "precinct" field? What data type is the "mail" column? Answer below. **Answer**
 
 ```{r}
-glimpse(texas_precinct_20)
+glimpse(md_precinct_results_22)
 ```
 
 Things that should be characters -- like county, precinct, candidate -- are characters (chr). Things that should be numbers (dbl) -- like votes -- are numbers.
