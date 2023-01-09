@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Load libraries and establish settings
+
 ```{r}
 # Turn off scientific notation
 options(scipen=999)
@@ -21,6 +22,7 @@ options(scipen=999)
 ```
 
 ## Load data
+
 ```{r}
 # Write code to load MD slice of FEC House candidate contribution data and call it md_contribs.
 # The data is called lab_03.rds, and is in the data folder alongside lab_03.Rmd (this data notebook)
@@ -30,11 +32,12 @@ options(scipen=999)
 
 ## Answer questions
 
-Q1: Which seven cities in Maryland had the largest _number_ of contributions from donors? How many did each have? To answer this question, you'll have to clean the messy "contributor_city" field.
+Q1: Which seven cities in Maryland had the largest *number* of contributions from donors? How many did each have? To answer this question, you'll have to clean the messy "contributor_city" field.
 
 Note: To answer this question, you'll need to see every variation of the "contributor_city" for the top seven cities, which you should identify through some initial analysis. Then find variations of them and change those variations into the most common version.
 
 A1:
+
 ```{r}
 
 # Write your code in this codeblock.
@@ -54,7 +57,7 @@ A2:
 
 Q3: Let's look at top individual donors to House campaigns. Write code to generate a list of top donors using name and city, adding up the total amount of contributions. One of the top few donors has a very strong connection to the U.S. House - who is that and what does he do? How does his donation pattern differ from the second-largest donor, and what can you say about that second-largest donor?
 
-Feel free to add any interesting "color" (little interesting details) you find in your research.  
+Feel free to add any interesting "color" (little interesting details) you find in your research.
 
 A3:
 
