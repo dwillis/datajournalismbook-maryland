@@ -1,7 +1,7 @@
 ---
 title: "lab_05"
 author: "Derek Willis"
-date: "8/24/2022"
+date: "2023-01-10"
 output: html_document
 ---
 
@@ -11,11 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## About this lab
 
-To complete this lab, you need to:
-* run existing code as directed (look for **Task**).
-* modify existing code as directed (look for **Task**).
-* write code in empty codeblocks provided to answer questions included (look for **Q**).
-* write out the answer in the form of a complete sentence in the space given (look for **A**).
+To complete this lab, you need to: \* run existing code as directed (look for **Task**). \* modify existing code as directed (look for **Task**). \* write code in empty codeblocks provided to answer questions included (look for **Q**). \* write out the answer in the form of a complete sentence in the space given (look for **A**).
 
 When you are finished, commit changes and push to your personal GitHub repo, then submit the URL to this document on ELMS.
 
@@ -43,13 +39,13 @@ The basic process here is to start in RStudio, export data so that we can use Op
 
 ## Load Data
 
-You'll need to load one data set, a CSV file of Maryland campaign expenditures located in the data folder called "md_expenses.csv"
+You'll need to load one data set, a CSV file of Maryland campaign expenditures located in the data folder called "maryland_expenses.csv"
 
 **Task** Create a codeblock below, then read the data in and assign it to an appropriate variable name. You'll want to clean up the column names and make sure that any date columns are actually date datatypes.
 
 ```{r}
 # Load the Maryland expenditures data table
-md_expenses <- read_csv('data/md_expenses.csv') %>% clean_names()
+md_expenses <- read_csv('data/maryland_expenses.csv') %>% clean_names()
 
 md_expenses <- md_expenses %>% mutate(expenditure_date = mdy(expenditure_date))
 ```
@@ -62,7 +58,7 @@ Then, when you are done standardizing `payee_clean`, export it as a new CSV file
 
 Then, using that `payee_clean` column, write code to find all of the spending where Facebook is the payee and calculate the total amount of spending for each committee and present the results showing the committee that spent the most first.
 
-**A1.**  
+**A1.**
 
 ```{r}
 media_expenses <- md_expenses %>% filter(expense_category == 'Media') %>% filter(!is.na(payee_name))
@@ -82,13 +78,14 @@ media_expenses_cleaned %>%
   arrange(desc(total_amount))
 
 ```
-**Q2.** Let's do some research on the top committees from question 1. Look up the top 10 spenders: if they are candidate committees, what offices were they running for? If they were not candidates, what issues do they seem to care about? Write some sentences answering those questions, then go the Facebook ad library (https://www.facebook.com/ads/library/?active_status=all&ad_type=political_and_issue_ads&country=US&sort_data[direction]=desc&sort_data[mode]=relevancy_monthly_grouped&media_type=all) and look for ads from the top spender. What do you notice about those ads?
 
-**A2.** The top ten are mostly, but not entirely, candidates for governor in the 2022 primary election. Billy Boniface is a candidate for Harford County executive, and there are several PACs, including CASA in Action, which supports immigrant communities. The top spender is the campaign of Ashwani Jain, a Democratic gubernatorial candidate who lost in the primary. His Facebook ads were taken down by the platform because they did not comply with disclaimer rules (who paid for this ad).
+**Q2.** Let's do some research on the top committees from question 1. Look up the top 10 spenders: if they are candidate committees, what offices were they running for? If they were not candidates, what issues do they seem to care about? Write some sentences answering those questions, then go the Facebook ad library (https://www.facebook.com/ads/library/?active_status=all&ad_type=political_and_issue_ads&country=US&sort_data\[direction\]=desc&sort_data\[mode\]=relevancy_monthly_grouped&media_type=all) and look for ads from the top spender. What do you notice about those ads?
+
+**A2.** The top ten are mostly, but not entirely, candidates for governor in the 2022 primary election. Billy Boniface is a candidate for Harford County executive, for example. The top spender is the campaign of Ashwani Jain, a Democratic gubernatorial candidate who lost in the primary. His Facebook ads were taken down by the platform because they did not comply with disclaimer rules (who paid for this ad).
 
 **Q3.** Given the list of top spenders in A1 and the primary results for governor (https://elections.maryland.gov/elections/2022/primary_results/gen_results_2022_1.html), who is missing from that Q1 list? Did those campaigns run Facebook ads? Who are the biggest recipients of media expenses by the Democratic primary winner for governor (HINT: that person has two committees)?
 
-**A3.** Both Wes Moore & Dan Cox's campaigns are missing from the list of top Facebook spenders. Moore definitely has run Facebook ads, but Cox appears not to have, which seems unusual. Moore's campaign (both primary and general committees) has paid more than $3.6 million to SKDK, a Democratic consulting firm that handles all kinds of campaign activities, including advertising. We don't see direct payments to Facebook because it's likely that SKDK is making those buys rather than the campaign itself.
+**A3.** Both Wes Moore & Dan Cox's campaigns are missing from the list of top Facebook spenders. Moore definitely has run Facebook ads, but Cox appears to have only run a small amount, which seems unusual. Moore's campaign (both primary and general committees) has paid more than \$6.1 million to SKDK, a Democratic consulting firm that handles all kinds of campaign activities, including advertising. We don't see direct payments to Facebook because it's likely that SKDK is making those buys rather than the campaign itself.
 
 ```{r}
 
@@ -102,7 +99,7 @@ media_expenses_cleaned %>%
 
 **Q4.** The media expense data you cleaned also has a standardized purpose column. Write code to generate a list of the committees with the total amount of spending on online advertising. How does this list compare to the one from Q1 about top Facebook spenders? Of the top 5 committees who spent the most on Facebook ads from Q1, are there any that appear to have spent *all* of their online advertising dollars on Facebook?
 
-**A4.** This list has larger amounts for total online ad spending, and a different list of top committees, including the Republican Governors Association and DGA Action. Ashwani Jain, the top committee on the Facebook spending list, appears to have spent all of its online advertising dollars on Facebook.
+**A4.** This list has larger amounts for total online ad spending, and a varied list of top committees, including Calvin Ball (Howard County exec candidate) and the House Democratic Caucus. Ashwani Jain, the top committee on the Facebook spending list, appears to have spent all of its online advertising dollars on Facebook.
 
 ```{r}
 media_expenses_cleaned %>% 
@@ -114,4 +111,4 @@ media_expenses_cleaned %>%
 
 **Q5** You've been asked to summarize your findings about spending on Facebook by Maryland political candidates. How much do we know and what don't we know? What's the best story idea you've found here?
 
-**A5** 
+**A5**
