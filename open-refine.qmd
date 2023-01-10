@@ -33,29 +33,30 @@ library(refinr)
 library(janitor)
 ```
 
-Let's load some campaign expenditure data focused on food-related expenses in Washington, D.C. Essentially, where campaigns spend their money on D.C. restaurants.
+Let's load that Maryland state government grants and loan data that we've been working with, and to make our standardization work easier we'll change all the grantees to upper-case.
 
 ```{r include=FALSE}
 
-dc_food <- read_csv("data/dc_food.csv")
+md_grant_loans <- read_csv("data/State_of_Maryland_Grant_and_Loan_Data__FY2009_to_FY2022.csv") %>% 
+  mutate(Grantee = str_to_upper(Grantee))
 
 ```
 
-Now let's try and group and count the number of expenditures by recipient. To make it a bit more manageable, let's use another string function from `stringr` and filter for recipients that start with the uppercase "W" or lowercase "w" using the function `str_detect()` with a regular expression.
+Now let's try and group and count the number of grants by recipient. To make it a bit more manageable, let's use another string function from `stringr` and filter for recipients that start with the uppercase "W" or lowercase "w" using the function `str_detect()` with a regular expression.
 
-The filter function in the codeblock below says: look in the city column, and pluck out any value that starts with (the "^" symbol means "starts with") a lowercase "w" OR (the vertical "|", called a pipe, means OR) an uppercase "W".
+The filter function in the codeblock below says: look in the city column, and pluck out any value that starts with (the "\^" symbol means "starts with") a lowercase "w" OR (the vertical "\|", called a pipe, means OR) an uppercase "W".
 
 ```{r}
-dc_food %>%
-  group_by(recipient_name) %>%
+md_grant_loans %>%
+  group_by(Grantee) %>%
   summarise(
     count=n()
   ) %>%
-  filter(str_detect(recipient_name, '^w|^W')) %>%
-  arrange(recipient_name)
+  filter(str_detect(Grantee, '^w|^W')) %>%
+  arrange(Grantee)
 ```
 
-There are several problems in this data that will prevent proper grouping and summarizing. We've learned several functions to do this manually.
+There are several problems in this data that will prevent proper grouping and summarizing - you can see multiple versions of "Walden Sierra", for example. We've learned several functions to fix this manually, but that could take awhile.
 
 By using the Open Refine package for R, `refinr`, our hope is that it can identify and standardize the data with a little more ease.
 
@@ -66,47 +67,50 @@ The key collision merge function takes each string and extracts the key parts of
 One rule you should follow when using this is: **do not overwrite your original fields**. Always work on a copy. If you overwrite your original field, how will you know if it did the right thing? How can you compare it to your original data? To follow this, I'm going to mutate a new field called clean_city and put the results of key collision merge there.
 
 ```{r}
-cleaned_dc_food <- dc_food %>%
-  mutate(recipient_clean=key_collision_merge(recipient_name)) %>%
-  select(recipient_name, recipient_clean, everything())
+cleaned_md_grant_loans <- md_grant_loans %>%
+  mutate(grantee_clean=key_collision_merge(Grantee)) %>%
+  select(Grantee, grantee_clean, everything())
 
-cleaned_dc_food
+cleaned_md_grant_loans
 
 ```
+
 To examine changes `refinr` made, let's examine the changes it made to cities that start with the letter "W".
 
 ```{r}
-cleaned_dc_food %>%
-  group_by(recipient_name, recipient_clean) %>%
+cleaned_md_grant_loans %>%
+  group_by(Grantee, grantee_clean) %>%
   summarise(
     count=n()
   ) %>%
-  filter(str_detect(recipient_clean, "^w|^W")) %>%
-  arrange(recipient_clean)
-```
-You can see several changes on the second page of results, including that refinr made "PIZZA, WE THE" into "WE THE PIZZA" which is pretty smart. Other potential changes, grouping together "WASHINGTON NATIONALS" and "WASHINGTON NATIONALS BASEBALL CLUB", didn't happen. Key collision will do well with different cases, but all of our records are upper case.
-
-There's another merging algorithim that's part of refinr that works a bit differently, called `n_gram_merge()`.  Let's try applying that one.
-
-```{r}
-cleaned_dc_food <- dc_food %>%
-  mutate(recipient_clean=n_gram_merge(recipient_name)) %>%
-  select(recipient_name, recipient_clean, everything())
-
-cleaned_dc_food
+  filter(str_detect(Grantee, '^w|^W')) %>%
+  arrange(Grantee)
 ```
 
-To examine changes `refinr` made with this algorithm, let's again look at cities that start with the letter "A". Examining Aberdeen and Annapolis, we see there wasn't a substantial change from the previous method.
+You can see several changes on the first page of results, including that refinr consolidated all the Walden Sierra entries into a single one in `grantee_clean`, which is pretty smart. Other potential changes, grouping together "WALTER'S ART MUSEUM" and "THE WALTERS ART MUSEUM", didn't happen. Key collision will do well with different cases, but all of our records are upper case.
+
+There's another merging algorithim that's part of refinr that works a bit differently, called `n_gram_merge()`. Let's try applying that one.
 
 ```{r}
-cleaned_dc_food %>%
-  group_by(recipient_name, recipient_clean) %>%
+cleaned_md_grant_loans <- md_grant_loans %>%
+  mutate(grantee_clean=n_gram_merge(Grantee)) %>%
+  select(Grantee, grantee_clean, everything())
+
+cleaned_md_grant_loans
+```
+
+To examine changes `refinr` made with this algorithm, let's again look at recipients that start with the letter "W". We see there wasn't a substantial change from the previous method, and it even missed a few the first method got.
+
+```{r}
+cleaned_md_grant_loans %>%
+  group_by(Grantee, grantee_clean) %>%
   summarise(
     count=n()
   ) %>%
-  filter(str_detect(recipient_clean, "^w|^W")) %>%
-  arrange(recipient_clean)
+  filter(str_detect(Grantee, '^w|^W')) %>%
+  arrange(Grantee)
 ```
+
 This method also made some good changes, but not in every case. No single method will be perfect and often a combination is necessary.
 
 That's how you use the Open Refine r package, refinr.
@@ -119,50 +123,51 @@ Open Refine is free software. [You should download and install it](https://openr
 
 For bigger datasets, Open Refine is the way to go. And it has a lot more tools than refinr does (by design).
 
-After you install it, run it. (If you are on a Mac it might tell you that it can't run the program. Go to System Preferences -> Security & Privacy -> General and click "Open Anyway".) Open Refine works in the browser, and the app spins up a small web server visible only on your computer to interact with it. A browser will pop up automatically.
+After you install it, run it. (If you are on a Mac it might tell you that it can't run the program. Go to System Preferences -\> Security & Privacy -\> General and click "Open Anyway".) Open Refine works in the browser, and the app spins up a small web server visible only on your computer to interact with it. A browser will pop up automatically.
 
-You first have to import your data into a project. Click the choose files button and upload a csv of the DC food-related expenditures.
+You first have to import your data into a project. Click the choose files button and upload a csv of the Maryland state grants and loans.
 
 ```{r, echo=FALSE}
-knitr::include_graphics(rep("images/open1.png"))
+knitr::include_graphics("images/open1.png")
 ```
 
 After your data is loaded into the app, you'll get a screen to look over what the data looks like. On the top right corner, you'll see a button to create the project. Click that.
 
 ```{r, echo=FALSE}
-knitr::include_graphics(rep("images/open2.png"))
+knitr::include_graphics("images/open2.png")
 ```
 
-Open Refine has many, many tools.  We're going to use one piece of it, as a tool for data cleaning. To learn how to use it, we're going to clean the "recipient_name" field.
+Open Refine has many, many tools. We're going to use one piece of it, as a tool for data cleaning. To learn how to use it, we're going to clean the "Grantee" field.
 
-First, let's make a copy of the original recipient_name column so that we can preserve the original data while cleaning the new one.
+First, let's make a copy of the original Grantee column so that we can preserve the original data while cleaning the new one.
 
-Click the dropdown arrow next to the recipient_name column, choose "edit column" > "Add column based on this column":
+Click the dropdown arrow next to the Grantee column, choose "edit column" \> "Add column based on this column":
 
 ```{r, echo=FALSE}
-knitr::include_graphics(rep("images/open2a.png"))
+knitr::include_graphics("images/open2a.png")
 ```
-On the window that pops up, type "recipient_name_orig" in the "new column name" field. Then hit the OK button.
+
+On the window that pops up, type "grantee_clean" in the "new column name" field. Then hit the OK button. We'll work on that new column.
 
 ```{r, echo=FALSE}
-knitr::include_graphics(rep("images/open2b.png"))
+knitr::include_graphics("images/open2b.png")
 ```
 
-Now, let's get to work cleaning the recipient_name column.
+Now, let's get to work cleaning the grantee_clean column.
 
-Next to the recipient_name field name, click the down arrow, then facet, then text facet.
+Next to the grantee_clean field name, click the down arrow, then facet, then text facet.
 
 ```{r, echo=FALSE}
-knitr::include_graphics(rep("images/open3.png"))
+knitr::include_graphics("images/open3.png")
 ```
 
-After that, a new box will appear on the left. It tells us how many unique recipient_names there are: 1,655. And, there's a button on the right of the box that says Cluster.
+After that, a new box will appear on the left. It tells us how many unique recipient_names there are: 8,956 (you may need to . And, there's a button on the right of the box that says Cluster.
 
 ```{r, echo=FALSE}
-knitr::include_graphics(rep("images/open4.png"))
+knitr::include_graphics("images/open4.png")
 ```
 
-Click the cluster button.  A new window will pop up, a tool to help us identify things that need to be cleaned, and quickly clean them.
+Click the cluster button. A new window will pop up, a tool to help us identify things that need to be cleaned, and quickly clean them.
 
 ```{r, echo=FALSE}
 knitr::include_graphics(rep("images/open5.png"))
@@ -172,16 +177,15 @@ The default "method" used is a clustering algorithim called "key collision", usi
 
 At the top, you'll see which method was used, and how many clusters that algorithm identified. There are several different methods, each of which work slightly differently and produce different results.
 
-
 ```{r, echo=FALSE}
 knitr::include_graphics(rep("images/open6.png"))
 ```
 
-Then, below that, you can see what those clusters are. Right away, we can see how useful this program is.  It identified 99 rows that have some variation on "Hawk N Dove" in the recipient_name field.  It proposed changing them all to "HAWK N DOVE".
+Then, below that, you can see what those clusters are. Right away, we can see how useful this program is. It identified 23 rows that have some variation on "University of Maryland - Baltimore" in the grantee_clean field. It proposed changing them all to "UNIVERSITY OF MARYLAND BALTIMORE".
 
 Using human judgement, you can say if you agree with the cluster. If you do, click the "merge" checkbox. When it merges, the new result will be what it says in New Cell Value. Most often, that's the row with the most common result. You also can manually edit the "New Cell Value" if you want it to be something else:
 
-Now begins the fun part: You have to look at all 88 clusters found and decide if they are indeed valid. The key collision method is very good, and very conservative. You'll find that most of them are usually valid.
+Now begins the fun part: You have to look at all the clusters found and decide if they are indeed valid. The key collision method is very good, and very conservative. You'll find that most of them are usually valid.
 
 Be careful! If you merge two things that aren't supposed to be together, it will change your data in a way that could lead to inaccurate results.
 
@@ -189,7 +193,7 @@ When you're done, click Merge Selected and Re-Cluster.
 
 If any new clusters come up, evaluate them. Repeat until either no clusters come up or the clusters that do come up are ones you reject.
 
-Now. Try a new method, maybe the "nearest neighbor levenshtein" method. Notice that it finds even more clusters - 167 - using a slightly different approach.
+Now. Try a new method, maybe the "nearest neighbor levenshtein" method. Notice that it finds even more clusters - using a slightly different approach.
 
 Rinse and repeat.
 
