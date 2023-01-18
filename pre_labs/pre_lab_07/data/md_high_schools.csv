@@ -1,0 +1,202 @@
+cohort_year,local_school_system,school,zip,high_school_graduates,enrollment,percent_of_high_school_graduates_enrolled
+2019-20,Allegany,Allegany High,21502,169,92,54
+2019-20,Allegany,Fort Hill High,21502,136,63,46
+2019-20,Allegany,Mountain Ridge High School,21532,157,94,60
+2019-20,Anne Arundel,Annapolis High,21401,457,193,42
+2019-20,Anne Arundel,Arundel High,21054,534,259,49
+2019-20,Anne Arundel,Broadneck High,21409,516,289,56
+2019-20,Anne Arundel,Chesapeake High,21122,325,97,30
+2019-20,Anne Arundel,Chesapeake Science Point,21076,50,28,56
+2019-20,Anne Arundel,Glen Burnie High,21060,417,118,28
+2019-20,Anne Arundel,Meade High,20755,419,164,39
+2019-20,Anne Arundel,North County High,21061,504,170,34
+2019-20,Anne Arundel,Northeast High,21122,328,105,32
+2019-20,Anne Arundel,Old Mill High,21108,524,239,46
+2019-20,Anne Arundel,Severna Park High,21146,434,275,63
+2019-20,Anne Arundel,South River High,21037,520,308,59
+2019-20,Anne Arundel,Southern High,20776,238,95,40
+2019-20,Baltimore City,Academy for College and Career Exploration,21211,70,12,17
+2019-20,Baltimore City,Baltimore City College,21218,295,218,74
+2019-20,Baltimore City,Baltimore Design School,21202,73,48,66
+2019-20,Baltimore City,Baltimore Leadership School for Young Women,21201,50,36,72
+2019-20,Baltimore City,Baltimore Polytechnic Institute,21209,369,266,72
+2019-20,Baltimore City,Baltimore School for the Arts,21201,96,60,63
+2019-20,Baltimore City,Bard High School Early College,21216,105,56,53
+2019-20,Baltimore City,Carver Vocational-Technical High,21216,143,37,26
+2019-20,Baltimore City,City Neighbors High,21214,89,21,24
+2019-20,Baltimore City,Coppin Academy,21216,74,19,26
+2019-20,Baltimore City,Digital Harbor High School,21230,195,31,16
+2019-20,Baltimore City,Edmondson-Westside High,21229,177,31,18
+2019-20,Baltimore City,Forest Park High,21207,150,32,21
+2019-20,Baltimore City,Frederick Douglass High,21217,137,16,12
+2019-20,Baltimore City,Green Street Academy,21229,106,38,36
+2019-20,Baltimore City,Mergenthaler Vocational-Technical High,21218,338,96,28
+2019-20,Baltimore City,National Academy Foundation,21205,103,19,18
+2019-20,Baltimore City,Patterson High,21224,205,25,12
+2019-20,Baltimore City,Paul Laurence Dunbar High,21231,141,54,38
+2019-20,Baltimore City,Reginald F. Lewis High,21214,92,18,20
+2019-20,Baltimore City,The Reach! Partnership School,21218,117,21,18
+2019-20,Baltimore City,SEED School of Maryland,21223,28,18,64
+2019-20,Baltimore City,Vivien T. Thomas Medical Arts Academy,21223,63,18,29
+2019-20,Baltimore City,Western High,21209,209,131,63
+2019-20,Baltimore County,Catonsville High,21228,413,201,49
+2019-20,Baltimore County,Chesapeake High,21221,223,57,26
+2019-20,Baltimore County,Dulaney High,21093,458,283,62
+2019-20,Baltimore County,Dundalk High,21222,374,80,21
+2019-20,Baltimore County,Eastern Technical High School,21221,264,213,81
+2019-20,Baltimore County,Franklin High,21136,395,207,52
+2019-20,Baltimore County,George W. Carver Center for Arts & Technology,21204,217,147,68
+2019-20,Baltimore County,Hereford High,21120,335,224,67
+2019-20,Baltimore County,Kenwood High IB and Sports Science,21221,373,81,22
+2019-20,Baltimore County,Lansdowne High & Academy of Finance,21227,314,79,25
+2019-20,Baltimore County,Loch Raven High,21286,217,104,48
+2019-20,Baltimore County,Milford Mill Academy,21207,263,80,30
+2019-20,Baltimore County,New Town High,21117,269,113,42
+2019-20,Baltimore County,Overlea High,21206,190,39,21
+2019-20,Baltimore County,Owings Mills High,21117,261,84,32
+2019-20,Baltimore County,Parkville High & Center for Math/Science,21234,416,149,36
+2019-20,Baltimore County,Patapsco High & Center for Arts,21222,319,105,33
+2019-20,Baltimore County,Perry Hall High,21236,478,232,49
+2019-20,Baltimore County,Pikesville High,21208,215,99,46
+2019-20,Baltimore County,Randallstown High,21133,238,84,35
+2019-20,Baltimore County,Sparrows Point High,21219,238,97,41
+2019-20,Baltimore County,Towson High Law & Public Policy,21286,361,257,71
+2019-20,Baltimore County,Western School of Technology & Env. Science,21228,204,149,73
+2019-20,Baltimore County,Woodlawn High Center for Pre-Eng. Res.,21207,360,76,21
+2019-20,Calvert,Calvert High,20678,310,139,45
+2019-20,Calvert,Huntingtown High School,20639,359,189,53
+2019-20,Calvert,Northern High,20736,346,190,55
+2019-20,Calvert,Patuxent High,20657,262,93,36
+2019-20,Caroline,Colonel Richardson High School,21632,111,42,38
+2019-20,Caroline,North Caroline High School,21660,253,88,35
+2019-20,Carroll,Century High,21784,277,178,64
+2019-20,Carroll,Francis Scott Key High,21791,258,104,40
+2019-20,Carroll,Liberty High,21784,270,192,71
+2019-20,Carroll,Manchester Valley High,21102,322,156,48
+2019-20,Carroll,South Carroll High,21784,261,152,58
+2019-20,Carroll,Westminster High,21157,343,199,58
+2019-20,Carroll,Winters Mill High,21157,240,112,47
+2019-20,Cecil,Bohemia Manor High,21915,152,69,45
+2019-20,Cecil,Elkton High,21921,216,86,40
+2019-20,Cecil,North East High,21901,228,90,40
+2019-20,Cecil,Perryville High,21903,190,70,37
+2019-20,Cecil,Rising Sun High,21901,270,127,47
+2019-20,Charles,Henry E. Lackey High School,20640,242,72,30
+2019-20,Charles,La Plata High School,20646,285,139,49
+2019-20,Charles,Maurice J. McDonough High School,20675,193,93,48
+2019-20,Charles,North Point High School,20603,427,243,57
+2019-20,Charles,St. Charles High School,20602,360,136,38
+2019-20,Charles,Thomas Stone High School,20601,270,90,33
+2019-20,Charles,Westlake High School,20603,288,119,41
+2019-20,Dorchester,Cambridge-South Dorchester High School,21613,145,47,32
+2019-20,Dorchester,North Dorchester High School,21643,94,24,26
+2019-20,Frederick,Brunswick High,21716,175,93,53
+2019-20,Frederick,Catoctin High,21788,176,69,39
+2019-20,Frederick,Frederick High,21701,358,164,46
+2019-20,Frederick,Gov. Thomas Johnson High,21701,415,152,37
+2019-20,Frederick,Linganore High,21701,311,179,58
+2019-20,Frederick,Middletown High,21769,260,162,62
+2019-20,Frederick,Oakdale High,21754,312,205,66
+2019-20,Frederick,Tuscarora High,21703,365,190,52
+2019-20,Frederick,Urbana High,21754,436,326,75
+2019-20,Frederick,Walkersville High,21793,270,146,54
+2019-20,Garrett,Northern Garrett High School,21520,91,31,34
+2019-20,Garrett,Southern Garrett High School,21550,165,69,42
+2019-20,Harford,Aberdeen High,21001,336,147,44
+2019-20,Harford,Bel Air High,21014,374,225,60
+2019-20,Harford,C. Milton Wright High,21015,356,225,63
+2019-20,Harford,Edgewood High,21040,314,128,41
+2019-20,Harford,Fallston High,21047,245,159,65
+2019-20,Harford,Harford Technical High,21015,233,129,55
+2019-20,Harford,Havre de Grace High,21078,148,62,42
+2019-20,Harford,Joppatowne High,21085,154,60,39
+2019-20,Harford,North Harford High,21132,291,142,49
+2019-20,Harford,Patterson Mill High School,21015,201,134,67
+2019-20,Howard,Atholton High,21044,367,252,69
+2019-20,Howard,Centennial High,21042,415,323,78
+2019-20,Howard,Glenelg High,21737,307,200,65
+2019-20,Howard,Hammond High,21046,307,162,53
+2019-20,Howard,Howard High,21043,481,339,71
+2019-20,Howard,Long Reach High,21045,397,218,55
+2019-20,Howard,Marriotts Ridge High,21104,356,273,77
+2019-20,Howard,Mount Hebron High,21042,404,293,73
+2019-20,Howard,Oakland Mills High,21045,307,138,45
+2019-20,Howard,Reservoir High,20759,335,224,67
+2019-20,Howard,River Hill High,21029,307,222,72
+2019-20,Howard,Wilde Lake High,21044,312,174,56
+2019-20,Kent,Kent County High,21678,133,51,38
+2019-20,Montgomery,Albert Einstein High,20895,373,181,49
+2019-20,Montgomery,Bethesda-Chevy Chase High,20814,501,352,70
+2019-20,Montgomery,Clarksburg High,20871,561,311,55
+2019-20,Montgomery,Col. Zadok Magruder High,20855,380,201,53
+2019-20,Montgomery,Damascus High,20872,286,183,64
+2019-20,Montgomery,Gaithersburg High,20877,538,196,36
+2019-20,Montgomery,James Hubert Blake High,20905,429,262,61
+2019-20,Montgomery,John F. Kennedy High,20902,375,128,34
+2019-20,Montgomery,Montgomery Blair High,20901,748,396,53
+2019-20,Montgomery,Northwest High,20874,582,357,61
+2019-20,Montgomery,Northwood High School,20901,420,170,41
+2019-20,Montgomery,Paint Branch High,20866,467,287,62
+2019-20,Montgomery,Poolesville High,20837,277,210,76
+2019-20,Montgomery,Quince Orchard High,20878,521,342,66
+2019-20,Montgomery,Richard Montgomery High,20852,635,428,67
+2019-20,Montgomery,Rockville High,20851,352,190,54
+2019-20,Montgomery,Seneca Valley High,20874,247,113,46
+2019-20,Montgomery,Sherwood High,20860,452,295,65
+2019-20,Montgomery,Springbrook High,20904,436,194,45
+2019-20,Montgomery,Thomas S. Wootton High,20850,525,415,79
+2019-20,Montgomery,Walt Whitman High,20817,504,328,65
+2019-20,Montgomery,Walter Johnson High,20814,599,393,66
+2019-20,Montgomery,Watkins Mill High,20879,377,151,40
+2019-20,Montgomery,Wheaton High,20906,470,222,47
+2019-20,Montgomery,Winston Churchill High,20854,562,414,74
+2019-20,Prince George's,Academy of Health Sciences at PGCC,20774,111,79,71
+2019-20,Prince George's,Bladensburg High,20710,386,68,18
+2019-20,Prince George's,Bowie High,20715,588,311,53
+2019-20,Prince George's,Central High,20747,165,58,35
+2019-20,Prince George's,Charles Herbert Flowers High,20774,497,255,51
+2019-20,Prince George's,Chesapeake Math and IT Public Charter,20707,87,64,74
+2019-20,Prince George's,Chesapeake Math and IT South Public Charter,20772,81,52,64
+2019-20,Prince George's,College Park Academy,20737,60,39,65
+2019-20,Prince George's,Crossland High,20748,203,39,19
+2019-20,Prince George's,Dr. Henry A. Wise Jr. High,20772,506,205,41
+2019-20,Prince George's,Duval High,20706,404,151,37
+2019-20,Prince George's,Eleanor Roosevelt High,20770,621,359,58
+2019-20,Prince George's,Fairmont Heights High,20785,172,53,31
+2019-20,Prince George's,Frederick Douglass High,20772,201,99,49
+2019-20,Prince George's,Friendly High,20744,170,61,36
+2019-20,Prince George's,Gwynn Park High,20613,227,80,35
+2019-20,Prince George's,High Point High,20705,535,120,22
+2019-20,Prince George's,International High school @ Largo,20772,78,14,18
+2019-20,Prince George's,Largo High,20774,183,74,40
+2019-20,Prince George's,Laurel High,20707,380,156,41
+2019-20,Prince George's,Northwestern High,20782,478,128,27
+2019-20,Prince George's,Oxon Hill High,20745,346,157,45
+2019-20,Prince George's,Parkdale High,20737,433,137,32
+2019-20,Prince George's,Potomac High,20745,244,54,22
+2019-20,Prince George's,Suitland High,20746,394,122,31
+2019-20,Prince George's,Surrattsville High,20735,177,50,28
+2019-20,Queen Anne's,Kent Island High School,21666,327,186,57
+2019-20,Queen Anne's,Queen Anne's County High School,21617,281,134,48
+2019-20,Somerset,Crisfield Academy and High School,21817,67,20,30
+2019-20,Somerset,Washington Academy and High School,21853,78,16,21
+2019-20,St. Mary's,Chopticon High,20660,372,125,34
+2019-20,St. Mary's,Great Mills High,20634,343,109,32
+2019-20,St. Mary's,Leonardtown High,20650,478,246,52
+2019-20,Talbot,Easton High,21601,316,133,42
+2019-20,Talbot,St. Michaels Middle/High School,21663,60,32,53
+2019-20,Washington,Barbara Ingram School for the Arts,21740,76,52,68
+2019-20,Washington,Boonsboro High,21713,189,104,55
+2019-20,Washington,Clear Spring High,21722,85,35,41
+2019-20,Washington,North Hagerstown High,21742,289,126,44
+2019-20,Washington,Smithsburg High,21783,157,69,44
+2019-20,Washington,South Hagerstown High,21740,252,92,37
+2019-20,Washington,Washington County Technical High,21740,304,91,30
+2019-20,Washington,Williamsport High,21795,191,79,41
+2019-20,Wicomico,James M. Bennett High,21804,326,127,39
+2019-20,Wicomico,Mardela Middle & High,21837,85,38,45
+2019-20,Wicomico,Parkside High,21804,242,119,49
+2019-20,Wicomico,Wicomico High,21804,231,75,33
+2019-20,Worcester,Pocomoke High,21851,92,31,34
+2019-20,Worcester,Snow Hill High,21863,66,32,49
+2019-20,Worcester,Stephen Decatur High,21811,289,128,44
