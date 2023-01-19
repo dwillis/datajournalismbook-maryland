@@ -33,8 +33,7 @@ library(tidyverse)
 
 ### Task 2: Load data
 
-**Task** Load some [Maryland state government payments data](https://opendata.maryland.gov/Budget/State-of-Maryland-Payments-Data-FY2008-to-FY2023/7syw-q4cy) by running the following code. We'll use the guess_max() function as an argument to use the first 10 rows to set the data type. What does the first line of the red Warning message that prints out when you load the data say? What happens when you follow its instructions? Answer below. 
-**Answer**
+**Task** Load some [Maryland state government payments data](https://opendata.maryland.gov/Budget/State-of-Maryland-Payments-Data-FY2008-to-FY2023/7syw-q4cy) by running the following code. We'll use the guess_max() function as an argument to use the first 10 rows to set the data type. What does the first line of the red Warning message that prints out when you load the data say? What happens when you follow its instructions? Answer below. **Answer**
 
 ```{r}
 payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2023.csv", guess_max=10)
@@ -50,8 +49,7 @@ payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2023.csv
 
 ### Task 4: Examine the data with glimpse
 
-**Task** Run the following codeblock to glimpse the data. What data type is the "district" field? What data type is the "precinct" field? What data type is the "mail" column? Answer below. 
-**Answer**
+**Task** Run the following codeblock to glimpse the data. What data type is the "district" field? What data type is the "precinct" field? What data type is the "mail" column? Answer below. **Answer**
 
 ```{r}
 glimpse(payments)
@@ -59,15 +57,13 @@ glimpse(payments)
 
 Things that should be characters -- like agency name, vendor name -- are characters (chr). Things that should be numbers (dbl) -- like amount and fiscal year -- are numbers. We've seen before that sometimes dates aren't defined as date datatypes by R - we can fix that using `lubridate`.
 
-
 ### Task 5: Detect wrong spatial data
 
 The second smell we can find in code is **wrong spatial data**. Spatial data means data that refers to some geography; in this dataset the only geographical element is the vendor's zip code. Zip codes should be, at a minimum, five characters long (although composed of numbers, zip codes aren't used as numbers).
 
 We can check to see if any of the zip codes are less than five characters by using [a function called `str_length`](https://stringr.tidyverse.org/reference/str_length.html) inside a filter.
 
-**Task** Run the following codeblock to group by the vendor's zip code and show any that are less than five characters in length. How many zip codes do not have five characters? What do you think is happening with this data?
-**Answer** 
+**Task** Run the following codeblock to group by the vendor's zip code and show any that are less than five characters in length. How many zip codes do not have five characters? What do you think is happening with this data? **Answer**
 
 ```{r}
 payments %>%
@@ -93,8 +89,7 @@ Each row represents a recipient of state grant or loan, along with information a
 
 ### Task 7: Count the number of payments in each category by year:
 
-**Task** Run the following codeblock to count the number of payments. Looking at the result, what jumps out at you as potentially problematic?
-**Answer** 
+**Task** Run the following codeblock to count the number of payments. Looking at the result, what jumps out at you as potentially problematic? **Answer**
 
 ```{r}
 md_grants_loans %>% 
@@ -107,8 +102,7 @@ Any time you are going to focus on a column for analysis, you should check for u
 
 ### Task 8: Find outliers
 
-**Task** Run the following code to arrange the grants & loan data so that the smallest amount is first. Describe what you see.
-**Answer** 
+**Task** Run the following code to arrange the grants & loan data so that the smallest amount is first. Describe what you see. **Answer**
 
 ```{r}
 md_grants_loans %>% 
@@ -144,8 +138,7 @@ Let's get cleaning. Our goal will be to build up one block of code that does all
 
 ### Task 3: Use clean_names()
 
-**Task** Run the following codeblock to use the `clean_names()` function from janitor to standardize column names. How does the function change the headers? Answer below.
-**Answer**
+**Task** Run the following codeblock to use the `clean_names()` function from janitor to standardize column names. How does the function change the headers? Answer below. **Answer**
 
 ```{r}
 # cleaning function
@@ -189,8 +182,7 @@ cleaned_md_grants_loans
 
 ### Task 6: Check for duplicate rows
 
-**Task** Run the following codeblock to check for duplicate rows using get_dupes(). How many duplicates are possible? 
-**Answer**
+**Task** Run the following codeblock to check for duplicate rows using get_dupes(). How many duplicates are possible? **Answer**
 
 ```{r}
 cleaned_md_grants_loans %>%
@@ -199,8 +191,7 @@ cleaned_md_grants_loans %>%
 
 ### Task 7: Get rid of duplicate rows
 
-**Task** Run the following codeblock to use distinct() to get rid of duplicate rows. How many rows does the new dataframe have? Answer below. 
-**Answer**
+**Task** Run the following codeblock to use distinct() to get rid of duplicate rows. How many rows does the new dataframe have? Answer below. **Answer**
 
 ```{r}
 # cleaning function
@@ -222,8 +213,7 @@ Let's start by cleaning up the zip field. Remember, some of the rows had a five-
 
 We're going to write code that tells R to make a new column for our zips, keeping the first five digits on the left, and get rid of anything after that by using `mutate()` in concert with `str_sub()`, from the `stringr` package.
 
-**Task** Run the following codeblock to use str_sub() to convert the ZIP codes that have nine digits to five digits, creating a new column. Look at the difference in the result - what changed? 
-**Answer**
+**Task** Run the following codeblock to use str_sub() to convert the ZIP codes that have nine digits to five digits, creating a new column. Look at the difference in the result - what changed? **Answer**
 
 ```{r}
 # cleaning function
@@ -291,4 +281,3 @@ cleaned_md_grants_loans
 ```{r}
 
 ```
-
