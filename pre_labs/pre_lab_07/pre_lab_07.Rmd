@@ -123,7 +123,8 @@ We can measure this by median household income. That variable is `B19013_001`, s
 
 ### Task 5: Answer Questions with ACS Data
 
-**Task** Run the following codeblock to find the Maryland county with the highest median household income and put the answer below. **Answer**
+**Task** Run the following codeblock to find the Maryland county with the highest median household income and put the answer below. 
+**Answer**
 
 ```{r}
 md <- get_acs(geography = "county",
@@ -140,7 +141,8 @@ What do the top counties all have in common? Lots of suburban flight from D.C an
 
 ### Task 6: Margins of Error
 
-**Task** Run the following codeblock to create a chart showing the margin of error for each county.
+**Task** Run the following codeblock to create a chart showing the margin of error for each county. The current headline isn't very descriptive of the data. What should it be?
+**Answer** 
 
 ```{r}
 md %>%
@@ -207,6 +209,8 @@ Combining Census data with other types of data really unlocks its power for jour
 md_high_schools <- read_csv("data/md_high_schools.csv") %>%
   mutate(zip = as.character(zip))
 ```
+
+The Census Bureau has Zip Code Tabulation Areas - they are mostly identical to what we know as zip codes, with some small differences. In most cases we can use them interchangeably.
 
 **Task** Let's get ZCTA household income data from the ACS using tidycensus for each zip code in `md_high_schools`. Run the following codeblock to retrieve household income data for all Maryland ZCTAs first, then join them to `md_high_schools` using the GEOID column. We'll also create min and max values and drop any rows where we don't have income estimates. What's one question we could ask of this data now that we have enrollment percentages and household income for the high school's zip code? What might make the answer harder to interpret?
 **Answer**
