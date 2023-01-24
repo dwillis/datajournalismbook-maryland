@@ -283,9 +283,10 @@ Is this a more interesting or useful answer? Why?
 
 Mutate is also useful for standardizing data - for example, making different spellings of, say, campaign spending recipients.
 
-Let's take a look at that `maryland_expenses` dataframe, and in particular the `payee_name` column.
+Let's load some Maryland state campaign expenditures into a `maryland_expenses` dataframe, and focus in particular on the `payee_name` column.
 
 ```{r}
+maryland_expenses <- read_csv("data/maryland_expenses.csv")
 maryland_expenses
 ```
 
@@ -302,7 +303,7 @@ standardized_maryland_expenses <- maryland_expenses %>%
 )
 ```
 
-**Task** Search the Internet for tidyverse functions similar to str_to_upper. Name at least two and describe what they do.
+**Task** Search the Internet for tidyverse functions similar to str_to_upper. Name at least two and describe what they do. If you use ChatGPT for this, include the question you submitted.
 
 **Answer**
 
@@ -310,64 +311,41 @@ There are lots of potential uses for standardization - addresses, zip codes, any
 
 ### Task 15: Create a new column using case_when
 
-Mutate is even more useful when combined with some additional functions. Let's wind up where we started: with our UMD course data. We have those values for terms, but it's not clear what semesters they actually refer to. We'd like to have columns for year and semester based on the values we have for `term`. Let's look at those unique values using a function called `distinct`:
-
-**Task** Run the following code to see unique values for terms:
-
-```{r}
-umd_courses %>% distinct(term)
-```
-
-We can see that each term value begins with a year and ends with two digits: "01", "05", "08" and "12". We can turn those into semester equivalents by looking them up: "01" indicates Spring semesters, like [the current one](https://app.testudo.umd.edu/soc/search?courseId=&sectionId=&termId=202301).
-
-Mutate can make that happen by creating a new column and putting in a value *based on the term value* of each record. We can use the `case_when` function to give our new columns a value using some standard logic:
+Mutate is even more useful when combined with some additional functions. Let's keep rolling with our expenditure data. Take a look at the address column: it contains a full address, including the state, spelled out. It would be useful to have a separate `state` column with an abbreviation. We can check to see if a state name is contained in that column and then populate a new column with the value we want, using the functions `str_detect` and `case_when`. We can identify the state by the following pattern: a space, followed by the full name, followed by another space. So, " Maryland ". The `case_when` function handles multiple variations, such as if the state is Maryland or the state is Texas, etc. Crucially, we can tell R to populate the new column with `NA` if it doesn't find a match.
 
 **Task** Run the following code and look at the output. Then write a sentence or two describing what you think the mutate statement is doing step by step.
 
 **Answer**
 
 ```{r}
-umd_courses_terms <- umd_courses %>%
+maryland_expenses_with_state <- maryland_expenses %>%
   mutate(
-    term_name = case_when(
-        term == 202305 ~ "Summer",
-        term == 202301 ~ "Spring",
-        term == 202212 ~ "Winter",
-        term == 202208 ~ "Fall",
-        term == 202205 ~ "Summer",
-        term == 202201 ~ "Spring",
-        term == 202112 ~ "Winter",
-        term == 202108 ~ "Fall",
-        term == 202105 ~ "Summer",
-        term == 202101 ~ "Spring",
-        term == 202012 ~ "Winter",
-        term == 202008 ~ "Fall",
-        term == 202005 ~ "Summer",
-        term == 202001 ~ "Spring",
-        term == 201912 ~ "Winter",
-        term == 201908 ~ "Fall",
-        term == 201905 ~ "Summer",
-        term == 201901 ~ "Spring",
-        term == 201812 ~ "Winter",
-        term == 201808 ~ "Fall",
-        term == 201805 ~ "Summer",
-        term == 201801 ~ "Spring",
-        term == 201712 ~ "Winter",
+    state = case_when(
+        str_detect(address, " Maryland ") ~ "MD",
+        str_detect(address, " California ") ~ "CA",
+        str_detect(address, " Washington ") ~ "WA",
+        str_detect(address, " Louisiana ") ~ "LA",
+        str_detect(address, " Florida ") ~ "FL",
+        str_detect(address, " North Carolina ") ~ "NC",
+        str_detect(address, " Massachusetts ") ~ "MA",
+        str_detect(address, " West Virginia ") ~ "WV",
+        str_detect(address, " Virginia ") ~ "VA",
+        TRUE ~ as.character(NA)
       )
   )
 ```
 
-There's a lot going on here, so let's unpack it. It starts out as a typical mutate statement, but case_when introduces some new things. Each line is basically a filter followed by `~` and then a value for the new column for records that match that filter. Here is [more detail](https://www.sharpsightlabs.com/blog/case-when-r/) on using `case_when`.
+There's a lot going on here, so let's unpack it. It starts out as a typical mutate statement, but `case_when` introduces some new things. Each line checks to see if the pattern is contained in the address column, followed by `~` and then a value for the new column for records that match that check. You can read it like this: "If we find ' Maryland ' in the address column, then put 'MD' in the state column." Here is [more detail](https://www.sharpsightlabs.com/blog/case-when-r/) on using `case_when`.
 
-We can then use our new `term_name` column in group_by statements to make summarizing easier.
+We can then use our new `state` column in group_by statements to make summarizing easier.
 
 **Task** Run the following code.
 
 ```{r}
-umd_courses_terms %>%
-  group_by(term_name) %>%
-  summarize(count_classes = n()) %>%
-  arrange(desc(count_classes))
+maryland_expenses_with_state %>%
+  group_by(state) %>%
+  summarize(total = sum(amount)) %>%
+  arrange(desc(total))
 ```
 
 Does this answer make sense to you? Why or why not?
@@ -378,11 +356,11 @@ Mutate is there to make your data more useful and to make it easier for you to a
 
 ### Task 16: More questions
 
-Now that you have seen how to use mutate, filtering and dates, give me three questions about the UMD course data that you could ask that would make use of some or all of those new functions. They can be better versions of the questions from the previous pre-lab.
+Now that you have seen how to use mutate, filtering and dates, give me three questions about either the UMD course data or the Maryland expenditure data that you could ask that would make use of some or all of those new functions. They can be better versions of the questions from the previous pre-lab.
 
 **Answer**
 
-1.  
+1. 
 
 2.  
 

@@ -18,10 +18,6 @@ library(tidycensus)
 
 To use the API, you need an API key. To get that, you need to [apply for an API key with the Census Bureau](https://api.census.gov/data/key_signup.html). It takes a few minutes and you need to activate your key via email. Once you have your key, you need to set that for this session. Just FYI: Your key is your key. Do not share it around.
 
-```{r, include=FALSE}
-census_api_key("549950d36c22ff16455fe196bbbd01d63cfbe6cf")
-```
-
 ```{r, eval=FALSE}
 census_api_key("YOUR KEY HERE", install=TRUE)
 ```
@@ -104,6 +100,7 @@ Here's an example using the 5-year ACS estimates:
 What is Maryland's richest county?
 
 We can measure this by median household income. That variable is `B19013_001`, so we can get that data like this (I'm narrowing it to the top 20 for simplicity):
+
 ```{r}
 md <- get_acs(geography = "county",
               variables = c(medincome = "B19013_001"),
@@ -116,7 +113,7 @@ md
 
 ```
 
-Howard, Calvert, Montgomery, Anne Arundel, Charles. What do they all have in common? Lots of suburban flight from DC and Baltimore. But do the margins of error let us say one county is richer than the other. We can find this out visually using error bars. Don't worry much about the code here --  we'll cover that soon enough.
+Howard, Calvert, Montgomery, Anne Arundel, Charles. What do they all have in common? Lots of suburban flight from DC and Baltimore. But do the margins of error let us say one county is richer than the other. We can find this out visually using error bars. Don't worry much about the code here -- we'll cover that soon enough.
 
 ```{r}
 md %>%
@@ -182,7 +179,6 @@ And then view `v20` to see what kinds of variables are available via the API.
 
 Although one of the chief strengths of tidycensus is that it offers a, well, tidy display of Census data, it also has the ability to view multiple variables spread across columns. This can be useful for creating percentages and comparing multiple variables.
 
-
 ## Sorting Results
 
 You'll notice that we've used `arrange` to sort the results of tidycensus functions, although that's done after we create a new variable to hold the data. There's another way to use `arrange` that you should know about, one that you can use for exploratory analysis. An example using median household income from 2020:
@@ -196,3 +192,32 @@ arrange(md20, desc(estimate))
 ```
 
 In this case we don't save the sorted results to a variable, we can just see the output in the console.
+
+## Combining with Other Data
+
+Combining Census data with other types of data really unlocks its power for journalism. In this case, we'll use some 2019-20 data from Maryland high schools, including the number of graduates and the number of students who enrolled in college the next fall semester, plus the percentage. We also have the zip code of the high school, which will enable us to bring in Census data. Let's load the CSV file and make sure the zip code is a character column, because that's what we'll need to join.
+
+```{r}
+md_high_schools <- read_csv("data/md_high_schools.csv") %>%
+  mutate(zip = as.character(zip))
+```
+
+The Census Bureau has Zip Code Tabulation Areas - they are mostly identical to what we know as zip codes, with some small differences. In most cases we can use them interchangeably. Let's get ZCTA household income data from the ACS using tidycensus for each zip code in `md_high_schools`. Run the following codeblock to retrieve household income data for all Maryland ZCTAs first, then join them to `md_high_schools` using the GEOID column. We'll also create min and max values and drop any rows where we don't have income estimates. What's one question we could ask of this data now that we have enrollment percentages and household income for the high school's zip code? What might make the answer harder to interpret?
+
+```{r}
+md_zipcodes <- get_acs(geography="zcta", variables = "B19013_001", state='MD', year=2019)
+md_high_schools_with_acs <- md_high_schools %>% left_join(md_zipcodes, by=c('zip'='GEOID'))
+md_high_schools_with_acs <- md_high_schools_with_acs %>% mutate(min=(estimate-moe), max=(estimate+moe)) %>% drop_na()
+```
+
+Now let's look at the average household income for high schools that have 60% or more graduates immediately enrolling in college, and then look at those with less than 40%. What do you see here?
+
+```{r}
+md_high_schools_with_acs %>%
+  filter(percent_of_high_school_graduates_enrolled >= 60) %>% 
+  summarize(avg_income = mean(estimate), count =n())
+
+md_high_schools_with_acs %>%
+  filter(percent_of_high_school_graduates_enrolled <= 40) %>% 
+  summarize(avg_income = mean(estimate), count = n())
+```

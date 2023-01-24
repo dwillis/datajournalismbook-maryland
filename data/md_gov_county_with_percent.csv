@@ -1,4 +1,4 @@
-Fips_Code,County,Cox,Moore,Lashar,Wallace,Harding,Write-ins,Total,PctMoore
+fips_code,county,cox,moore,lashar,wallace,harding,write_ins,total,pct_moore
 24001,Allegany,13833,6390,279,143,267,0,20912,30.556618209640398
 24003,Anne Arundel,72806,83643,3446,948,1247,0,162090,51.602813251897096
 24510,Baltimore City,11140,107563,1237,1180,1391,0,122511,87.79864665213736

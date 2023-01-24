@@ -14,7 +14,6 @@ library(tidyverse)
 library(janitor)
 ```
 
-
 ## Easy does it
 
 Tabula works best when tables in PDFs are clearly defined and have nicely-formatted information. Here's a perfect example: [active voters by county in Maryland](https://elections.maryland.gov/press_room/2020_stats/Eligible%20Active%20Voters%20by%20County%20-%20PG20.pdf).
@@ -45,66 +44,78 @@ Boom - we're good to go.
 
 ## When it looks good, but needs a little fixing
 
-Here's a slightly more involved PDF, from our Missouri primary election collection efforts! It's from [Camden County](https://drive.google.com/file/d/1PcsvFpkulCZUM6bnEM74cttf3W0WWC0U/view?usp=sharing).
+Here's a slightly more involved PDF, from [Maryland's 2020 annual report on unintentional drug and alcohol-related intoxication deaths](https://health.maryland.gov/vsa/Documents/Overdose/Annual_2020_Drug_Intox_Report.pdf). Specifically, we're looking at Table 7 on page 67 of the report which lists the number of fentanyl-related deaths by jurisdiction:
 
 ```{r, echo=FALSE}
-knitr::include_graphics(rep("images/camden_1.png"))
+knitr::include_graphics(rep("images/md_fentanyl_deaths_1.png"))
 ```
 
 Looks like a spreadsheet, right? Save that PDF file to your computer in a place where you'll remember it (like a Downloads folder).
 
-Now let's repeat the steps we did to import the PDF into Tabula and autodetect the tables. It should look like this:
+Now let's repeat the steps we did to import the PDF into Tabula, go to page 67. It should look like this:
 
 ```{r, echo=FALSE}
-knitr::include_graphics(rep("images/camden_2.png"))
+knitr::include_graphics(rep("images/md_fentanyl_deaths_2.png"))
 ```
 
-This is pretty good, but we want to capture the second line of the headers - `Voters`, `Cast` and `Turnout` - and for our purposes we only want the first page of the PDF for now. So hit "Clear All Selections" button at the top and let's draw a box around what we want. Using your cursor, click and drag a box across the first page so it looks like this:
+Let's draw a box around what we want, but there's a catch: the headers aren't on a single line. If you draw your box around the whole table and preview, you'll see that there's a problem. To fix that, we'll need to limit our box to just the data. Using your cursor, click and drag a box across the table so it looks like this:
 
 ```{r, echo=FALSE}
-knitr::include_graphics(rep("images/camden_3.png"))
+knitr::include_graphics(rep("images/md_fentanyl_deaths_3.png"))
 ```
 
 Now you can hit the green "Preview & Export Extracted Data" button on the top right. Using the "Stream" method, you should see something very like this:
 
 ```{r, echo=FALSE}
-knitr::include_graphics(rep("images/camden_4.png"))
+knitr::include_graphics(rep("images/md_fentanyl_deaths_4.png"))
 ```
+
 You can now export that extracted table to a CSV file using the "Export" button. And then we can read it into R and clean up the column names and some other things:
 
 ```{r}
-camden_2022 <- read_csv("data/tabula-camden_county_election_results.csv") %>% clean_names()
+fentanyl_deaths <- read_csv("data/tabula-Annual_2020_Drug_Intox_Report.csv") %>% clean_names()
 
-camden_2022
+fentanyl_deaths
 ```
 
 ## Cleaning up the data in R
 
-The good news is that we have data we don't have to retype. The bad news is, it's hardly in importable shape. We have a few things to fix. Some of the datatypes are wrong, we've got a column to rename and two rows with NAs, plus a precinct name that wraps over to the next line. Let's start by re-importing it and calling `mutate` to fix the column & datatype issues, plus that precinct name:
+The good news is that we have data we don't have to retype. The bad news is, we have a few things to fix, starting with the fact that the headers shouldn't be headers. Let's start by re-importing it and specifying that the first row doesn't have column headers:
 
 ```{r}
-camden_2022 <- read_csv("data/tabula-camden_county_election_results.csv") %>% clean_names()
+fentanyl_deaths <- read_csv("data/tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) %>% clean_names()
 
-camden_2022 <- camden_2022 %>%
-  rename(precinct = x1) %>%
-  mutate(voters = as.numeric(voters),
-         turnout = as.numeric(str_replace(turnout, '%',''))
-         ) %>%
-  mutate(precinct = case_when(
-    precinct == 'SUNRISE BEACH 2 & 3 AND WILSON' ~ 'SUNRISE BEACH 2 & 3 AND WILSON BEND',
-    TRUE ~ precinct
-  )
-)
-camden_2022
+fentanyl_deaths
 ```
 
-Ok, now we have numbers. Next we'll get rid of the rows where `cast` is NA (why not `voters`?). To do that, we'll use the inverse of the `is.na` function by placing an exclamation point before it (you can read that filter as "where cast is NOT NA").
+Ok, now we have all the data. But we need actual headers. Let's add those using `rename()`, keeping in mind that the new name comes _first_.
 
 ```{r}
-camden_2022 <- camden_2022 %>% filter(!is.na(cast))
+fentanyl_deaths <- read_csv("data/tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) %>% 
+  clean_names() %>% 
+  rename(jurisdiction = x1, deaths_2011 = x2, deaths_2012 = x3, deaths_2013 = x4, deaths_2014 = x5, deaths_2015 = x6, deaths_2016 = x7, deaths_2017 = x8, 
+         deaths_2018 = x9, deaths_2019 = x10, deaths_2020 = x11, deaths_total = x12)
 
-camden_2022
+fentanyl_deaths
 ```
+
+We could stop here, but there are a bunch of periods in the jurisdiction column and it's better to remove them - it will make filtering easier. Let's use `str_replace_all()` to do that:
+
+```{r}
+fentanyl_deaths <- read_csv("data/tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) %>% 
+  clean_names() %>% 
+  rename(jurisdiction = x1, deaths_2011 = x2, deaths_2012 = x3, deaths_2013 = x4, deaths_2014 = x5, deaths_2015 = x6, deaths_2016 = x7, deaths_2017 = x8, 
+         deaths_2018 = x9, deaths_2019 = x10, deaths_2020 = x11, deaths_total = x12) %>% 
+  mutate(jurisdiction = str_squish(str_replace_all(jurisdiction,'\\.','')))
+
+fentanyl_deaths
+```
+There are a few important things to explain here:
+
+1. Because we're replacing a literal period (.), we need to make sure that R knows that. Hence the '\\.' Why? Because '.' is a valid expression meaning "any character", so if we didn't have the backslashes the above code would make the entire column blank (try it!)
+2. The `str_squish` function cleans up any excess spaces, at the beginning, middle or end of a character column. If we then use filter, we can do so with confidence.
+3. I put "deaths_" in front of each yearly column because R likes it when columns don't begin with a number. You can have a column called `2011`, but you literally have to use the backticks (`2011`) to refer to it in code.
+
 All things considered, that was pretty easy. Many - most? - electronic PDFs aren't so easy to parse. Sometimes you'll need to open the exported CSV file and clean things up before importing into R. Other times you'll be able to do that cleaning in R itself.
 
 Here's the sad truth: THIS IS PRETTY GOOD. It sure beats typing it out. And since many government processes don't change all that much, you can save the code to process subsequent versions of PDFs.
