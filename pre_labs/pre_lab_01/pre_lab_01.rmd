@@ -12,7 +12,7 @@ options(scipen=999)
 
 ## About this notebook
 
-This notebook contains code and explanatory text that your should review and run as you read through chapters 1 - 5 of the course textbook, "Data Journalism with R and the Tidyverse". Answer questions and edit the document as directed.
+This notebook contains code and explanatory text that your should review and run as you read through chapters 13 and 15 of the course textbook, "Data Journalism with R and the Tidyverse". Answer questions and edit the document as directed.
 
 Running this notebook will help you understand key data analysis methods and concepts that you will put into practice during this week's lab. When you come across a new command or verb in R, you should add it to your class reference notebook file along with what it's used for.
 
@@ -30,11 +30,10 @@ The library function loads an R library such as the tidyverse, providing access 
 
 -   Load this notebook, and provide overview of R, RStudio (text editor, console, environment window, file explorer), Rmarkdown data notebooks, the reference notebook.
 -   Work through the code below, chapter by chapter.
-    -   Chapter 3: explain the console and the concept of variables.
-    -   Chapter 3: explain packages, the Tidyverse, how to install them.
-    -   Chapter 6: explain loading libraries, the concept of functions, loading data, the importance of having questions to guide data analysis, and aggregation and summarization.
+    -   Chapter 13: explain the console and the concept of variables. Explain packages, the Tidyverse, how to install them.
+    -   Chapter 15: explain loading libraries, the concept of functions, loading data, the importance of having questions to guide data analysis, and aggregation and summarization.
 
-## Chapter 3
+## Chapter 13
 
 ### Task 1: The console
 
@@ -74,9 +73,7 @@ Then run the following code to install the rmarkdown library
 install.packages('rmarkdown')
 ```
 
-## Chapter 6
-
-### Task 1: Load libraries
+### Task 4: Load libraries
 
 **Task** Run the following code in the gray-colored codeblock below -- not in the console -- to load the tidyverse library. To run the code, click the little green play button (left facing arrow) at the top right of the codeblock. In Rmarkdown data notebooks, we write code inside of codeblocks, and explanatory text in the white area outside of it.
 
@@ -86,9 +83,9 @@ install.packages('rmarkdown')
 library(tidyverse)
 ```
 
-### Task 2: Load data
+### Task 5: Load data
 
-**Task** Load the UMD courses data by running the following codeblock.
+**Task** Load the UMD courses data by running the following codeblock. The data is contained in an .rds file, which is a binary format for R data.
 
 ```{r}
 umd_courses <- read_rds("umd_courses.rds")
@@ -98,7 +95,7 @@ Once it loads, look at the environment window at right in RStudio for umd_course
 
 **Answer**
 
-### Task 3: Glimpse data
+### Task 6: Glimpse data
 
 **Task** Run the following codeblock to use glimpse() to get a sense of the data, some of the values in each field/variable/column, and the data types of each field/variable/column.
 
@@ -106,9 +103,10 @@ Once it loads, look at the environment window at right in RStudio for umd_course
 glimpse(umd_courses)
 ```
 
-In the space below, write the data type for the "id" column and the "seats" column (it's in light gray, offset by \< \>). **Answer**
+In the space below, write the data type for the "id" column and the "seats" column (it's in light gray, offset by \< \>). 
+**Answer**
 
-### Task 4: Examine data "head"
+### Task 7: Examine data "head"
 
 **Task** Run the following codeblock to use head() to examine the first six rows of data. Explore the data by clicking the black arrow on the right side of the output table, allowing you to examine additional columns.
 
@@ -116,13 +114,14 @@ In the space below, write the data type for the "id" column and the "seats" colu
 head(umd_courses)
 ```
 
-In the space below, write the name of the business from the first row of the "name" column. **Answer**
+In the space below, write the name of the business from the first row of the "name" column. 
+**Answer**
 
-### Task 5: Explore data with interactive dataframe
+### Task 8: Explore data with interactive dataframe
 
 **Task** look at the environment window at right in RStudio for umd_courses. It's next to a small blue circle with a white arrow in it. Click on the umd_courses -- not the blue circle. It will open the dataframe as an interactive table. Scroll down to see additional rows. Scroll left to see additional columns. Click on a column name to sort by that column.
 
-### Task 6: Group and count
+### Task 9: Group and count
 
 **Task** Run the following codeblock:
 
@@ -134,11 +133,11 @@ umd_courses %>%
   )
 ```
 
-Describe what you think each line of this code is doing below:
+Describe what you think each line of this code is doing below, based on the result:
 
 **Answer**
 
-### Task 7: Adding arrange to sort the data
+### Task 10: Adding arrange to sort the data
 
 **Task** Run the following codeblock:
 
@@ -151,9 +150,10 @@ umd_courses %>%
   arrange(desc(count_classes))
 ```
 
-Compared to the previous codeblock, what has changed and how did that affect the result? **Answer**
+Compared to the previous codeblock, what has changed and how did that affect the result? 
+**Answer**
 
-### Task 8 Grouping by multiple columns
+### Task 11: Grouping by multiple columns
 
 **Task** Run the following codeblock.
 
@@ -170,7 +170,7 @@ Compared to the previous codeblock, how did the output change and what in the co
 
 **Answer**
 
-### Task 9 Other summary functions
+### Task 12: Other summary functions
 
 **Task** Run the following codeblock:
 
@@ -184,9 +184,10 @@ umd_courses %>%
   arrange(desc(total_seats))
 ```
 
-Compared to the previous codeblock, what has changed and how did that affect the result? **Answer**
+Compared to the previous codeblock, what has changed and how did that affect the result? 
+**Answer**
 
-### Task 10
+### Task 13: different kinds of summarizations
 
 **Task** Run the following codeblock to group the umd_courses dataframe by term. Then do the following summarizations for each term: count the number of courses, add up the total of all seats, and calculate the mean and median contribution number of seats. Then sort so the term with the most total seats is listed first.
 
@@ -202,9 +203,10 @@ umd_courses %>%
   arrange(desc(total_seats))
 ```
 
-Compared to the previous codeblock, what has changed and how did that affect the result? What do the top terms have in common? **Answer**
+Compared to the previous codeblock, what has changed and how did that affect the result? What do the top terms have in common? 
+**Answer**
 
-### Task 11
+### Task 14: more aggregations
 
 **Task** Run the following codeblock to group the umd_courses dataframe by the department. Then do the following summarizations for each group: count the number of courses, add up the total of all seats, calculate the mean and median number of seats and calculate the smallest and largest seat numbers. Then sort so the department with the largest total number of seats is listed first.
 
