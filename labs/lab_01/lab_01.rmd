@@ -46,7 +46,7 @@ umd_courses <- read_rds("lab_01.rds")
 ```
 
 **Q2** Find out the greatest number of times any individual class has been offered in our dataset. You must show the greatest number of classes first.
-**A2** There are more than 150 that have been offered 21 times each.
+**A2** 
 
 ```{r}
 ```
