@@ -63,7 +63,8 @@ The second smell we can find in code is **wrong spatial data**. Spatial data mea
 
 We can check to see if any of the zip codes are less than five characters by using [a function called `str_length`](https://stringr.tidyverse.org/reference/str_length.html) inside a filter.
 
-**Task** Run the following codeblock to group by the vendor's zip code and show any that are less than five characters in length. How many zip codes do not have five characters? What do you think is happening with this data? **Answer**
+**Task** Run the following codeblock to group by the vendor's zip code and show any that are less than five characters in length. How many zip codes do not have five characters? What do you think is happening with this data? 
+**Answer**
 
 ```{r}
 payments %>%
@@ -102,7 +103,8 @@ Any time you are going to focus on a column for analysis, you should check for u
 
 ### Task 8: Find outliers
 
-**Task** Run the following code to arrange the grants & loan data so that the smallest amount is first. Describe what you see. **Answer**
+**Task** Run the following code to arrange the grants & loan data so that the smallest amount is first. Describe what you see. 
+**Answer**
 
 ```{r}
 md_grants_loans %>% 
