@@ -2,12 +2,6 @@
 	"name": "R Data Science Environment",
 	"build": {
 		"dockerfile": "Dockerfile",
-		⚠
-Error: Parse error on line 4:
-...e": "Dockerfile",		// More info: https:
-----------------------^
-Expecting 'STRING', got 'undefined'
-// More info: https://github.com/rocker-org/devcontainer-images/pkgs/container/devcontainer%2Ftidyverse
 		"args": { "VARIANT": "4.2" }
 	},
 
