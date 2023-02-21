@@ -49,7 +49,7 @@ payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2023.csv
 
 ### Task 4: Examine the data with glimpse
 
-**Task** Run the following codeblock to glimpse the data. What data type is the "district" field? What data type is the "precinct" field? What data type is the "mail" column? Answer below. **Answer**
+**Task** Run the following codeblock to glimpse the data. What data type is the "Vendor Name" field? What data type is the "Amount" field? What data type is the "Date" column? Answer below. **Answer**
 
 ```{r}
 glimpse(payments)
