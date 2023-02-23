@@ -1,7 +1,7 @@
 ---
 title: "lab_03"
 author: "Derek Willis"
-date: "8/10/2022"
+date: "2023-02-22"
 output: html_document
 ---
 
@@ -22,105 +22,61 @@ library(tidyverse)
 library(janitor)
 ```
 
-## Load data
+## Load data and clean up the column names
+
+Load the two datasets we worked with in the pre_lab: the Maryland payments to vendors and Maryland grants and loans and, using janitor, change the columns so that they are lower-cased and any spaces are replaced with underscores.
 
 ```{r}
-# Load MD slice of FEC House candidate contribution data
-md_contribs <- read_rds("data/lab_03.rds")
+# Load in the Maryland state agency payments data, making sure that it correctly sets the datatypes using all of the rows
+md_payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2023.csv", guess_max=322138) %>% clean_names
+
+# Load in the Maryland grants and loan data
+md_grants_loans <- read_csv("data/State_of_Maryland_Grant_and_Loan_Data__FY2009_to_FY2022.csv") %>% clean_names()
 ```
 
 ## Answer questions
 
-Q1: Which seven cities in Maryland had the largest *number* of contributions from donors? How many did each have? To answer this question, you'll have to clean the messy "contributor_city" field.
+Q1: You want to know how much money state agencies have paid to the Prince George's County School system, but to do that you'll need to find all of the variations of how the school system might be listed. Write code to find rows where the vendor name contains the county's school system, starting with a broad search and then narrowing it down. When you have found as many as possible, save the result to a new dataframe called `pg_schools`. How many records did you find?
 
-Note: To answer this question, you'll need to see every variation of the "contributor_city" for the top seven cities, which you should identify through some initial analysis. Then find variations of them and change those variations into the most common version.
-
-A1: The top seven cities are BALTIMORE (6726), BETHESDA (5860), SILVER SPRING (4659), CHEVY CHASE (3260), POTOMAC (2301), ROCKVILLE (2213) and ANNAPOLIS (2001).
+A1: There are 39 records.
 
 ```{r}
-# initial list of cities are: BALTIMORE, BETHESDA, SILVER SPRING, CHEVY CHASE, POTOMAC, ROCKVILLE, ANNAPOLIS
-md_contribs_by_city <- md_contribs %>%
-  group_by(contributor_city) %>% 
-  summarize(count = n()) %>% 
-  arrange(desc(count))
-
-# clean those cities
-md_contribs_by_city_fixed <- md_contribs %>% 
-  mutate(contributor_city=case_when(
-    contributor_city == "BALITMORE" ~ "BALTIMORE",
-    contributor_city == "ANAPOLIS" ~ "ANNAPOLIS",
-    contributor_city == "ANNAPOLID" ~ "ANNAPOLIS",
-    contributor_city == "ANNNAPOLIS" ~ "ANNAPOLIS",
-    contributor_city == "ANRETIREDPOLIS" ~ "ANNAPOLIS",
-    contributor_city == "BETHESA" ~ "BETHESDA",
-    contributor_city == "BETHSDA" ~ "BETHESDA",
-    contributor_city == "POTAMIC" ~ "POTOMAC",
-    contributor_city == "SILVER SPRING, MD" ~ "SILVER SPRING",
-    contributor_city == "SILVER SPRINGS" ~ "SILVER SPRING",
-    contributor_city == "SLIVER SPRING" ~ "SILVER SPRING",
-    TRUE ~ contributor_city
-  )) %>%
-  group_by(contributor_city) %>%
-  summarise(total = n()) %>%
-  arrange(desc(total))
-
-md_contribs_by_city_fixed
-
+pg_schools <- md_payments %>% 
+  filter(str_detect(vendor_name, "PRINCE GEORGES PUBLIC") | str_detect(vendor_name, "PRINCE GEORGES COUNTY SCHOOL") | str_detect(vendor_name, "PG COUNTY PUBLIC"))
 ```
 
-Q2: Find the 5-digit ZIP code in Maryland that had the highest total amount of contributions (by dollar value). Where is that zip code and what kind of area is it? Which committee is the largest recipient of money from that zip code? How many of the top five recipients are Maryland candidates?
+Q2: Using that `pg_schools` dataframe, write code to calculate the total amount of payments to the Prince George's County School system for each fiscal year. Which fiscal year had the largest total amount? What do you notice about the years listed?
 
-A2: A ZIP code (20815) in Chevy Chase is responsible for more contributions to House candidates than anywhere else in the state. Chevy Chase is a very wealthy area bordering D.C. and home to prominent business people, government officials and others with a stake in government.
-
-Jamie Raskin got the most money from that zip code among House candidates, which makes some sense because it's located in the district that he represents. Just two of the top five are Maryland candidates.
+A2: 2020 had the largest amount, with $1,362,372,202. In addition to missing 2021 and 2022 data, 2016 appears to be missing.
 
 ```{r}
-# Create a dataframe that shows the top ZIP code by total dollar amount
-md_contribs_zip <- md_contribs %>%
-  mutate(zip_five = str_sub(contributor_zip, start=1L, end=5L)) %>%
-  group_by(zip_five) %>%
+pg_schools %>%
+  group_by(fiscal_year) %>%
   summarise(
-    total_amount = sum(contribution_receipt_amount)
+    total_amount = sum(amount)
   ) %>%
   arrange(desc(total_amount))
+```
+Q3. You're interested in examining the vendors paid for capital projects at the University of Maryland. Search the payments data to find those payments, then write code to produce a list of each vendor and the total amount it received. Look carefully at that list - what cleaning will it require to ensure that you have only one row per vendor and zip code? Provide at least three examples of vendor names that are similar and should be combined into one. Describe how you might clean that data so that any nearly identical vendors would look identical - what would you change and how?
 
-md_contribs_zip
+A3. There are multiple duplicates in the results, and removing punctuation would be one way to narrow down the list. Another one would be to use mutate with case_when to standardize the vendor names.
 
-# Use the top ZIP code in the dataframe you just created and create a new dataframe that shows the committee that got the most money from that ZIP code.
-md_zip_top_recipient <- md_contribs %>%
-  mutate(zip_five = str_sub(contributor_zip, start=1L, end=5L)) %>%
-  filter(zip_five == "20815") %>%
-  group_by(committee_name) %>%
-  summarise(
-    total_amount = sum(contribution_receipt_amount)
-  ) %>%
-  arrange(desc(total_amount))
-  head(1)
-
-md_zip_top_recipient
-
+```{r}
+md_payments %>% 
+  filter(agency_name == 'CAPITAL PROJECTS- UNIVERSITY OF MARYLAND') %>% 
+  group_by(vendor_name) %>% 
+  summarize(total = sum(amount)) %>% 
+  arrange(vendor_name)
 ```
 
-Q3: Let's look at top individual donors to House campaigns. Write code to generate a list of top donors using name and city, adding up the total amount of contributions. One of the top few donors has a very strong connection to the U.S. House - who is that and what does he do? How does his donation pattern differ from the second-largest donor, and what can you say about that second-largest donor?
+Q4: You want to understand how much state grant money went to stem cell research projects each fiscal year. Search the data to find grants that fit that description. Once you find which columns contain the information you want, your code should standardize the data needed to find just the grants for stem cell research in a single filter. Then create a total amount of money for each fiscal year. Write a sentence summarizing how stem cell research funding has changed over time.
 
-Feel free to add any interesting "color" (little interesting details) you find in your research.
-
-A3: The top individual Maryland donor to U.S. House campaigns is David Trone, the CEO of Total Wine & More, who is a member of the House himself representing Maryland's 6th District. His giving is to his Democratic colleagues and candidates and he usually gives \$2,900, the individual maximum contribution, or \$1,000. The second-largest donor is Juanita Mason, who lives in Baltimore and has made more than 3,000 separate donations to Republican candidates, mostly in much smaller amounts of \$15, \$25 or \$50. Her address is reported variously as 414 Water St. or 424 Water St., the latter of which doesn't seem to exist as a residence.
+A4: From a relatively small amount in 2009, stem cell research grants increased through 2012, when they hit a peak of $9.2 million, and have fallen off since. In 2020, the amount was $7.1 million.
 
 ```{r}
-
-# Create a dataframe of top individual contributors
-md_contribs_top_indiv <- md_contribs %>%
-  group_by(contributor_name, contributor_city) %>% 
-  summarize(total_amount = sum(contribution_receipt_amount)) %>% 
-  arrange(desc(total_amount))
-
-md_contribs_top_indiv
-
-# Check out Trone's donations
-trone_donations <- md_contribs %>%
-  filter(str_detect(contributor_name, '^TRONE, DAVID'))
-
-mason_donations <- md_contribs %>%
-  filter(str_detect(contributor_name, '^MASON, JUANITA'))
+md_grants_loans %>% 
+  mutate(description = str_to_upper(description)) %>% 
+  filter(description == "STEM CELL RESEARCH GRANT") %>% 
+  group_by(fiscal_year) %>% 
+  summarize(total = sum(amount))
 ```
