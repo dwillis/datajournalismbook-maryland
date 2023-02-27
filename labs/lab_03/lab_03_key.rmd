@@ -38,7 +38,7 @@ md_grants_loans <- read_csv("data/State_of_Maryland_Grant_and_Loan_Data__FY2009_
 
 Q1: You want to know how much money state agencies have paid to the Prince George's County School system, but to do that you'll need to find all of the variations of how the school system might be listed. Write code to find rows where the vendor name contains the county's school system, starting with a broad search and then narrowing it down. When you have found as many as possible, save the result to a new dataframe called `pg_schools`. How many records did you find?
 
-A1: There are 39 records.
+A1: There are anywhere from 27-79 records, depending on how many variations you were able to find.
 
 ```{r}
 pg_schools <- md_payments %>% 
@@ -47,7 +47,7 @@ pg_schools <- md_payments %>%
 
 Q2: Using that `pg_schools` dataframe, write code to calculate the total amount of payments to the Prince George's County School system for each fiscal year. Which fiscal year had the largest total amount? What do you notice about the years listed?
 
-A2: 2020 had the largest amount, with $1,362,372,202. In addition to missing 2021 and 2022 data, 2016 appears to be missing.
+A2: 2020 had the largest amount, with \$1,362,372,202. In addition to missing 2021 and 2022 data, 2016 appears to be missing.
 
 ```{r}
 pg_schools %>%
@@ -57,6 +57,7 @@ pg_schools %>%
   ) %>%
   arrange(desc(total_amount))
 ```
+
 Q3. You're interested in examining the vendors paid for capital projects at the University of Maryland. Search the payments data to find those payments, then write code to produce a list of each vendor and the total amount it received. Look carefully at that list - what cleaning will it require to ensure that you have only one row per vendor and zip code? Provide at least three examples of vendor names that are similar and should be combined into one. Describe how you might clean that data so that any nearly identical vendors would look identical - what would you change and how?
 
 A3. There are multiple duplicates in the results, and removing punctuation would be one way to narrow down the list. Another one would be to use mutate with case_when to standardize the vendor names.
@@ -71,7 +72,7 @@ md_payments %>%
 
 Q4: You want to understand how much state grant money went to stem cell research projects each fiscal year. Search the data to find grants that fit that description. Once you find which columns contain the information you want, your code should standardize the data needed to find just the grants for stem cell research in a single filter. Then create a total amount of money for each fiscal year. Write a sentence summarizing how stem cell research funding has changed over time.
 
-A4: From a relatively small amount in 2009, stem cell research grants increased through 2012, when they hit a peak of $9.2 million, and have fallen off since. In 2020, the amount was $7.1 million.
+A4: From a relatively small amount in 2009, stem cell research grants increased through 2012, when they hit a peak of \$9.2 million, and have fallen off since. In 2020, the amount was \$7.1 million.
 
 ```{r}
 md_grants_loans %>% 
