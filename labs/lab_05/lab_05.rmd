@@ -1,7 +1,7 @@
 ---
-title: "lab_05"
-author: "Derek Willis"
-date: "2023-01-10"
+title: "lab_04"
+author: "derek willis"
+date: "8/11/2022"
 output: html_document
 ---
 
@@ -9,70 +9,64 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## About this lab
-
-To complete this lab, you need to: \* run existing code as directed (look for **Task**). \* modify existing code as directed (look for **Task**). \* write code in empty codeblocks provided to answer questions included (look for **Q**). \* write out the answer in the form of a complete sentence in the space given (look for **A**).
-
-When you are finished, commit changes and push to your personal GitHub repo, then submit the URL to this document on ELMS.
-
 ## Load libraries and establish settings
-
-You'll need to load three packages for this: the tidyverse, lubridate and janitor.
-
-**Task** load these three packages.
-
 ```{r}
-# Turn off scientific notation
-options(scipen=999)
+# Load the libraries you will need to read in and clean up the data, knowing that you can go back and add a library and re-run this block after you get a look at the dataframes.
 
 ```
 
-For this lab, we want to investigate spending by Maryland state and local candidates during the current election. For example, we could ask how much money have candidates and committees spent on advertising on Facebook? Which vendors received the most money for media expenses? We have the data, but it's messy - names of payees are spelled differently and capitalized differently - and we need to clean it up. We'll use a combination of RStudio and OpenRefine to do that.
+## Getting Started
 
-The basic process here is to start in RStudio, export data so that we can use OpenRefine to clean it up, and then bring it back into RStudio to finish our analysis.
+This week we'll be combining and joining data to make it more useful and to ask some questions about it. We'll use Maryland 2022 primary precinct election results to do this, and our main question will be this: Which precincts had the most votes cast at them statewide, counting both the Republican and Democratic primaries? To answer this question, we'll need to first combine the two parties' primary precinct results into a single dataframe and then join it to data that has more information about each voting location.
 
-## Load Data
-
-You'll need to load one data set, a CSV file of Maryland campaign expenditures located in the data folder called "maryland_expenses.csv"
-
-**Task** Create a codeblock below, then read the data in and assign it to an appropriate variable name. You'll want to clean up the column names and make sure that any date columns are actually date datatypes.
+First, load the two precinct results CSV files in the `data` folder, one each for the Democratic and Republican primaries, and then combine them into a single dataframe using the method we used in the pre_lab. You'll need to clean up the column names to make the data easier to work with - make sure you have loaded the library to do that.
 
 ```{r}
-# Load the Maryland expenditures data table
+```
+
+Next, let's read in the precinct voting location data and make sure you clean up the column names:
+
+```{r}
+```
+
+These two dataframes have a pair of columns in common - not necessarily with the same column names. Join the two dataframes on that unique combination that describes a precinct and the jurisdiction that contains it:
+
+```{r}
+
 ```
 
 ## Answer questions
 
-**Q1.** You've been assigned to write about Maryland political committees' use of Facebook advertising. There's a category column in the data that has values for different kinds of spending. One of them is "Media". Write code to isolate Media expenses where the name of the payee is not NA. Then, using `write_csv`, make a CSV file in your data folder. Using OpenRefine, create a project using that CSV file, create a copy of the `payee_name` column called `payee_clean` and then standardize it, focusing on the payees that appear most often. Pay particular attention to variations of Facebook, bearing in mind that it changed its name last year: https://about.fb.com/news/2021/10/facebook-company-is-now-meta/), but also clean up variations of the most common payees.
+Q1. Using the newly-created dataframe and isolating just the results for Wes Moore and Aruna Miller, write code that calculates how many voting locations each county has, showing the county with the most voting locations first. There's a catch: multiple precincts can share the same voting location, so you'll need to calculate the distinct number of locations (Google is your friend).
 
-Then, when you are done standardizing `payee_clean`, export it as a new CSV file to your data folder, *giving it a different name* and read it back into RStudio as a new dataframe.
+Does the county with the most voting locations have the largest population in the state (ask yourself: where have you seen county population figures recently)?
 
-Then, using that `payee_clean` column, write code to find all of the spending where Facebook is the payee and calculate the total amount of spending for each committee and present the results showing the committee that spent the most first.
-
-**A1.**
+A1. 
 
 ```{r}
 ```
 
-**Q2.** Let's do some research on the top committees from question 1. Look up the top 10 spenders: if they are candidate committees, what offices were they running for? If they were not candidates, what issues do they seem to care about? Write some sentences answering those questions, then go the Facebook ad library (https://www.facebook.com/ads/library/?active_status=all&ad_type=political_and_issue_ads&country=US&sort_data\[direction\]=desc&sort_data\[mode\]=relevancy_monthly_grouped&media_type=all) and look for ads from the top spender. What do you notice about those ads?
 
-**A2.** 
+Q2. Write code to produce a `votes` column which is the result of adding together `early_votes`, `election_night_votes`, `provisional_votes` and the mail-in votes, overwriting your dataframe so that it now has that `total_votes` column going forward. Then, separately write code to show each county and precinct and calculate the total votes in the Governor's race - bearing in mind that each precinct will have multiple rows in the dataframe, but you only want to see one row for each precinct. What is the name and voting location of the precinct that saw the most votes in the governor's race? 
 
-**Q3.** Given the list of top spenders in A1 and the primary results for governor (https://elections.maryland.gov/elections/2022/primary_results/gen_results_2022_1.html), who is missing from that Q1 list? Did those campaigns run Facebook ads? Who are the biggest recipients of media expenses by the Democratic primary winner for governor (HINT: that person has two committees)?
-
-**A3.** 
+A2. 
 
 ```{r}
 ```
 
-**Q4.** The media expense data you cleaned also has a standardized purpose column. Write code to generate a list of the committees with the total amount of spending on online advertising. How does this list compare to the one from Q1 about top Facebook spenders? Of the top 5 committees who spent the most on Facebook ads from Q1, are there any that appear to have spent *all* of their online advertising dollars on Facebook?
+Q3. Let's look at the average number of votes in each party's primary race for governor. Take the code you wrote for the last part of Q2, save the results to a new variable and then find the precincts with 0 total votes for governor. How many precincts are there, and which county has the most? What else would you need to know about these precincts to know whether this might be worth a story?
 
-**A4.** 
+Finally, write code to calculate the average and median number of total votes across all precincts statewide (so you want to see just two numbers - the average and median). To do this, you will need to use the `ungroup()` function on your new dataframe _before_ you do the math - https://www.rdocumentation.org/packages/multiplyr/versions/0.1.1/topics/ungroup. There's no state column here, so you aren't grouping by anything, but can still use summarize to do the math.
+
+Take a look at the the Annotated Code of Maryland's election laws (https://mgaleg.maryland.gov/2023RS/Statute_Web/gel/gel.pdf) - can you find a limit on the number of voters assigned to a precinct? How might your answer impact wait times to vote?
+
+A3. 
 
 ```{r}
-
 ```
 
-**Q5** You've been asked to summarize your findings about spending on Facebook by Maryland political candidates. How much do we know and what don't we know? What's the best story idea you've found here?
+Q4. Choose your own adventure: I want you to come up with a question you could ask of one of the dataframes we've created for this lab. It could involve candidates, or counties or types of voting, but it cannot be a variation of a previous question (so, for example, you can't ask, "What's the average number of votes per precinct in the U.S. Senate primary?"). First write the question and then try to answer it by writing code. If you're not sure of the exact code, try googling (or ask me or Ramsay for advice) but, at a minimum, describe what you think you'd have to do to answer it and what the results would look like. That can help.
+A4: Put your question here.
 
-**A5**
+```{r}
+```
