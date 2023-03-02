@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## About this lab
 
-To complete this lab, you need to: \* run existing code as directed (look for **Task**). \* modify existing code as directed (look for **Task**). \* write code in empty codeblocks provided to answer questions included (look for **Q**). \* write out the answer in the form of a complete sentence in the space given (look for **A**).
+To complete this lab, you need to: \* run existing code as directed (look for **Task**). \* modify existing code as directed (look for **Task**). \* write code in empty codeblocks provided to answer questions included (look for **Q**). \* write out the answer in the form of a complete sentence in the space given (look for **A**). Read the questions carefully and attempt to do all of what they ask. Make a list if it helps.
 
 When you are finished, commit changes and push to your personal GitHub repo, then submit the URL to this document on ELMS.
 
@@ -29,7 +29,12 @@ options(scipen=999)
 
 For this lab, we want to investigate spending by Maryland state and local candidates during the 2022 election. For example, we could ask how much money have candidates and committees spent on advertising on Facebook? Which vendors received the most money for media expenses? We have the data, but it's messy - names of payees are spelled differently and capitalized differently - and we need to clean it up. We'll use a combination of RStudio and OpenRefine to do that.
 
-The basic process here is to start in RStudio, export data so that we can use OpenRefine to clean it up, and then bring it back into RStudio to finish our analysis.
+The basic process here is to start in RStudio, export data so that we can use OpenRefine to clean it up, and then bring it back into RStudio to finish our analysis. The function to export data from RStudio is called `write_csv()` and it takes two arguments: the name of the dataframe and the path of the file to write it to, which is in quotes. Like `read_csv()`, but the variable name comes inside. Here's an example, in which you'd replace the dataframe and the path values.
+
+```{r}
+write_csv(dataframe, "folder/file.csv")
+```
+
 
 ## Load Data
 
