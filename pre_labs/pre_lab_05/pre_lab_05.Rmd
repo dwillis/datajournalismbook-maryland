@@ -44,7 +44,7 @@ ow you can hit the green "Preview & Export Extracted Data" button on the top rig
 knitr::include_graphics(rep("images/md_voters2.png"))
 ```
 
-You can now export that extracted table to a CSV file using the "Export" button. Put it in your pre_lab_06 folder. And then we can read it into R:
+You can now export that extracted table to a CSV file using the "Export" button. Put it in your pre_lab_05 folder. And then we can read it into R:
 
 ### Task 2: Load data
 
@@ -97,7 +97,7 @@ You can now export that extracted table to a CSV file using the "Export" button.
 
 ### Task 5: Export the CSV file
 
-**Task** Export the CSV file to your pre_lab_06 folder and read it into R by running the following codeblock. What problems do you see with the data? 
+**Task** Export the CSV file to your pre_lab_05 folder and read it into R by running the following codeblock. What problems do you see with the data? 
 **Answer**
 
 ```{r}
