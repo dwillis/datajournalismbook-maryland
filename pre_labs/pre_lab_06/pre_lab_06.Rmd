@@ -11,153 +11,142 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Points to hit
 
-1.  Review of fifth lab questions/problems.
-2.  Demonstration of PDF parsing with Tabula
+1.  Review of third lab questions/problems.
+2.  Demonstration of combining and merging
 
-### Task 1: Load libraries
+## Chapter 10
 
-**Task** Run the following code in the gray-colored codeblock below -- not in the console -- to load the tidyverse library. To run the code, click the little green play button (left facing arrow) at the top right of the codeblock. In Rmarkdown data notebooks, we write code inside of codeblocks, and explanatory text in the white area outside of it.
+### Task 1: Load libraries and settings
+
+**Task** Run the following code in the gray-colored codeblock below to load the tidyverse library and turn off scientific notation.
 
 ```{r}
 # turn off sci notation
 options(scipen=999)
 library(tidyverse)
+library(lubridate)
 ```
-
-## PDF Parsing with Tabula
-
-Tabula works best when tables in PDFs are clearly defined and have nicely-formatted information. Here's a perfect example: [active voters by county in Maryland](https://www.elections.maryland.gov/press_room/2022_stats/Eligible%20Active%20Voters%20by%20County%20-%20GP22.pdf).
-
-### Task 1: Download and Install Tabula
-
-**Task**: [Download and install Tabula](https://tabula.technology/). Tabula works much the same way as Open Refine does -- it works in the browser by spinning up a small webserver in your computer. Start it as you would any other desktop application, then go to http://127.0.0.1:8080/ in your browser.
-
-When Tabula opens, you click browse to find the PDF on your computer somewhere, and then click import. After it imports, click autodetect tables. You'll see red boxes appear around what Tabula believes are the tables. You'll see it does a pretty good job at this.
-
-```{r, echo=FALSE}
-knitr::include_graphics(rep("images/md_voters.png"))
-```
-
-ow you can hit the green "Preview & Export Extracted Data" button on the top right. You should see something very like this:
-
-```{r, echo=FALSE}
-knitr::include_graphics(rep("images/md_voters2.png"))
-```
-
-You can now export that extracted table to a CSV file using the "Export" button. Put it in your pre_lab_06 folder. And then we can read it into R:
 
 ### Task 2: Load data
 
-**Task** Load the Maryland voters by county data by running the following codeblock.
+Let's say that we have Maryland county voter registration data from three different elections in three different files. They have the same record layout and the same number of counties (plus Baltimore City).
+
+**Task** Load the three CSV population estimate files. Do they have the same column structure? **Answer**
 
 ```{r}
-voters_by_county <- read_csv("tabula-Eligible Active Voters by County - GP22.csv")
-View(voters_by_county)
+county_voters_2016 <- read_csv("data/county_voters_2016.csv")
 ```
-
-Boom - we're good to go.
-
-## When it looks good, but needs a little fixing
-
-Here's a slightly more involved PDF, from [Maryland's 2020 annual report on unintentional drug and alcohol-related intoxication deaths](https://health.maryland.gov/vsa/Documents/Overdose/Annual_2020_Drug_Intox_Report.pdf). Specifically, we're looking at Table 7 on page 67 of the report which lists the number of fentanyl-related deaths by jurisdiction:
-
-```{r, echo=FALSE}
-knitr::include_graphics(rep("images/md_fentanyl_deaths_1.png"))
-```
-
-### Task 3: Get it into Tabula
-
-**Task** Save the PDF and import to Tabula
-
-Looks like a spreadsheet, right? Save that PDF file to your computer in a place where you'll remember it (like a Downloads folder).
-
-Now let's repeat the steps we did to import the PDF into Tabula, go to page 67. It should look like this:
-
-```{r, echo=FALSE}
-knitr::include_graphics(rep("images/md_fentanyl_deaths_2.png"))
-```
-
-### Task 4: Draw a Box
-
-**Task** Using your cursor, draw a box across the table so it looks like the image below.
-
-Let's draw a box around what we want, but there's a catch: the headers aren't on a single line. If you draw your box around the whole table and preview, you'll see that there's a problem. To fix that, we'll need to limit our box to just the data. Using your cursor, click and drag a box across the table so it looks like this:
-
-```{r, echo=FALSE}
-knitr::include_graphics(rep("images/md_fentanyl_deaths_3.png"))
-```
-
-Now you can hit the green "Preview & Export Extracted Data" button on the top right. Using the "Stream" method, you should see something very like this:
-
-```{r, echo=FALSE}
-knitr::include_graphics(rep("images/md_fentanyl_deaths_4.png"))
-```
-
-You can now export that extracted table to a CSV file using the "Export" button. And then we can read it into R and clean up the column names and some other things:
-
-### Task 5: Export the CSV file
-
-**Task** Export the CSV file to your pre_lab_06 folder and read it into R by running the following codeblock. What problems do you see with the data? 
-**Answer**
 
 ```{r}
-fentanyl_deaths <- read_csv("tabula-Annual_2020_Drug_Intox_Report.csv") %>% clean_names()
-
-fentanyl_deaths
+county_voters_2018 <- read_csv("data/county_voters_2018.csv")
 ```
-
-## Cleaning up the data in R
-
-The good news is that we have data we don't have to retype. The bad news is, we have a few things to fix, starting with the fact that the headers shouldn't be headers. Let's start by re-importing it and specifying that the first row doesn't have column headers:
-
-### Task 6: Load the data without headers
-
-**Task** Load the data without headers by running the codeblock below. What problems remain? 
-**Answer**
 
 ```{r}
-fentanyl_deaths <- read_csv("tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) %>% clean_names()
-
-fentanyl_deaths
+county_voters_2020 <- read_csv("data/county_voters_2020.csv")
 ```
 
-Ok, now we have all the data. But we need actual headers. Let's add those using `rename()`, keeping in mind that the new name comes _first_.
+### Task 3: Using bind_rows
 
-### Task 7: Change the headers to real names
-
-**Task** Run the codeblock below. What else do we need to do?
-**Answer**
+**Task** Combine the three files into a single data frame using the bind_rows function. Add a description of what this code does to your reference notebook.
 
 ```{r}
-fentanyl_deaths <- read_csv("tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) %>% 
-  clean_names() %>% 
-  rename(jurisdiction = x1, deaths_2011 = x2, deaths_2012 = x3, deaths_2013 = x4, deaths_2014 = x5, deaths_2015 = x6, deaths_2016 = x7, deaths_2017 = x8, 
-         deaths_2018 = x9, deaths_2019 = x10, deaths_2020 = x11, deaths_total = x12)
-
-fentanyl_deaths
+# bind_rows with list
+county_voters_combined <- bind_rows(list(county_voters_2016, county_voters_2018, county_voters_2020))
+View(county_voters_combined)
 ```
 
-We could stop here, but there are a bunch of periods in the jurisdiction column and it's better to remove them - it will make filtering easier. Let's use `str_replace_all()` to do that:
+## Joining data
 
-### Task 8: Replace the periods
+### Task 4: Loading population data
 
-**Task** Run the codeblock below.
+**Task** Load the Maryland 2020 county population data **Answer**
 
 ```{r}
-fentanyl_deaths <- read_csv("tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) %>% 
-  clean_names() %>% 
-  rename(jurisdiction = x1, deaths_2011 = x2, deaths_2012 = x3, deaths_2013 = x4, deaths_2014 = x5, deaths_2015 = x6, deaths_2016 = x7, deaths_2017 = x8, 
-         deaths_2018 = x9, deaths_2019 = x10, deaths_2020 = x11, deaths_total = x12) %>% 
-  mutate(jurisdiction = str_squish(str_replace_all(jurisdiction,'\\.','')))
-
-fentanyl_deaths
+maryland_population <- read_csv('data/maryland_population_2020.csv')
 ```
-There are a few important things to explain here:
 
-1. Because we're replacing a literal period (.), we need to make sure that R knows that. Hence the '\\.' Why? Because '.' is a valid expression meaning "any character", so if we didn't have the backslashes the above code would make the entire column blank (try it!)
-2. The `str_squish` function cleans up any excess spaces, at the beginning, middle or end of a character column. If we then use filter, we can do so with confidence.
-3. I put "deaths_" in front of each yearly column because R likes it when columns don't begin with a number. You can have a column called `2011`, but you literally have to use the backticks (`2011`) to refer to it in code.
+### Task 5: Join population and voter data
 
-All things considered, that was pretty easy. Many - most? - electronic PDFs aren't so easy to parse. Sometimes you'll need to open the exported CSV file and clean things up before importing into R. Other times you'll be able to do that cleaning in R itself.
+**Task** Run the following code to join Maryland population data and the 2020 voter registration data together using the common column county as the key. How many rows are there now? How many *should* there be? **Answer**
 
-Here's the sad truth: THIS IS PRETTY GOOD. It sure beats typing it out. And since many government processes don't change all that much, you can save the code to process subsequent versions of PDFs.
+```{r}
+# with nrow included to show row total
+maryland_population %>% left_join(county_voters_2020, by="COUNTY") %>% nrow()
+```
+
+### Task 6: Looking at Joined Data
+
+**Task** Examine the combined data
+
+```{r}
+# without nrow
+maryland_population %>% left_join(county_voters_2020, by="COUNTY")
+```
+
+### Task 7: Assign Joined Data to New Dataframe
+
+**Task** Create a new dataframe with population and voter data joined together. Add a description of what this code does to your reference notebook.
+
+```{r}
+maryland_population_with_voters <- maryland_population %>% left_join(county_voters_2020)
+```
+
+### Task 8: Add the Demographic Data
+
+**Task** Load the Maryland demographic data
+
+```{r}
+maryland_demographics <- read_csv('data/maryland_demographics.csv')
+```
+
+### Task 9: Join demographic data to combined voting/population data
+
+**Task** Join the demographic data to the our combined voting/population data. To do this, we need to specify the join columns since the names aren't the same.
+
+```{r}
+# join on zip - but there's a problem
+maryland_population_with_voters_and_demographics <- maryland_population_with_voters %>% left_join(maryland_demographics, by=c("COUNTY"="NAME"))
+```
+
+### Task 10: Asking Demographic Questions
+
+**Task** Using mutate, let's find the county with the highest 18+ Black population as a percentage of all population 18 and over and also the percentage of Democrats in that county. Put your answers below. **Answer**
+
+```{r}
+maryland_population_with_voters_and_demographics %>%
+  mutate(pct_black_18_plus = (pop_black/pop_18_over)*100, pct_dems = (DEM/Total)*100) %>% 
+  arrange(desc(pct_black_18_plus)) %>% 
+  select(COUNTY, pct_black_18_plus, pct_dems)
+```
+
+### Task 11: Asking Demographic Questions
+
+**Task** Now let's find the county with the highest 18+ Asian population as a percentage of all population 18 and over and also the percentage of Democrats in that county. How do these results compare to the previous task? Put your answers below. **Answer**
+
+```{r}
+maryland_population_with_voters_and_demographics %>%
+  mutate(pct_asian_18_plus = (pop_asian/pop_18_over)*100, pct_dems = (DEM/Total)*100) %>% 
+  arrange(desc(pct_asian_18_plus)) %>% 
+  select(COUNTY, pct_asian_18_plus, pct_dems)
+```
+
+### Task 11: Fixing Join Problems
+
+Sometimes joins look like they should work but don't. Often this is due to the two columns you're joining on having different data types: joining a <chr> column to a <dbl> column, for example. Let's walk through an example of that using some demographic data by zip code.
+
+**Task** Run the following code to load the Zip Code Tabulation Area data for Maryland. What's the datatype of ZCTA5N? **Answer**
+
+```{r}
+maryland_zcta <- read_csv('data/maryland_zcta.csv')
+glimpse(maryland_zcta)
+```
+
+The column we're interested in, ZCTA5N, is a <dbl> column - it's a number. We want it to be a <chr> column - text.
+
+**Task** Run the following code to change the datatype of ZCTA5N from numeric to character. What's the datatype of ZCTA5N? **Answer**
+
+```{r}
+maryland_zcta <- maryland_zcta %>% mutate(across(ZCTA5N, as.character))
+```
+
+Now we can join this dataframe to other zip code data where the zip code column is text, not numbers.
