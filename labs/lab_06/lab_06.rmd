@@ -1,7 +1,7 @@
 ---
-title: "lab_06"
+title: "lab_04"
 author: "derek willis"
-date: "10/18/2022"
+date: "8/11/2022"
 output: html_document
 ---
 
@@ -9,110 +9,64 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## You will need
-
-* Tabula
-
 ## Load libraries and establish settings
 ```{r}
-# Turn off scientific notation
-options(scipen=999)
-
-# Load the libraries you will need
+# Load the libraries you will need to read in and clean up the data, knowing that you can go back and add a library and re-run this block after you get a look at the dataframes.
 
 ```
 
-## Get Our PDF
+## Getting Started
 
-We'll be working with the [Maryland monthly voter registration update](https://elections.maryland.gov/pdf/vrar/2022_09.pdf) from the State Board of Elections. You'll want to download it to a place you'll remember (like your Downloads folder, or the labs folder in your repository). The goal is to write a couple of paragraphs that summarize the changes in voter registration in Maryland during the month of September.
+This week we'll be combining and joining data to make it more useful and to ask some questions about it. We'll use Maryland 2022 primary precinct election results to do this, and our main question will be this: Which precincts had the most votes cast at them statewide, counting both the Republican and Democratic primaries? To answer this question, we'll need to first combine the two parties' primary precinct results into a single dataframe and then join it to data that has more information about each voting location.
 
-## Setup Tabula
-
-Start Tabula, then go to http://127.0.0.1:8080/ in your browser. Click the "Browse" button and find the PDF file and click "open", and then click the "Import button" in Tabula. This will take a few seconds.
-
-This PDF has multiple possible tables to extract. We're going to make four dataframes: new registrations by party, removals by party, changes in registration and current registrations by county. You will need to draw boxes around four sections and export four CSV files that you will load into R. In Tabula, draw a box around the borders of those tables and click the "Preview & Export Extracted Data" button for each one. The export should look pretty clean.
-
-Export each CSV (each one should be called `tabula-2022-09.csv` by default, so you should rename them for clarity) to your lab_06/data folder.
-
-From there, you will need to read in and clean up the data, and in particular the headers. You can choose to include the headers from the PDF in your exported CSV files OR to exclude them and add them when importing. `read_csv` allows us to do this ([and more](https://readr.tidyverse.org/reference/read_delim.html)).
-
-## Load and clean up the data in R
-
-You will need to read in and clean up the data so that it can be used for analysis. By "clean" I mean the column headers should not contain spaces and they should have meaningful names, not "x1" or something similar. The current registrations dataframe *MUST* include the county name, but should not include the columns under `Changes` and `Party Affiliation From`. How you do that is up to you (and could involve something outside R), but you can use select() with or without the minus sign to include or exclude certain columns. You also can use the `rename` function to, well, rename columns.
+First, load the two precinct results CSV files in the `data` folder, one each for the Democratic and Republican primaries, and then combine them into a single dataframe using the method we used in the pre_lab. You'll need to clean up the column names to make the data easier to work with - make sure you have loaded the library to do that.
 
 ```{r}
-# Party registrations
 ```
+
+Next, let's read in the precinct voting location data and make sure you clean up the column names:
 
 ```{r}
-# Removals
 ```
+
+These two dataframes have a pair of columns in common - not necessarily with the same column names. Join the two dataframes on that unique combination that describes a precinct and the jurisdiction that contains it:
 
 ```{r}
-# Changes
+
 ```
-
-```{r}
-# Current registrations
-```
-
-## Rinse, Repeat: September 2020 data
-
-Do all of that again, for the [September 2020 voter registration update](https://elections.maryland.gov/pdf/vrar/2020_09.pdf), so we can compare the two. If you've done well, this is easy: just do the same steps in Tabula, export the files and use the same code to read in and clean up the data, *just remember to give these dataframes different names*, although similar enough so that you know how to compare September 2022 to September 2020.
-
-To answer the following questions, you'll need to calculate percentages and do other calculations. Whether you do that by combining or joining dataframes or you write code to run separately on both is up to you.
-
-```{r}
-# Party registrations
-```
-
-```{r}
-# Removals
-```
-
-```{r}
-# Changes
-```
-
-```{r}
-# Current registrations
-```
-
 
 ## Answer questions
 
-Q1. Calculate the percentage of registered Democrats, Republicans and unaffiliated voters for the entire state in September 2022 and September 2020, and then calculate the percentage change for those three party categories (the formula for percentage change is easy to remember: (New-Old)/Old). How would you describe the changes in these partisan categories in a story? What's the most interesting thing about these changes that would be the lede of that story?
+Q1. Using the newly-created dataframe and isolating just the results for Wes Moore and Aruna Miller, write code that calculates how many voting locations each county has, showing the county with the most voting locations first. There's a catch: multiple precincts can share the same voting location, so you'll need to calculate the distinct number of locations (Google is your friend).
+
+Does the county with the most voting locations have the largest population in the state (ask yourself: where have you seen county population figures recently)?
 
 A1. 
 
 ```{r}
 ```
 
-Q2. Among the Maryland jurisdictions with the most registered voters, which one had the biggest percentage increase in unaffiliated voters between 2020 and 2022? How did that county vote for governor in 2018 and for president in 2020? Contrast the partisan percentages of that county with the county that had the second-largest percentage increase in unaffiliated voters. You should display information from the data that shows the counties with the largest percentage increase first.
+
+Q2. Write code to produce a `votes` column which is the result of adding together `early_votes`, `election_night_votes`, `provisional_votes` and the mail-in votes, overwriting your dataframe so that it now has that `total_votes` column going forward. Then, separately write code to show each county and precinct and calculate the total votes in the Governor's race - bearing in mind that each precinct will have multiple rows in the dataframe, but you only want to see one row for each precinct. What is the name and voting location of the precinct that saw the most votes in the governor's race? 
 
 A2. 
 
 ```{r}
 ```
 
+Q3. Let's look at the average number of votes in each party's primary race for governor. Take the code you wrote for the last part of Q2, save the results to a new variable and then find the precincts with 0 total votes for governor. How many precincts are there, and which county has the most? What else would you need to know about these precincts to know whether this might be worth a story?
 
-Q3. Do the party percentages of new registrants (% Dem, % Rep, % Unaffiliated) from September 2022 and September 2020 match the overall percentage of partisan registration in the state at those times?
+Finally, write code to calculate the average and median number of total votes across all precincts statewide (so you want to see just two numbers - the average and median). To do this, you will need to use the `ungroup()` function on your new dataframe _before_ you do the math - https://www.rdocumentation.org/packages/multiplyr/versions/0.1.1/topics/ungroup. There's no state column here, so you aren't grouping by anything, but can still use summarize to do the math.
 
-In other words, did new registrants mirror the overall partisan composition of the electorate, or were they different? Do any of the methods of registration vary significantly from the overall partisan pattern? Which method is worthy of further exploration?
+Take a look at the the Annotated Code of Maryland's election laws (https://mgaleg.maryland.gov/2023RS/Statute_Web/gel/gel.pdf) - can you find a limit on the number of voters assigned to a precinct? How might your answer impact wait times to vote?
 
 A3. 
 
 ```{r}
 ```
 
-Q4. Choose your own adventure! Using both the 2022 and 2020 data for one of the dataframes (changes, removals or new registrations), ask and answer a question that makes at least one comparison and requires code to answer. That could involve calculating a percentage, percentage change or the raw difference between two columns.
-
-A4. 
+Q4. Choose your own adventure: I want you to come up with a question you could ask of one of the dataframes we've created for this lab. It could involve candidates, or counties or types of voting, but it cannot be a variation of a previous question (so, for example, you can't ask, "What's the average number of votes per precinct in the U.S. Senate primary?"). First write the question and then try to answer it by writing code. If you're not sure of the exact code, try googling (or ask me or Ramsay for advice) but, at a minimum, describe what you think you'd have to do to answer it and what the results would look like. That can help.
+A4: Put your question here.
 
 ```{r}
-
 ```
-
-Q5. What's the best story idea or question you've seen as a result of the work you've done in this lab?
-
-A5. 

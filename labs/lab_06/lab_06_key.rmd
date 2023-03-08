@@ -1,7 +1,7 @@
 ---
-title: "lab_06"
+title: "lab_04"
 author: "derek willis"
-date: "10/18/2022"
+date: "8/11/2022"
 output: html_document
 ---
 
@@ -9,106 +9,107 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## You will need
-
--   Tabula
-
 ## Load libraries and establish settings
 
 ```{r}
 # Turn off scientific notation
 options(scipen=999)
 
-# Load the tidyverse.
 library(tidyverse)
 library(janitor)
 ```
 
-## Get Our PDF
+## Getting Started
 
-We'll be working with the [Maryland historical health trend data](https://health.maryland.gov/vsa/Documents/Reports%20and%20Data/Historical%20Trends/Historical_Trends_2020.pdf). You'll want to download it to a place you'll remember (like your Downloads folder, or the labs folder in your repository). The goal is to write a couple of paragraphs that summarize the changes in various health metrics and to find a possible story about recent changes.
+This week we'll be combining and joining data to make it more useful and to ask some questions about it. We'll use Maryland 2022 primary election results to do this, and our main question will be this: Which precincts had the most votes cast at them statewide, counting both the Republican and Democratic primaries? To answer this question, we'll need to first combine the two parties' primary precinct results into a single dataframe and then join it to data that has more information about each voting location.
 
-## Setup Tabula
-
-Start Tabula, then go to http://127.0.0.1:8080/ in your browser. Click the "Browse" button and find the PDF file and click "open", and then click the "Import button" in Tabula. This will take a few seconds.
-
-This PDF has a single table spread over two pages to extract. We're going to make a single dataframe from this table, exporting it to a CSV file that you will load into R. In Tabula, draw a box around the table and click the "Preview & Export Extracted Data" button. You may want to play with including or excluding the column headers.
-
-Save the CSV (it should be called `tabula-Historical_Trends_2020.csv` by default) to your lab_06/data folder.
-
-From there, you will need to read in the data, and add or fix headers if necessary. You can choose to include the headers from the PDF in your exported CSV files OR to exclude them and add them when importing. `read_csv` allows us to do this ([and more](https://readr.tidyverse.org/reference/read_delim.html)).
-
-## Load and clean up the data in R
-
-You will need to read in and clean up the data so that it can be used for analysis. By "clean" I mean the column headers should not contain spaces and they should have meaningful names, not "x1" or something similar. How you do that is up to you (and could involve something outside R), but you can use select() with or without the minus sign to include or exclude certain columns. You also can use the `rename` function to, well, rename columns. Importantly, you'll need to ensure that the columns containing numbers actually have a numeric datatype. There is a way to do this that doesn't require typing each column name; you don't have to use it but it involves the `across` function.
-
-Also: you may not need every column if some are duplicated!
+First, load the two precinct results CSV files in the `data` folder, one each for the Democratic and Republican primaries, and then combine them into a single dataframe. You'll need to clean up the column names to make the data easier to work with - make sure you have loaded the library to do that.
 
 ```{r}
-md_health_trends <- read_csv("data/tabula-Historical_Trends_2020.csv", col_names = FALSE)
+primary_dem <- read_csv("data/md_primary_precinct_dem.csv")
+primary_rep <- read_csv("data/md_primary_precinct_rep.csv")
 
-md_health_trends <- md_health_trends %>% 
-  rename(year = X1, total_pop = X2, pop65_plus = X3, births = X4, birth_rate = X5, pct_teen_births = X6, pct_low_birth_weight = X7, pct_prenatal_care = X8, 
-         deaths = X10, crude_death_rate = X11, infant_deaths = X12, infant_death_rate = X13, life_expectancy = X14, leading_cause = X15, heart_disease_deaths = X16,
-         heart_disease_rate = X17, malignant_neoplasm_deaths = X18, malignant_neoplasms_rate = X19, cerebrovascular_deaths = X20, cerebrovascular_rate = X21,
-         chronic_lower_resp_deaths = X22, chronic_lower_resp_rate = X23, diabetes_deaths = X24, diabetes_rate = X25) %>% 
-  select(-X9) %>% 
-  mutate(across(c(-"leading_cause"), ~as.numeric(gsub(",","",.x))))
+all_primary_precinct_results <- bind_rows(list(primary_dem, primary_rep))
+all_primary_precinct_results <- all_primary_precinct_results %>% clean_names()
+```
 
+Next, let's read in the precinct voting location data and make sure you clean up the column names:
+
+```{r}
+precinct_voting_locations <- read_csv('data/precinct_voting_locations.csv') %>% clean_names()
+```
+
+Next join the two on the unique combination of precinct and county:
+
+```{r}
+# there's a problem - the `election_district_precinct` column in all_primary_precinct_results is numeric, so we have to convert it to character before we join
+
+primary_precinct_results_with_voting_locations <- all_primary_precinct_results %>% left_join(precinct_voting_locations, by=c("election_district_precinct"="precinct_code", "county"="county_code"))
+```
+
+```{r}
+all_primary_precinct_results <- all_primary_precinct_results %>% mutate(election_district_precinct = as.character(election_district_precinct))
+
+# now we can join on precinct and county
+
+primary_precinct_results_with_voting_locations <- all_primary_precinct_results %>% left_join(precinct_voting_locations, by=c("election_district_precinct"="precinct_code", "county"="county_code"))
 ```
 
 ## Answer questions
 
-Q1. 
+Q1. Using the newly-created dataframe and isolating just the results for Wes Moore and Aruna Miller, write code that calculates how many voting locations each county has, showing the county with the most voting locations first. There's a catch: multiple precincts can share the same voting location, so you'll need to calculate the distinct number of locations (Google is your friend).
 
-A1.
+Does the county with the most voting locations have the largest population in the state (ask yourself: where have you seen county population figures recently)?
+
+A1. Prince George's County has 240 voting locations, but it's not the most populous county - that's Montgomery, which has 15 fewer voting locations. (Pre_lab_04 has county population data.)
 
 ```{r}
-current_sep22 <- current_sep22 %>% 
-  mutate(pct_dem22 = (dem22/total22)*100, pct_rep22 = (rep22/total22)*100, pct_unaffil22 = (unaf22/total22)*100)
-
-current_sep20 <- current_sep20 %>% 
-  mutate(pct_dem20 = (dem/total)*100, pct_rep20 = (rep/total)*100, pct_unaffil20 = (unaf/total)*100)
-
-current_compare <- current_sep22 %>% 
-  left_join(current_sep20, by='county') %>% 
-  mutate(dem_pct_change = (dem22-dem)/dem*100, rep_pct_change = (rep22-rep)/rep*100, unaffil_pct_change = (unaf22-unaf)/unaf*100)
+primary_precinct_results_with_voting_locations %>% 
+  filter(candidate_name == 'Wes Moore and Aruna Miller') %>%
+  group_by(county_name) %>% 
+  summarise(voting_locations = n_distinct(location_name)) %>% 
+  arrange(desc(voting_locations))
 ```
 
-Q2. Among the Maryland jurisdictions with the most registered voters, which one had the biggest percentage increase in unaffiliated voters between 2020 and 2022? How did that county vote for governor in 2018 and for president in 2020? Contrast the partisan percentages of that county with the county that had the second-largest percentage increase in unaffiliated voters. You should display information from the data that shows the counties with the largest percentage increase first.
+Q2. Write code to produce a `votes` column which is the result of adding together `early_votes`, `election_night_votes`, `provisional_votes` and the mail-in votes, overwriting your dataframe so that it now has that `total_votes` column permanently. Next, separately write code to show each county and precinct and calculate the total votes in the Governor's race - bearing in mind that each precinct will have multiple rows in the dataframe, but you only want to see one row for each precinct. What is the name and voting location of the precinct that saw the most votes in the governor's race?
 
-A2. Frederick County had the largest percentage increase, 13.2 percent. Republican Gov. Larry Hogan [won 67% of the vote in 2018 in Frederick](https://www.elections.maryland.gov/elections/2018/results/general/gen_results_2018_2_by_county_11-1.html), while [Joe Biden won the county with 53.3% of the vote in 2020](https://www.elections.maryland.gov/elections/2020/results/general/gen_results_2020_4_by_county_11-1.html).
-
-Frederick County's partisan split is much narrower than Prince George's County, which had the second-largest percentage increase in unaffiliated voters. But Frederick is slowly trending Democratic, with 39% of current voters there choosing that party, while Prince George's is actually losing Democratic voters.
+A2. Precinct 15005 in Prince George's County, which votes at Wise High School, had 2,396 votes in the governor's race.
 
 ```{r}
-current_compare %>% 
-  filter(total22 > 100000) %>% 
-  arrange(desc(unaffil_pct_change))
-```
+primary_precinct_results_with_voting_locations <- primary_precinct_results_with_voting_locations %>% 
+  mutate(votes = early_votes + election_night_votes + provisional_votes + mail_in_ballot_1_votes + mail_in_ballot_2_votes)
 
-Q3. Do the party percentages of new registrants (% Dem, % Rep, % Unaffiliated) from September 2022 and September 2020 match the overall percentage of partisan registration in the state at those times?
-
-In other words, did new registrants mirror the overall partisan composition of the electorate, or were they different? Do any of the methods of registration vary significantly from the overall partisan pattern? Which method is worthy of further exploration?
-
-A3. Overall, in September 2022 and September 2020, the statewide partisan was roughly 54-24-20 D/R/I, and September registrations in both years are somewhat consistent with that, but with much higher figures for unaffiliated voters (25-30%). Republican registrations in September 2022 were 15% of the total, down from 20% in September 2020, suggesting a drop in GOP enthusiasm/effort. A third of new voters who registered at the MVA in September 2022 were unaffiliated, and Democrats who registered this way were 49%. Registration by mail is down among Republicans compared to 2020, which probably is due to COVID's impact on 2020 and general skepticism among conservatives about the method.
-
-```{r}
-new_registrations_sep22 <- new_registrations_sep22 %>% 
-  mutate(pct_dem22 = (dem/total)*100, pct_rep22 = (rep/total)*100, pct_unaffil22 = (unaf/total)*100)
-
-new_registrations_sep20 <- new_registrations_sep20 %>% 
-  mutate(pct_dem20 = (dem/total)*100, pct_rep20 = (rep/total)*100, pct_unaffil20 = (unaf/total)*100)
-```
-
-Q4. Choose your own adventure! Using both the 2022 and 2020 data for one of the dataframes (changes, removals or new registrations), ask and answer a question that makes at least one comparison and requires code to answer. That could involve calculating a percentage, percentage change or the raw difference between two columns.
-
-A4.
-
-```{r}
+primary_precinct_results_with_voting_locations %>% 
+  filter(office_name == 'Governor / Lt. Governor') %>% 
+  group_by(county_name, election_district_precinct, location_name) %>% 
+  summarise(total_votes = sum(votes)) %>% 
+  arrange(desc(total_votes))
 
 ```
 
-Q5. What's the best story idea or question you've seen as a result of the work you've done in this lab?
+Q3. Let's look at the average number of votes in each party's primary race for governor. Take the code you wrote for the last part of Q2, save the results to a new variable and then find the precincts with 0 total votes for governor. How many precincts are there, and which county has the most? What else would you need to know about these precincts to know whether this might be worth a story?
 
-A5.
+Finally, write code to calculate the average and median number of total votes across all precincts statewide (so you want to see just two numbers - the average and median). To do this, you will need to use the `ungroup()` function on your new dataframe *before* you do the math - https://www.rdocumentation.org/packages/multiplyr/versions/0.1.1/topics/ungroup. There's no state column here, so you aren't grouping by anything, but can still use summarize to do the math.
+
+Take a look at the the Annotated Code of Maryland's election laws (https://mgaleg.maryland.gov/2023RS/Statute_Web/gel/gel.pdf) - can you find a limit on the number of voters assigned to a precinct? How might your answer impact wait times to vote?
+
+A3. There are 12, and four of them are in Prince George's County. It would be useful to know how many registered voters are assigned to this precinct - if it's a sizeable amount (more than 25, say), that's probably worth looking into. The average number of votes across all precincts is 465, and the median is 418. Maryland has no limit on the number of voters assigned to a precinct (although many states do), so having 2,000+ voters at one location and 400 at another could mean that more voting machines and poll workers would be needed at the former location.
+
+```{r}
+gov_precinct_totals <- primary_precinct_results_with_voting_locations %>% 
+  filter(office_name == 'Governor / Lt. Governor') %>% 
+  group_by(county_name, election_district_precinct, location_name) %>% 
+  summarise(total_votes = sum(votes)) %>% 
+  arrange(desc(total_votes))
+
+gov_precinct_totals %>% filter(total_votes == 0)
+
+gov_precinct_totals %>% ungroup() %>% summarise(average = mean(total_votes), median = median(total_votes))
+
+```
+
+Q4. Choose your own adventure: I want you to come up with a question you could ask of one of the dataframes we've created for this lab. It could involve candidates, or counties or types of voting, but it cannot be a variation of a previous question (so, for example, you can't ask, "What's the average number of votes per precinct in the U.S. Senate primary?"). First write the question and then try to answer it by writing code. If you're not sure of the exact code, try googling (or ask me or Ramsay for advice) but, at a minimum, describe what you think you'd have to do to answer it and what the results would look like. That can help. A4: \[backup questions:\]
+
+```{r}
+
+```
