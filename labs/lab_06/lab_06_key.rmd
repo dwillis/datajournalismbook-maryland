@@ -17,98 +17,81 @@ options(scipen=999)
 
 library(tidyverse)
 library(janitor)
+library(lubridate)
 ```
 
 ## Getting Started
 
-This week we'll be combining and joining data to make it more useful and to ask some questions about it. We'll use Maryland 2022 primary election results to do this, and our main question will be this: Which precincts had the most votes cast at them statewide, counting both the Republican and Democratic primaries? To answer this question, we'll need to first combine the two parties' primary precinct results into a single dataframe and then join it to data that has more information about each voting location.
+This week we'll be combining and joining data to make it more useful and to ask some questions about it. We'll use some of our 911 overdose call data to do this. The first thing we want to do is to combine multiple counties' data into a single dataframe so that we can ask some questions. First, let's combine data from Washington, Carroll and Allegany counties into a new dataframe.
 
-First, load the two precinct results CSV files in the `data` folder, one each for the Democratic and Republican primaries, and then combine them into a single dataframe. You'll need to clean up the column names to make the data easier to work with - make sure you have loaded the library to do that.
+*Before* you combine them you'll need to clean up some of the column names to make the data easier to work with - make sure you have loaded the library to do that. You also need to make sure that each column has the same name and datatype (you can check the datatypes using `glimpse`). If any of them does not, you need to fix that.
 
 ```{r}
-primary_dem <- read_csv("data/md_primary_precinct_dem.csv")
-primary_rep <- read_csv("data/md_primary_precinct_rep.csv")
+carroll_911 <- read_csv("data/carroll_911.csv") %>% clean_names()
+washington_911 <- read_csv("data/washington_911.csv")
+allegany_911 <- read_csv("data/allegany_911.csv") %>% mutate(incident = as.character(incident))
 
-all_primary_precinct_results <- bind_rows(list(primary_dem, primary_rep))
-all_primary_precinct_results <- all_primary_precinct_results %>% clean_names()
+combined_911 <- bind_rows(list(carroll_911, washington_911, allegany_911))
 ```
 
-Next, let's read in the precinct voting location data and make sure you clean up the column names:
+Then we'll join some demographic data with Baltimore City 911 calls and ask some questions of that. For that, you'll need to load the Baltimore City data and the demographic data, and join them based on the zip code. Remember, the zip codes in both dataframes must be the same datatype (and should be characters).
 
 ```{r}
-precinct_voting_locations <- read_csv('data/precinct_voting_locations.csv') %>% clean_names()
-```
+baltimore_911 <- read_csv("data/baltimore_911.csv") %>% mutate(zip_code = as.character(zip_code))
 
-Next join the two on the unique combination of precinct and county:
+maryland_zcta <- read_csv("data/maryland_zcta.csv") %>% clean_names() %>% mutate(zcta5n = as.character(zcta5n))
 
-```{r}
-# there's a problem - the `election_district_precinct` column in all_primary_precinct_results is numeric, so we have to convert it to character before we join
-
-primary_precinct_results_with_voting_locations <- all_primary_precinct_results %>% left_join(precinct_voting_locations, by=c("election_district_precinct"="precinct_code", "county"="county_code"))
-```
-
-```{r}
-all_primary_precinct_results <- all_primary_precinct_results %>% mutate(election_district_precinct = as.character(election_district_precinct))
-
-# now we can join on precinct and county
-
-primary_precinct_results_with_voting_locations <- all_primary_precinct_results %>% left_join(precinct_voting_locations, by=c("election_district_precinct"="precinct_code", "county"="county_code"))
+baltimore_911_with_demographics <- baltimore_911 %>% left_join(maryland_zcta, by=c('zip_code' = 'zcta5n'))
 ```
 
 ## Answer questions
 
-Q1. Using the newly-created dataframe and isolating just the results for Wes Moore and Aruna Miller, write code that calculates how many voting locations each county has, showing the county with the most voting locations first. There's a catch: multiple precincts can share the same voting location, so you'll need to calculate the distinct number of locations (Google is your friend).
+Q1. Let's start with our data from Allegany, Anne Arundel and Carroll counties. Write code to generate a dataframe that shows the total number of calls for each county. What's the order of counties from most calls to least?
 
-Does the county with the most voting locations have the largest population in the state (ask yourself: where have you seen county population figures recently)?
-
-A1. Prince George's County has 240 voting locations, but it's not the most populous county - that's Montgomery, which has 15 fewer voting locations. (Pre_lab_04 has county population data.)
+A1. Washington, Carroll, Allegany
 
 ```{r}
-primary_precinct_results_with_voting_locations %>% 
-  filter(candidate_name == 'Wes Moore and Aruna Miller') %>%
-  group_by(county_name) %>% 
-  summarise(voting_locations = n_distinct(location_name)) %>% 
-  arrange(desc(voting_locations))
+combined_911 %>% 
+  group_by(county) %>% 
+  summarise(calls = n()) %>% 
+  arrange(desc(calls))
 ```
 
-Q2. Write code to produce a `votes` column which is the result of adding together `early_votes`, `election_night_votes`, `provisional_votes` and the mail-in votes, overwriting your dataframe so that it now has that `total_votes` column permanently. Next, separately write code to show each county and precinct and calculate the total votes in the Governor's race - bearing in mind that each precinct will have multiple rows in the dataframe, but you only want to see one row for each precinct. What is the name and voting location of the precinct that saw the most votes in the governor's race?
+Q2. In your combined dataframe that you used in A1, add a column for the month of each call, then write code to show the total number of calls per county and month. Are there any outliers or noteworthy results? Describe the general pattern of the results.
 
-A2. Precinct 15005 in Prince George's County, which votes at Wise High School, had 2,396 votes in the governor's race.
+A2. Washington had more calls in every month last year than either Allegany or Carroll have in any month. August saw the most calls for both Allegany and Carroll, while July had by far the most in Washington.
 
 ```{r}
-primary_precinct_results_with_voting_locations <- primary_precinct_results_with_voting_locations %>% 
-  mutate(votes = early_votes + election_night_votes + provisional_votes + mail_in_ballot_1_votes + mail_in_ballot_2_votes)
-
-primary_precinct_results_with_voting_locations %>% 
-  filter(office_name == 'Governor / Lt. Governor') %>% 
-  group_by(county_name, election_district_precinct, location_name) %>% 
-  summarise(total_votes = sum(votes)) %>% 
-  arrange(desc(total_votes))
-
+combined_911 %>% 
+  mutate(month = month(date)) %>% 
+  group_by(county, month) %>% 
+  summarize(calls = n()) %>% 
+  arrange(desc(calls))
 ```
 
-Q3. Let's look at the average number of votes in each party's primary race for governor. Take the code you wrote for the last part of Q2, save the results to a new variable and then find the precincts with 0 total votes for governor. How many precincts are there, and which county has the most? What else would you need to know about these precincts to know whether this might be worth a story?
+Q3. Let's turn to the Baltimore City data. Write code to find zip codes with the most calls, along with showing the percentage of black non-Hispanic population. Describe the top 10 zip codes in terms of their Black population. Where is that top zip code in the city in relation to downtown? Find the neighborhoods in that zip code that are listed in the data - you can use group_by or distinct to do this. What are some of those neighborhoods?
 
-Finally, write code to calculate the average and median number of total votes across all precincts statewide (so you want to see just two numbers - the average and median). To do this, you will need to use the `ungroup()` function on your new dataframe *before* you do the math - https://www.rdocumentation.org/packages/multiplyr/versions/0.1.1/topics/ungroup. There's no state column here, so you aren't grouping by anything, but can still use summarize to do the math.
-
-Take a look at the the Annotated Code of Maryland's election laws (https://mgaleg.maryland.gov/2023RS/Statute_Web/gel/gel.pdf) - can you find a limit on the number of voters assigned to a precinct? How might your answer impact wait times to vote?
-
-A3. There are 12, and four of them are in Prince George's County. It would be useful to know how many registered voters are assigned to this precinct - if it's a sizeable amount (more than 25, say), that's probably worth looking into. The average number of votes across all precincts is 465, and the median is 418. Maryland has no limit on the number of voters assigned to a precinct (although many states do), so having 2,000+ voters at one location and 400 at another could mean that more voting machines and poll workers would be needed at the former location.
+A3. The zip code with the most calls, 21217, is 86.4 percent Black, and is located northwest of the downtown area. 
+Some of the neighborhoods in that zip code are Upton, Sandtown-Winchester and Mondawin.
 
 ```{r}
-gov_precinct_totals <- primary_precinct_results_with_voting_locations %>% 
-  filter(office_name == 'Governor / Lt. Governor') %>% 
-  group_by(county_name, election_district_precinct, location_name) %>% 
-  summarise(total_votes = sum(votes)) %>% 
-  arrange(desc(total_votes))
+baltimore_911_with_demographics %>% 
+  group_by(zip_code, pct_black_non_hispanic) %>% 
+  summarize(calls = n()) %>% 
+  arrange(desc(calls))
 
-gov_precinct_totals %>% filter(total_votes == 0)
-
-gov_precinct_totals %>% ungroup() %>% summarise(average = mean(total_votes), median = median(total_votes))
+baltimore_911_with_demographics %>% 
+  filter(zip_code == "21217") %>% 
+  distinct(neighborhood) 
 
 ```
 
-Q4. Choose your own adventure: I want you to come up with a question you could ask of one of the dataframes we've created for this lab. It could involve candidates, or counties or types of voting, but it cannot be a variation of a previous question (so, for example, you can't ask, "What's the average number of votes per precinct in the U.S. Senate primary?"). First write the question and then try to answer it by writing code. If you're not sure of the exact code, try googling (or ask me or Ramsay for advice) but, at a minimum, describe what you think you'd have to do to answer it and what the results would look like. That can help. A4: \[backup questions:\]
+
+
+
+Q5. Choose your own adventure: I want you to come up with a question you could ask of the Baltimore City data that combines both the calls and the demographic information.
+
+A5: 
 
 ```{r}
 
