@@ -37,7 +37,7 @@ Then we'll join some demographic data with Baltimore City 911 calls and ask some
 
 ## Answer questions
 
-Q1. Let's start with our data from Allegany, Harford and Carroll counties. Write code to generate a dataframe that shows the total number of calls for each county. What's the order of counties from most calls to least?
+Q1. Let's start with our data from Allegany, Cecil and Carroll counties. Write code to generate a dataframe that shows the total number of calls for each county. What's the order of counties from most calls to least?
 
 A1. 
 
