@@ -1,7 +1,7 @@
 ---
-title: "lab_04"
+title: "lab_06"
 author: "derek willis"
-date: "8/11/2022"
+date: "2022-03-14"
 output: html_document
 ---
 
@@ -22,16 +22,16 @@ library(lubridate)
 
 ## Getting Started
 
-This week we'll be combining and joining data to make it more useful and to ask some questions about it. We'll use some of our 911 overdose call data to do this. The first thing we want to do is to combine multiple counties' data into a single dataframe so that we can ask some questions. First, let's combine data from Washington, Carroll and Allegany counties into a new dataframe.
+This week we'll be combining and joining data to make it more useful and to ask some questions about it. We'll use some of our 911 overdose call data to do this. The first thing we want to do is to combine multiple counties' data into a single dataframe so that we can ask some questions. First, let's combine data from Cecil, Carroll and Allegany counties into a new dataframe.
 
 *Before* you combine them you'll need to clean up some of the column names to make the data easier to work with - make sure you have loaded the library to do that. You also need to make sure that each column has the same name and datatype (you can check the datatypes using `glimpse`). If any of them does not, you need to fix that.
 
 ```{r}
 carroll_911 <- read_csv("data/carroll_911.csv") %>% clean_names()
-washington_911 <- read_csv("data/washington_911.csv")
-allegany_911 <- read_csv("data/allegany_911.csv") %>% mutate(incident = as.character(incident))
+cecil_911 <- read_csv("data/cecil_911.csv")
+allegany_911 <- read_csv("data/allegany_911.csv")
 
-combined_911 <- bind_rows(list(carroll_911, washington_911, allegany_911))
+combined_911 <- bind_rows(list(carroll_911, cecil_911, allegany_911))
 ```
 
 Then we'll join some demographic data with Baltimore City 911 calls and ask some questions of that. For that, you'll need to load the Baltimore City data and the demographic data, and join them based on the zip code. Remember, the zip codes in both dataframes must be the same datatype (and should be characters).
@@ -48,7 +48,7 @@ baltimore_911_with_demographics <- baltimore_911 %>% left_join(maryland_zcta, by
 
 Q1. Let's start with our data from Allegany, Harford and Carroll counties. Write code to generate a dataframe that shows the total number of calls for each county. What's the order of counties from most calls to least?
 
-A1. Washington, Carroll, 
+A1. Carroll, Cecil, Allegany - all of them have similar numbers of calls. 
 
 ```{r}
 combined_911 %>% 
@@ -57,14 +57,21 @@ combined_911 %>%
   arrange(desc(calls))
 ```
 
-Q2. In your combined dataframe that you used in A1, add a column for the month of each call, then write code to show the total number of calls per county and month. Are there any outliers or noteworthy results? Describe the general pattern of the results.
+Q2. In your combined dataframe that you used in A1, add a column for the month of each call, then write code to show the total number of calls per county and month. Are there any outliers or noteworthy results? Describe the general pattern of the results. 
 
-A2. Washington had more calls in every month last year than either Allegany or Carroll have in any month. August saw the most calls for both Allegany and Carroll, while July had by far the most in Washington.
+Then calculate the most calls per county and location. Which location had the most calls - where and what is that location?
+
+A2. August was the leading month for calls for all three counties, with Allegany having more in several months than the others. The top location in this data is 314 Grove Neck Rd. in Earleville, Cecil County. It is the site of an addiction treatment center.
 
 ```{r}
 combined_911 %>% 
   mutate(month = month(date)) %>% 
   group_by(county, month) %>% 
+  summarize(calls = n()) %>% 
+  arrange(desc(calls))
+
+combined_911 %>% 
+  group_by(county, location) %>% 
   summarize(calls = n()) %>% 
   arrange(desc(calls))
 ```
