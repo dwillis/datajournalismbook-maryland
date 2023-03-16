@@ -46,9 +46,9 @@ baltimore_911_with_demographics <- baltimore_911 %>% left_join(maryland_zcta, by
 
 ## Answer questions
 
-Q1. Let's start with our data from Allegany, Anne Arundel and Carroll counties. Write code to generate a dataframe that shows the total number of calls for each county. What's the order of counties from most calls to least?
+Q1. Let's start with our data from Allegany, Harford and Carroll counties. Write code to generate a dataframe that shows the total number of calls for each county. What's the order of counties from most calls to least?
 
-A1. Washington, Carroll, Allegany
+A1. Washington, Carroll, 
 
 ```{r}
 combined_911 %>% 
@@ -69,29 +69,33 @@ combined_911 %>%
   arrange(desc(calls))
 ```
 
-Q3. Let's turn to the Baltimore City data. Write code to find zip codes with the most calls, along with showing the percentage of black non-Hispanic population. Describe the top 10 zip codes in terms of their Black population. Where is that top zip code in the city in relation to downtown? Find the neighborhoods in that zip code that are listed in the data - you can use group_by or distinct to do this. What are some of those neighborhoods?
+Q3. Let's turn to the Baltimore City data. You're interested in exploring calls in zip codes with a high percentage of children under 18. Write code to isolate calls in zip codes where the percentage of under 18 population is at least 75% and then show the zip code and population and how many calls occurred in each of those zip codes. 
 
-A3. The zip code with the most calls, 21217, is 86.4 percent Black, and is located northwest of the downtown area. 
-Some of the neighborhoods in that zip code are Upton, Sandtown-Winchester and Mondawin.
+Where are those zip codes in the city?
+
+Add a column to your code that calculates the number of calls per 1,000 people for those zip codes. To calculate a per capita rate, you might find this short guide handy: https://observablehq.com/@palewire/per-capita-calculator.
+
+Which zip code has the highest rate of calls per 1,000 people? Find the neighborhoods in that zip code that are listed in the data - you can use group_by or distinct to do this. What are some of those neighborhoods, and what else can you tell me about the population there?
+
+A3. There are seven zip codes in the city with at least 75% population under 18. They are all around downtown or just next to it.
+
+The zip code with the highest rate of calls per 1,000 population, 21217, is 86.4 percent Black, and is located northwest of the downtown area.Some of the neighborhoods in that zip code are Upton, Sandtown-Winchester and Mondawin.
 
 ```{r}
 baltimore_911_with_demographics %>% 
-  group_by(zip_code, pct_black_non_hispanic) %>% 
+  filter(pct_under_18 >= 75) %>% 
+  group_by(zip_code, population) %>% 
   summarize(calls = n()) %>% 
-  arrange(desc(calls))
+  mutate(rate = calls/population *1000)
 
 baltimore_911_with_demographics %>% 
   filter(zip_code == "21217") %>% 
   distinct(neighborhood) 
-
 ```
 
+Q4. Choose your own adventure: I want you to come up with a question you could ask of the Baltimore City data that combines both the calls and the demographic information. You must use both demographics and the overdose call records.
 
-
-
-Q5. Choose your own adventure: I want you to come up with a question you could ask of the Baltimore City data that combines both the calls and the demographic information.
-
-A5: 
+A4: 
 
 ```{r}
 
