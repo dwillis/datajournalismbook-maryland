@@ -65,19 +65,17 @@ arrange(md_median_age, estimate)
 md_median_age %>% filter(estimate >= 50)
 ```
 
-# 911 calls and spanish speaking zip codes
-
-**Q3** We're interested in knowing which Maryland counties have the highest percentage of 5-17 year-olds who speak Spanish at home and *also* speak English fluently. Start with the code you wrote for Q1 and alter it to show the total population of 5-17 year-olds by county. Then create a second dataframe to show the number of 5-17 year-olds by county living in homes where Spanish is spoken but who speak English "very well" according to the ACS. To do this, you will need to find the ACS variables that represent those subjects. HINT: the phrase "very well" shows up in multiple variables - you want the one that doesn't include other factors like citizenship.
+**Q3** We're interested in knowing more about Montgomery County zip codes where overdose calls are coming from and the demographic characteristics they possess.
 
 For each dataframe, rename the `estimate` column to a meaningful name you've given the ACS variable, remove the `variable` columns in each using select and then join them on GEOID and NAME. Then you can add a column to calculate the percentage of the total 5-17 population that speaks Spanish at home.
 
 Which county has the highest percentage of 5-17 year-olds who speak Spanish at home and also speak English very well?
 
-**A3** Prince George's County, with 19%, or nearly one in five.
+**A3** 
 
 ```{r}
-speak_spanish_5_17 <- get_acs(geography='county', variables=c(speak_spanish_5_17='B16004_005'), state='MD', year=2020) %>%
-   rename('speak_spanish_5_17'='estimate') %>%
+speak_spanish_zips <- get_acs(geography='zcta', variables=c(speak_spanish='B06007_003'), state='MD', year=2019) %>%
+   rename('speak_spanish'='estimate') %>%
    select(-variable)
 md_population_5_17 <- get_acs(geography='county', variables=c(total_pop_5_17='B16004_002'), state='MD', year =2020) %>%
    rename('total_pop_5_17'='estimate') %>%
