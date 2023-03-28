@@ -184,7 +184,7 @@ md10 <- get_acs(geography = "county",
 
 What we're going to do next is a lot, but each step is simple. We're going to join the data together, so each county has one line of data. Then we're going to rename some fields that repeat. Then we're going to calculate the minimum and maximum value of the estimate using the margin of error. That'll help us later. After that, we're going to calculate a percent change and sort it by that change.
 
-**Task** Run the following codeblock to join the data, rename the population estimates and then calculate the values we need. Notice how we select *after* we do the initial calculations so we only see the columns we're interested in (and drop the ones we don't want to see). Also note how the select function has the minus sign (-) in front of some columns? That means we don't want to see them in our result. Did any counties see their median incomes fall from 2010-2021? Is the change outside the margin of error for both? 
+**Task** Run the following codeblock to join the data, rename the population estimates and then calculate the values we need. Notice how we select *after* we do the initial calculations so we only see the columns we're interested in (and drop the ones we don't want to see). Also note how the select function has the minus sign (-) in front of some columns? That means we don't want to see them in our result. Which jurisdictions saw the largest increases in median income? Did any counties see their median incomes fall from 2010-2021? 
 **Answer**
 
 ```{r}
@@ -196,7 +196,7 @@ md10 %>%
   mutate(min2010 = estimate2010-moe.x, max2010 = estimate2010+moe.x, min2020 = estimate2021-moe.y, max2021 = estimate2021+moe.y) %>%
   select(-variable.x, -variable.y, -moe.x, -moe.y) %>%
   mutate(change = ((estimate2021-estimate2010)/estimate2010)*100) %>%
-  arrange(change)
+  arrange(desc(change))
 ```
 
 ### Task 8: Combine with Maryland Data
@@ -212,7 +212,7 @@ md_high_schools <- read_csv("data/md_high_schools.csv") %>%
 
 The Census Bureau has Zip Code Tabulation Areas - they are mostly identical to what we know as zip codes, with some small differences. In most cases we can use them interchangeably.
 
-**Task** Let's get ZCTA household income data from the ACS using tidycensus for each zip code in `md_high_schools`. Run the following codeblock to retrieve household income data for all Maryland ZCTAs first, then join them to `md_high_schools` using the GEOID column. We'll also create min and max values and drop any rows where we don't have income estimates. What's one question we could ask of this data now that we have enrollment percentages and household income for the high school's zip code? What might make the answer harder to interpret?
+**Task** Let's get ZCTA household income data from the ACS using tidycensus for each zip code in `md_high_schools`. Run the following codeblock to retrieve household income data from 2019 - the latest year for which we have it for all Maryland ZCTAs - first, then join them to `md_high_schools` using the GEOID column. We'll also create min and max values and drop any rows where we don't have income estimates. What's one question we could ask of this data now that we have enrollment percentages and household income for the high school's zip code? What might make the answer harder to interpret?
 **Answer**
 
 ```{r}
