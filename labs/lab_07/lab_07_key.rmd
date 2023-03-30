@@ -42,7 +42,7 @@ census_api_key("102c0c72d8f8eb880608f9dacb53fdf9100f8ba0", install=TRUE)
 
 You'll also need to load the list of American Community Survey variables from the 2021 5-year estimates so you can identify the codes you need:
 
-**Task** load the variables from the 2021 5-year ACS and save them to a dataframe
+**Task** load the variables from the 2021 5-year ACS (which is called "acs5") and save them to a dataframe
 
 ```{r}
 v21 <- load_variables(2021, "acs5", cache=TRUE)
@@ -69,10 +69,10 @@ md_median_age %>% filter(estimate >= 50)
 
 1. Load the Montgomery County 911 overdose calls data.
 2. Create a new dataframe with the total number of calls for each zip code.
-2. Find the ACS variable pertaining to the total 18 and up population (there are several choices here; you want the simplest one).
-3. Get from the ACS data from all Maryland zip codes using that variable.
-4. Join the ACS data to the Montgomery County zip code totals dataframe and rename the estimate column to a meaningful name you've given the ACS variable.
-5. Add a column to the joined dataframe that calculates a rate of calls per 1,000 population.
+3. Find the ACS variable pertaining to the total 18 and up population (there are several choices here; you want the simplest one).
+4. Get from the ACS data from all Maryland zip codes using that variable.
+5. Join the ACS data to the Montgomery County zip code totals dataframe and rename the estimate column to a meaningful name you've given the ACS variable.
+6. Add a column to the joined dataframe that calculates a rate of calls per 1,000 population.
 
 Which zip code has the highest rate of calls? Which has the lowest?
 
