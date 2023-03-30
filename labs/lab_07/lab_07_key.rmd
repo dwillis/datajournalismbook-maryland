@@ -65,25 +65,25 @@ arrange(md_median_age, estimate)
 md_median_age %>% filter(estimate >= 50)
 ```
 
-**Q3** We're interested in knowing more about Montgomery County zip codes where overdose calls are coming from and the demographic characteristics they possess. In particular, we want to calculate a per capita rate of calls per . To do this, you'll need to:
+**Q3** We're interested in knowing more about Montgomery County zip codes where overdose calls are coming from and the demographic characteristics they possess. In particular, we want to calculate a rate of calls per 1,000 population. To do this, you'll need to:
 
 1. Load the Montgomery County 911 overdose calls data.
 2. Create a new dataframe with the total number of calls for each zip code.
-2. Find the ACS variable pertaining to total population (there are several choices here; you want the simplest one).
+2. Find the ACS variable pertaining to the total 18 and up population (there are several choices here; you want the simplest one).
 3. Get from the ACS data from all Maryland zip codes using that variable.
 4. Join the ACS data to the Montgomery County zip code totals dataframe and rename the estimate column to a meaningful name you've given the ACS variable.
 5. Add a column to the joined dataframe that calculates a rate of calls per 1,000 population.
 
 Which zip code has the highest rate of calls? Which has the lowest?
 
-**A3** 
+**A3** 20877 is the highest, 20707 is the lowest.
 
 ```{r}
 montgomery_911_calls <- read_csv("data/montgomery_2022_overdoses.csv") %>% mutate(zip = as.character(zip))
 
 montco_totals <- montgomery_911_calls %>% group_by(zip) %>% summarize(calls = n()) %>% arrange(desc(calls))
 
-md_zcta_population <- get_acs(geography="zcta", variables = "B01001_001", state='MD', year=2019)
+md_zcta_population <- get_acs(geography="zcta", variables = "B09021_001", state='MD', year=2019)
 
 montco_zip_with_population <- montco_totals %>% inner_join(md_zcta_population, by=c('zip' = 'GEOID')) %>% rename(population = estimate)
 
@@ -96,7 +96,7 @@ montco_zip_with_population <- montco_zip_with_population %>% mutate(rate_per_1k 
 
 **Q5** Go back to your joined dataframe from Q3 and add two more columns representing the minimum and maximum populations based on the estimate and margin of error, then calculate per capita rates for each. Do you get the same two zip codes for the highest and lowest as you did before? Does that give you more or less confidence in your answers to Q3?
 
-**A5** 
+**A5** They are the same, which should give us more confidence that they are the highest and lowest rates by zip code.
 
 ```{r}
 montco_zip_with_population <- montco_zip_with_population %>% 
