@@ -1,7 +1,7 @@
 ---
 title: "lab_07"
 author: "derek willis"
-date: "10/21/2022"
+date: "2023-03-28"
 output: html_document
 ---
 
@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## You will need
 
-* A Census API key
+-   A Census API key
 
 ## Load libraries and establish settings
 
@@ -23,71 +23,65 @@ You'll need to load two packages for this: the tidyverse and tidycensus.
 # Turn off scientific notation
 options(scipen=999)
 
-# Load the libraries you'll need
-
+# Load the tidyverse.
 ```
 
 ## Setup Census API
 
 You'll need your Census API Key:
 
-**Task** set your API Key if you haven't already
+**Task** set your API Key if you haven't already. You won't need to install or overwrite it.
 
 ```{r echo=FALSE}
-census_api_key("YOUR API KEY", overwrite=TRUE)
 ```
 
 ## Load and view ACS variables
 
-You'll also need to load the list of American Community Survey variables from the 2020 5-year estimates so you can identify the codes you need:
+You'll also need to load the list of American Community Survey variables from the 2021 5-year estimates so you can identify the codes you need:
 
-**Task** load the variables from the 2020 5-year ACS and save them to a dataframe
+**Task** load the variables from the 2021 5-year ACS and save them to a dataframe
 
 ```{r}
 ```
 
 ## Answer questions
 
-**Q1** What is the Maryland jurisdiction with the lowest median age, according to the ACS 2020 5-year estimates? You will need to find the variable for median age first.
-**A1**
+**Q1** What is the Maryland jurisdiction with the lowest median age, according to the ACS 2021 5-year estimates? You will need to find the variable for median age first. 
+**A1** 
 
 ```{r}
 ```
 
-**Q2** Which Maryland counties have a median age of at least 50? You can use the dataframe you just made to answer this, but you must write code to display only those counties with a median age of at least 50.
+**Q2** Which Maryland counties have a median age of at least 50? You can use the dataframe you just made to answer this, but you must write code to display only those counties with a median age of at least 50. 
 **A2** 
 
 ```{r}
 ```
 
-**Q3** We're interested in knowing which Maryland counties have the highest percentage of 5-17 year-olds who speak Spanish at home and *also* speak English fluently. Start with the code you wrote for Q1 and alter it to show the total population of 5-17 year-olds by county. Then create a second dataframe to show the number of 5-17 year-olds by county living in homes where Spanish is spoken but who speak English "very well" according to the ACS. To do this, you will need to find the ACS variables that represent those subjects. HINT: the phrase "very well" shows up in multiple variables - you want the one that doesn't include other factors like citizenship. 
+**Q3** We're interested in knowing more about Montgomery County zip codes where overdose calls are coming from and the demographic characteristics they possess. In particular, we want to calculate a per capita rate of calls per . To do this, you'll need to:
 
-For each dataframe, rename the `estimate` column to a meaningful name you've given the ACS variable, remove the `variable` columns in each using select and then join them on GEOID and NAME. Then you can add a column to calculate the percentage of the total 5-17 population that speaks Spanish at home.
+1. Load the Montgomery County 911 overdose calls data.
+2. Create a new dataframe with the total number of calls for each zip code.
+2. Find the ACS variable pertaining to total population (there are several choices here; you want the simplest one).
+3. Get from the ACS data from all Maryland zip codes using that variable.
+4. Join the ACS data to the Montgomery County zip code totals dataframe and rename the estimate column to a meaningful name you've given the ACS variable.
+5. Add a column to the joined dataframe that calculates a rate of calls per 1,000 population.
 
-Which county has the highest percentage of 5-17 year-olds who speak Spanish at home and also speak English very well?
+Which zip code has the highest rate of calls? Which has the lowest?
 
 **A3** 
 
 ```{r}
 ```
 
-**Q4** Given the counties with the largest percentage of 5-17 year-olds that speak Spanish at home, which county stands out to you in the data as different from the others? How would you describe the top 5 counties? How would you describe Garrett County's numbers?
+**Q4** Using [CensusReporter.org](https://censusreporter.org/), examine the zip codes with the highest and lowest rates and compare and contrast their demographic profiles. Is there a story here?
 
 **A4** 
 
-**Q5** Pennsylvanians are currently requesting and submitting mail ballots for the November election. You'd like to know more about the people who live in the areas sending in mail ballots. Read in the `zip_totals.csv` file in the data folder containing the number of returned mail ballots per zip code. Then create a dataframe of Pennsylvania ZCTAs that include the following variables from the 2019 ACS: total population and median income. You will need to add `output = "wide"` to the get_acs function so that you get columns for those two variables' estimates and margins of error.
+**Q5** Go back to your joined dataframe from Q3 and add two more columns representing the minimum and maximum populations based on the estimate and margin of error, then calculate per capita rates for each. Do you get the same two zip codes for the highest and lowest as you did before? Does that give you more or less confidence in your answers to Q3?
 
-Join the ZCTA dataframe to the zip totals dataframe and calculate a per capita rate for mail ballots per 100 population in each ZCTA, and write code to answer the following questions?
-
-* Which zip code *that has returned at least 100 mail ballots* has the highest per capita rate? 
-* Where is that zip code and what does Census Reporter say about its demographics? 
-* For zip codes with a per capita rate of at least 10 returned ballots per 100 people, how many have median incomes of at least $100,000? 
-* How many have median incomes less than the state figure of $68,957? 
-* What's the most interesting one from this last result?
-
-**A5**
+**A5** 
 
 ```{r}
-
 ```
 
