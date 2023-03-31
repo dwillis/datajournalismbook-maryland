@@ -1,7 +1,7 @@
 ---
-title: "pre_lab_09.Rmd"
-author: "sean mussenden"
-date: "8/24/2021"
+title: "pre_lab_08.Rmd"
+author: "Derek Willis"
+date: "2023-03-30"
 output: html_document
 ---
 
@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Chapter 17
+## Chapter 26
 
 Visualizing data is becoming a much greater part of journalism. Large news organizations are creating graphics desks that create complex visuals with data to inform the public about important events. 
 
@@ -26,7 +26,7 @@ Let's revisit some data we've used in the past and turn it into charts. First, l
 library(tidyverse)
 ```
 
-The dataset we'll use is voter registration data by county in Maryland from 2020 and September 2022. Let's load it.
+The dataset we'll use is 911 overdose calls from  Let's load it.
 
 ### Task 2: Load data
 **Task** Run the following code to load the data. In the space below, indicate how many rows and columns it has.
