@@ -92,7 +92,7 @@ Using geom_bar() -- as opposed to geom_line() -- says we're making a bar chart.
 
 Inside of that function, the aesthetic, aes, says which columns to use in drawing the chart. 
 
-We're setting the values on the x axis (horizontal) to be the name of the county. We set weight to total loans, and it uses that value to "weight" or set the height of each bar. 
+We're setting the values on the x axis (horizontal) to be the abbreviation of the month. We set weight to total calls, and it uses that value to "weight" or set the height of each bar. 
 
 One quirk here with ggplot.  
 
@@ -108,7 +108,7 @@ baltco_911_calls_by_month %>%
   geom_bar(aes(x=month, weight=total_calls))
 ```
 
-This is a very basic chart.  But it's hard to derive much meaning from this chart, because the counties aren't ordered from highest to lowest by total_loans. We can fix that by using the reorder() function to do just that:
+This is a very basic chart.  But it's hard to derive much meaning from this chart, because the months aren't ordered from highest to lowest by total_calls We can fix that by using the reorder() function to do just that:
 
 ### Task 6: Run the following code
 **Task** Run the following code. Explain what you see after running the code in the space below. What has changed from the last codeblock?
@@ -159,7 +159,6 @@ First, you have to install and load a package that contains lots of extra themes
 
 ### Task 9: Run the following code
 **Task** Run the following code. 
-**Answer**
 
 ```{r}
 install.packages('ggthemes')
