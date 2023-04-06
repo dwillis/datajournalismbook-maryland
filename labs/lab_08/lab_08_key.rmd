@@ -138,11 +138,11 @@ pg_calls_with_income <- pg_calls_zip %>% inner_join(md_median_income_zip, by=c('
 pg_calls_with_income %>%
   ggplot() +
   geom_point(aes(x=total_calls,y=estimate)) +
-  geom_text(aes(x=total_calls,y=estimate, label=zipcode)) +
+  geom_text(aes(x=total_calls,y=estimate, label=zipcode), check_overlap = TRUE) +
   labs(
-    title="Significant Gender Gaps in Younger Maryland Early Voters",
-    y = "percent female",
-    x = "percent male",
-    caption = "source: Maryland State Board of Elections"
+    title="Wealthier Areas of Prince George's Have Fewer 911 Overdose Calls",
+    y = "median income",
+    x = "number of 911 overdose calls",
+    caption = "source: Prince George's County EMS"
   )
 ```
