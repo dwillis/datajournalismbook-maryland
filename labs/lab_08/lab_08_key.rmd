@@ -1,7 +1,7 @@
 ---
-title: "lab_09"
+title: "lab_08"
 author: "derek willis"
-date: "10/26/2022"
+date: "2023-04-03"
 output: html_document
 ---
 
@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Load libraries and establish settings
 
-**Task** Create a codeblock and load appropriate packages and settings for this lab. We'll be making some charts and cleaning up data.
+**Task** Create a codeblock and load appropriate packages and settings for this lab. We'll be making some charts, working with dates and retrieving Census data.
 
 ```{r}
 # Turn off scientific notation
@@ -20,79 +20,83 @@ options(scipen=999)
 # Load the tidyverse.
 library(tidyverse)
 library(tidycensus)
-library(janitor)
 library(ggrepel)
 
 ```
 
-## Load data
+## Load and modify data
 
 **Task** Create a codeblock and load the following data from the data folder:
 
-* Maryland active registered voters - `md_active_voters.csv`
-* Maryland absentee ballots sent and returned - `md_absentee_ballots.csv`
+* Prince George's County 911 Overdose Calls
 
-You may want to clean up the column names and standardize the names of counties so that they appear identical in the two dataframes.
+You will need to create columns for the date, week and month based on the existing `datetime` column.
 
 ```{r}
-md_active_voters <- read_csv("data/md_active_voters.csv")
-md_absentee_ballots <- read_csv("data/md_absentee_ballots.csv") %>% clean_names()
+pg_calls <- read_csv("data/prince_georges_2022_overdoses.csv")
+
+pg_calls <- pg_calls %>% mutate(date = date(datetime), month = month(datetime, label=TRUE), week = week(datetime))
+
 ```
 
 ## Questions 
 
-**Q1.** Which county has the highest percentage of total absentee ballots returned of total ballots sent? Make a bar chart of the top 10 counties. Your bar chart must have:
+**Q1.** Which month saw the greatest percentage of total calls? Create a dataframe that calculates the percentage of all calls that each month's calls represents. Make a bar chart from that dataframe. Your bar chart must have:
 
 * A clear title that states the main idea/finding
-* Good labels for the x & y axis and a caption for the source, which is the Maryland State Board of Elections
+* Good labels for the x & y axis and a caption for the source, which is Prince George's County EMS.
 * Readable bars - the values shouldn't be overlapping
 
-**A1.** 
+Compare the results here to those from the pre_lab bar chart - are there major differences in the months with the highest and lowest figures? Describe that below.
+
+**A1.** December accounts for one of every 10 911 overdose calls in Prince George's County, which is not at all like the pattern from Baltimore County. August is near the bottom in PG, while November is near the top. Very different patterns.
 
 ```{r}
 # Calculate the percentage
-md_absentee_ballots <- md_absentee_ballots %>%
-  mutate(pct_returned = total_received/total_sent*100) %>% 
-  arrange(desc(pct_returned))
+pg_calls_month <- pg_calls %>%
+  group_by(month) %>% 
+  summarize(total_calls = n()) %>% 
+  mutate(pct = total_calls/1397 *100) %>% 
+  arrange(desc(pct))
 
 # Plot the data.  Use geom_line to draw the line, geom_point to add points, geom_text to add labels.  Use scale_x_date to set breaks at 1 day. 
-md_absentee_ballots %>%
-  head(10) %>% 
+pg_calls_month %>%
   ggplot() + 
-  geom_bar(aes(x=reorder(county_name,pct_returned), weight=pct_returned)) + 
+  geom_bar(aes(x=reorder(month,pct), weight=pct)) + 
   coord_flip() +
   labs(
-    title="Smaller Maryland Counties Returning More Mail Ballots",
-    y = "percentage of ballots returned",
-    x = "county",
-    caption = "source: Maryland State Board of Elections"
+    title="One in Ten Prince George's Overdose 911 Calls Made in December",
+    y = "percentage of calls",
+    x = "month",
+    caption = "source: Prince George's County EMS"
   )
 
 ```
 
-**Q2.** What are the top 10 counties with the lowest percentage of ballots returned by Democratic voters, and what is the difference between the percentage returned for Democrats and Republicans in those counties? You MUST do the following things when answering this question:
+**Q2.** Let's visualize this data on a weekly basis using a line chart. As in Q1, generate a dataframe with the total number of calls for each week, and then create a line chart to show the distribution of calls over time. Your line chart must have:
 
-* Make a codeblock below to write your code in.
-* Calculate the percentage of ballots returned by both Democrats and Republicans.
-* Arrange the dataframe to show the counties with the smallest percentage of returned ballots from Democrats first.
-* Use ggplot to make a horizontal bar chart that shows just the first 10 counties, with the length of the bar determined by the county's percentage of ballots returned by Democrats. Give it an appropriate title, source, and x and y axis titles. 
+* A clear title that states the main idea/finding
+* Good labels for the x & y axis and a caption for the source, which is Prince George's County EMS.
+* Readable labels
 
-**A2.** 
+Describe the pattern of results; you may want to look at the data to dig into particular outliers.
+
+**A2.** There's a huge mid-year spike and then a slope upwards towards the end of the year. The sharp decline at the very end of the year is due to four incidents on Dec. 31, the beginning of a new week and the last day of the year.
+
+
 ```{r}
-md_absentee_ballots <- md_absentee_ballots %>%
-  mutate(pct_returned_dem = dem_received/dem_sent*100, pct_returned_rep = rep_received/rep_sent*100, pct_returned_oth = oth_received/oth_sent*100, dem_rep_diff = pct_returned_dem-pct_returned_rep) %>% 
-  arrange(pct_returned_dem)
+pg_calls_week <- pg_calls %>%
+  group_by(week) %>% 
+  summarize(total_calls = n())
 
-md_absentee_ballots %>% 
-  head(10) %>% 
+pg_calls_week %>% 
   ggplot() + 
-  geom_bar(aes(x=reorder(county_name,-pct_returned_dem), weight=pct_returned_dem)) + 
-  coord_flip() +
+  geom_line(aes(x=week, y=total_calls)) + 
   labs(
-    title="Maryland's Largest Counties Returning Fewer Absentee Ballots",
-    y = "percentage of ballots returned",
-    x = "county",
-    caption = "source: Maryland State Board of Elections"
+    title="Prince George's County 911 Overdose Calls Show Mid-Year Spike",
+    y = "total calls",
+    x = "week",
+    caption = "source: Prince George's County EMS"
   )
 
 ```
@@ -107,44 +111,34 @@ knitr::include_graphics("https://www.mathsisfun.com/data/images/scatter-ice-crea
 
 We're going to use a scatterplot a little differently, to get a visual sense of two key variables: 
 
-Our questions include: Does the percentage of early votes cast by younger voters vary depending on the county? Are there differences in gender?
+Our question is: does the median income in a zip code have any relationship to the number of overdose 911 calls in that zip code?
 
-To answer those questions, do the following:
+To answer this question, do the following:
 
-1. Load in the early voting data here: https://elections.maryland.gov/press_room/2022_stats/GG22/EarlyVoting%20RAW%20data.csv and isolate the 18-24 age group.
-2. Create a dataframe adding up the total number of early votes cast, county name and gender among 18-24 year-olds. To do this, you will need to make sure that all of the early voting totals for Days 1-6 DO NOT have NA values. You should change those values to 0 and exclude Day 7 and Day 8 entirely.
-3. Replace that dataframe with a version that uses `pivot_wider` to turn the gender values into columns (https://tidyr.tidyverse.org/reference/pivot_wider.html#ref-examples), rename the NA column to "UNK" and then replace any NAs in the gender columns with 0s using the same approach you used in step 2. Finally, calculate the total number of votes cast and the percentage of male and female early voters for each county.
-4. Make a scatterplot showing the percentage of early votes cast by gender in each county, with male and female on separate axes. I didn't show you how to do this, so look it up! Googling "ggplot scatterplot" is a good start.
-4. Give it an appropriate title, source, and x and y axis titles.
-5. Add a label for each point that shows the name of the county using geom_text(). Try to make the names as easy to read as possible - 
-6. In the answer space below, describe what you see and answer the questions posed above. In a general sense, what do you think this means? Feel free to consider the actual raw values: how would you report out the main point(s) of this chart?
+1. Generate a dataframe with the number of 911 calls for each zip code.
+2. Get data from the Census Bureau showing median household income for Maryland zip codes.
+3. Join those two dataframes on their zip code columns, starting with the 911 calls dataframe.
+4. Make a scatterplot showing the total calls and median income. I didn't show you how to do this, so look it up! Googling "ggplot scatterplot" is a good start.
+5. Give it an appropriate title, source, and x and y axis titles.
+6. Add a label for each point that shows the zip code using geom_text() - see some examples of its use at https://ggplot2.tidyverse.org/reference/geom_text.html#ref-examples. Try to make the names as easy to read as possible by avoiding overlap.
+7. In the answer space below, describe what you see and answer the questions posed above. In a general sense, what do you think this means? Feel free to consider the actual raw values: how would you report out the main point(s) of this chart?
 
 **A3.**  
 
 ```{r}
-md_early_voting <- read_csv("https://elections.maryland.gov/press_room/2022_stats/GG22/EarlyVoting%20RAW%20data.csv") %>% filter(AgeGroup == '18-24')
+pg_calls_zip <- pg_calls %>% 
+  group_by(zipcode) %>% 
+  summarize(total_calls = n())
 
-md_early_voting <- md_early_voting %>% mutate(fips_code = case_when(
-  COUNTY_CODE < 10 ~ paste0("2400",COUNTY_CODE),
-  COUNTY_CODE >= 10 ~ paste0("240",COUNTY_CODE))
-) %>% 
-  mutate(across(where(is.numeric), ~ replace_na(., 0))) %>% 
-  select(-Day7, -Day8)
+md_median_income_zip <- get_acs(geography = 'zcta', variables='B19013_001', state='MD', year=2019)
 
-md_early_voting_county_gender <- md_early_voting %>% 
-  group_by(fips_code, COUNTY_NAME, GENDER_CODE) %>% 
-  summarize(total = sum(c_across(starts_with('Day')))) %>% 
-  pivot_wider(names_from = GENDER_CODE, values_from = total) %>% 
-  rename(UNK = `NA`) %>% 
-  mutate(across(where(is.numeric), ~ replace_na(., 0))) %>% 
-  mutate(total = M + F + UNK) %>% 
-  mutate(pct_male = M/total *100, pct_female = F/total * 100)
+pg_calls_with_income <- pg_calls_zip %>% inner_join(md_median_income_zip, by=c('zipcode'='GEOID'))
 
 # Plot it using geom_point.
-md_early_voting_county_gender %>%
+pg_calls_with_income %>%
   ggplot() +
-  geom_point(aes(x=pct_male,y=pct_female)) +
-  geom_text_repel(aes(x=pct_male,y=pct_female, label=COUNTY_NAME), position=position_jitter(width=1,height=1)) +
+  geom_point(aes(x=total_calls,y=estimate)) +
+  geom_text(aes(x=total_calls,y=estimate, label=zipcode)) +
   labs(
     title="Significant Gender Gaps in Younger Maryland Early Voters",
     y = "percent female",

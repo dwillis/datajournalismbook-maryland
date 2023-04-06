@@ -1,7 +1,7 @@
 ---
-title: "lab_09"
+title: "lab_08"
 author: "derek willis"
-date: "10/26/2022"
+date: "2023-04-03"
 output: html_document
 ---
 
@@ -11,48 +11,45 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Load libraries and establish settings
 
-**Task** Create a codeblock and load appropriate packages and settings for this lab. We'll be making some charts and cleaning up data.
+**Task** Create a codeblock and load appropriate packages and settings for this lab. We'll be making some charts, working with dates and retrieving Census data.
 
-```{r}
-# Turn off scientific notation
-options(scipen=999)
 
-# Load libraries
-```
-
-## Load data
+## Load and modify data
 
 **Task** Create a codeblock and load the following data from the data folder:
 
-* Maryland active registered voters - `md_active_voters.csv`
-* Maryland absentee ballots sent and returned - `md_absentee_ballots.csv`
+* Prince George's County 911 Overdose Calls
 
-You may want to clean up the column names and standardize the names of counties so that they appear identical in the two dataframes.
+You will need to create columns for the date, week and month based on the existing `datetime` column.
 
-```{r}
-```
+
 
 ## Questions 
 
-**Q1.** Which county has the highest percentage of total absentee ballots returned of total ballots sent? Make a bar chart of the top 10 counties. Your bar chart must have:
+**Q1.** Which month saw the greatest percentage of total calls? Create a dataframe that calculates the percentage of all calls that each month's calls represents. Make a bar chart from that dataframe. Your bar chart must have:
 
 * A clear title that states the main idea/finding
-* Good labels for the x & y axis and a caption for the source, which is the Maryland State Board of Elections
+* Good labels for the x & y axis and a caption for the source, which is Prince George's County EMS.
 * Readable bars - the values shouldn't be overlapping
+
+Compare the results here to those from the pre_lab_08 bar chart - are there major differences in the months with the highest and lowest figures? Describe that below.
 
 **A1.** 
 
 ```{r}
 ```
 
-**Q2.** What are the top 10 counties with the lowest percentage of ballots returned by Democratic voters, and what is the difference between the percentage returned for Democrats and Republicans in those counties? You MUST do the following things when answering this question:
+**Q2.** Let's visualize this data on a weekly basis using a line chart. As in Q1, generate a dataframe with the total number of calls for each week, and then create a line chart to show the distribution of calls over time. Your line chart must have:
 
-* Make a codeblock below to write your code in.
-* Calculate the percentage of ballots returned by both Democrats and Republicans.
-* Arrange the dataframe to show the counties with the smallest percentage of returned ballots from Democrats first.
-* Use ggplot to make a horizontal bar chart that shows just the first 10 counties, with the length of the bar determined by the county's percentage of ballots returned by Democrats. Give it an appropriate title, source, and x and y axis titles. 
+* A clear title that states the main idea/finding
+* Good labels for the x & y axis and a caption for the source, which is Prince George's County EMS.
+* Readable labels
+
+Describe the pattern of results; you may want to look at the data to dig into particular outliers.
 
 **A2.** 
+
+
 ```{r}
 ```
 
@@ -66,18 +63,19 @@ knitr::include_graphics("https://www.mathsisfun.com/data/images/scatter-ice-crea
 
 We're going to use a scatterplot a little differently, to get a visual sense of two key variables: 
 
-Our questions include: Does the percentage of returned ballots by younger voters vary depending on the percentage of younger residents? Are there differences in party and gender? Do certain counties have a higher number of younger voters casting ballots early?
+Our question is: does the median income in a zip code have any relationship to the number of overdose 911 calls in that zip code?
 
-To answer those questions, do the following:
+To answer this question, do the following:
 
-1. Load in the early voting data here: https://elections.maryland.gov/press_room/2022_stats/GG22/EarlyVoting%20RAW%20data.csv and isolate the 18-24 age group.
-2. Create a dataframe adding up the total number of early votes cast, grouping by GEOID, county name and gender among 18-24 year-olds. To do this, you will need to make sure that all of the early voting totals for Days 1-6 DO NOT have NA values. You should change those values to 0 and exclude Day 7 and Day 8 entirely.
-3. Replace that dataframe with a version that uses `pivot_wider` to turn the gender values into columns (https://tidyr.tidyverse.org/reference/pivot_wider.html#ref-examples), rename the NA column to "UNK" and then replace any NAs in the gender columns with 0s using the same approach you used in step 2. Finally, calculate the total number of votes cast and the percentage of male and female early voters for each county.
-4. Make a scatterplot showing the percentage of early votes cast by gender in each county, with male and female on separate axes. I didn't show you how to do this, so look it up! Googling "ggplot scatterplot" is a good start.
-4. Give it an appropriate title, source, and x and y axis titles.
-5. Add a label for each point that shows the name of the county using geom_text(). Try to make the names as easy to read as possible - 
-6. In the answer space below, describe what you see and answer the questions posed above. In a general sense, what do you think this means? Feel free to consider the actual raw values: how would you report out the main point(s) of this chart?
+1. Generate a dataframe with the number of 911 calls for each zip code.
+2. Get data from the Census Bureau showing median household income for Maryland zip codes.
+3. Join those two dataframes on their zip code columns, starting with the 911 calls dataframe.
+4. Make a scatterplot showing the total calls and median income. I didn't show you how to do this, so look it up! Googling "ggplot scatterplot" is a good start.
+5. Give it an appropriate title, source, and x and y axis titles.
+6. Add a label for each point that shows the zip code using geom_text() - see some examples of its use at https://ggplot2.tidyverse.org/reference/geom_text.html#ref-examples. Try to make the names as easy to read as possible by avoiding overlap.
+7. In the answer space below, describe what you see and answer the questions posed above. In a general sense, what do you think this means? Feel free to consider the actual raw values: how would you report out the main point(s) of this chart?
 
-**A3.**
+**A3.**  
+
 ```{r}
 ```
