@@ -36,7 +36,7 @@ knitr::include_graphics("images/datawrapper1.png")
 
 ### Task 4: Upload the CSV File
 
-The first thing we'll do is upload the GOP candidates CSV that's in the pre_lab_10/data folder.
+The first thing we'll do is upload the GOP candidates CSV that's in the pre_lab_09/data folder.
 
 **Task** Click on XLS/CSV and upload the md_gop_cands.csv file.
 
@@ -77,7 +77,7 @@ knitr::include_graphics("images/datawrapper5.png")
 
 ### Task 7: Publish the Chart
 
-**Task** Click the "Publish & Embed" tab, then click on the "PNG" icon. Finally, click the "Download image" button and save that file in the pre_lab_10 folder.
+**Task** Click the "Publish & Embed" tab, then click on the "PNG" icon. Finally, click the "Download image" button and save that file in the pre_lab_09 folder.
 
 ```{r, echo=FALSE}
 knitr::include_graphics("images/datawrapper6.png")
