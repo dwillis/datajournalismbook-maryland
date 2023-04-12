@@ -1,0 +1,164 @@
+---
+title: "lab_06"
+author: "Kiersten Hacker"
+date: "2022-03-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load libraries and establish settings
+
+```{r}
+# Turn off scientific notation
+options(scipen=999)
+
+# load your libraries
+library(tidyverse)
+library(lubridate)
+library(janitor)
+```
+
+## Getting Started
+
+This week we'll be combining and joining data to make it more useful and to ask some questions about it. We'll use some of our 911 overdose call data to do this. The first thing we want to do is to combine multiple counties' data into a single dataframe so that we can ask some questions. First, let's combine data from Cecil, Carroll and Allegany counties into a new dataframe.
+
+*Before* you combine them you'll need to clean up some of the column names to make the data easier to work with - make sure you have loaded the library to do that. You also need to make sure that each column has the same name and datatype (you can check the datatypes using `glimpse`). If any of them does not, you need to fix that.
+
+```{r}
+# load and combine the call data from those three counties
+allegany_911 <- read_csv('data/allegany_911.csv') %>%
+  clean_names()
+  glimpse(allegany_911)
+carroll_911 <- read_csv('data/carroll_911.csv') %>%
+  clean_names()
+  glimpse(carroll_911)
+cecil_911 <- read_csv('data/cecil_911.csv') %>%
+  clean_names()
+  glimpse(cecil_911)
+  
+county_911_combined <- bind_rows(list(allegany_911, carroll_911, cecil_911))
+View(county_911_combined)
+
+```
+
+Then we'll join some demographic data with Baltimore City 911 calls and ask some questions of that. For that, you'll need to load the Baltimore City 911 data and the ZCTA demographic data, and join them based on the zip code. Remember, the zip codes in both dataframes must be the same datatype (and should be characters). You should start with your Baltimore 911 dataframe in creating your join. 
+
+```{r}
+# load and join the Baltimore-related data
+baltimore_911 <- read_csv('data/baltimore_911.csv') %>%
+  clean_names() %>% 
+  mutate(zip_code = as.character(zip_code))
+  glimpse(baltimore_911)
+  
+maryland_zcta <- read_csv('data/maryland_zcta.csv')%>%
+  clean_names() %>%
+  mutate(zcta5n = as.character(zcta5n)) %>%
+  rename(zip_code= zcta5n)
+  glimpse(maryland_zcta)
+  
+baltimore_911_md_population <- baltimore_911 %>% left_join(maryland_zcta, by="zip_code")  
+```
+
+## Answer questions
+
+Q1. Let's start with our data from Allegany, Cecil and Carroll counties. Write code to generate a dataframe that shows the total number of calls for each county. What's the order of counties from most calls to least?
+
+A1. The order of counties from the most calls to the least is Carroll, Cecil, and then Allegany.
+
+```{r} 
+total_calls_by_county <- county_911_combined %>%
+  group_by (county) %>%
+  summarise (
+    count_calls = n()
+  ) %>%
+  arrange(desc(count_calls))
+
+```
+
+Q2. In your combined dataframe that you used in A1, add a column for the month of each call, then write code to show the total number of calls per county and month. Are there any outliers or noteworthy results? Describe the general pattern of the results. 
+
+Then calculate the most calls per county and location. Which location had the most calls - where and what is that location?
+
+A2. Based on the results, it seems like Allegany had the highest number of calls in 5 different months, those months being May, July, August, September and October. The highest number of calls came from Cecil County with 55 in August. This raises the question of what was happening in August, or what was happening in Allegany County for those 5 months. Was there a lack of harm reduction to decrease the amount of drugs on the streets? What was going on with the response in Allegany County?
+314 Grove Neck Rd in Earlesville, which is in Cecil County, has the most calls with 15. Following this location in Cecil County, 10 George St in Carroll County had 7 calls followed by two more locations in Cecil County with 7 calls. Not as many calls from Allegany County appeared in the top 10 unlike in the previous results. What is Cecil County's response? 314 Grove Neck Rd in Earlesville looks like it is in farmland with a porety that has a long driveway. Are people doing drugs in the driveway? In the farm? Are they traveling through here?
+
+```{r}
+county_911_combined_months <- county_911_combined %>%
+  mutate(month = month(date)) 
+
+county_911_combined_months %>%
+group_by (county, month) %>%
+  summarise (
+    count_calls = n()
+  ) %>%
+  arrange(desc(count_calls))
+
+county_911_combined_months %>%
+group_by (county, location) %>%
+  summarise (
+    count_calls = n()
+  ) %>%
+  arrange(desc(count_calls))
+
+```
+
+Q3. Let's turn to the Baltimore City data. You're interested in exploring calls in zip codes with a high percentage of children under 18. Write code to isolate calls in zip codes where the percentage of under 18 population is at least 75% and then show the zip code and population and how many calls occurred in each of those zip codes. 
+
+Where are those zip codes in the city?
+
+Add a column to your code that calculates the number of calls per 1,000 people for those zip codes. To calculate a per capita rate, you might find this short guide handy: https://observablehq.com/@palewire/per-capita-calculator.
+
+Which zip code has the highest rate of calls per 1,000 people? Find the neighborhoods in that zip code that are listed in the data - you can use group_by or distinct to do this. What are some of those neighborhoods, and what else can you tell me about the population there?
+
+A3. The 21217 zip code, which includes Druid Heights, Penn North, Bolton Hill, Harlem Park and other neighborhoods had the highest number of calls with people under 18 and is located northwest of the downtown area. This zip code is majority Black with 86.4% Black and 81.5% under 18. 21223 includes Franklin Square, Carrolton Ridge, New Southwest/Mount Clare and other neighborhoods. It is located right next to the inner harbor and is also majority Black 74.8% Black and 75.2% under 18. 21202 is also majority Black with 65% and young with 80.7% under 18.This zip code area is right in the heart of downtown and includes neighborhoods such as Jonestown, Penn-Fallsway, Oldtwon, East Baltimore Midway and Downtown, among others. 21217 and 21223 also had the highest per capita rates of calls followed by 21201 which is 52.4% Black, 32.3% white, 9% Asion, .3% Native, 3.4% Hispanic and 0.2% other. This zip code includes Midtown Belvedere, Downtown, Seton Hill, Charles North and Upton, among some other neighborhoods.
+
+```{r}
+baltimore_911_population_u18 <- baltimore_911_md_population %>%
+  filter(pct_under_18>= 75) 
+  
+baltimore_911_population_u18 %>%
+  group_by (zip_code, population) %>%
+  summarise (
+    count_calls = n()
+  ) %>%
+  mutate(per_capita_calls = count_calls/population*1000) %>%
+  arrange(desc(per_capita_calls))
+
+
+
+```
+
+Q4. Choose your own adventure: I want you to come up with a question you could ask of the Baltimore City data that combines both the calls and the demographic information. You must use both demographics and the overdose call data in your work.
+
+A4: I wanted to know the median age for the highest number of drug calls by district. This way, if jurisdictions decide to implement workshops and programs to help prevent drug overdoses, they would know what age group to focus their efforts on. Even though it is a bit intuitive that the median age would likely be on the younger side, I still wanted to see what results turned up. Similar to the answers that turned up in Q3, I also wanted to see the zip codes that were majority Black neighborhoods and how many calls they were getting compared to white neighborhoods. The majority white neighborhoods have much fewer calls. This could lead to a story, if it has not already, about systemic racism and the historic funneling of drugs into communities of color that lack resources in education, funding and other areas, contributing to disparate rates and inequalities.
+
+```{r}
+baltimore_911_md_population %>%
+  group_by (district, medage) %>%
+  summarise (
+    count_calls = n()
+  ) %>%
+  arrange(desc(count_calls))
+```
+```{r}
+baltimore_911_md_population %>%
+  filter(pct_black_non_hispanic>= 50) %>%
+  group_by (zip_code) %>%
+  summarise (
+    count_calls = n()
+  ) %>%
+  arrange(desc(count_calls))
+```
+```{r}
+baltimore_911_md_population %>%
+  filter(pct_white_non_hispanic>= 50) %>%
+  group_by (zip_code) %>%
+  summarise (
+    count_calls = n()
+  ) %>%
+  arrange(desc(count_calls))
+```
+

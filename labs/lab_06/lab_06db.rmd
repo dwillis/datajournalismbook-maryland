@@ -1,0 +1,110 @@
+---
+title: "lab_06"
+author: "derek willis"
+date: "2022-03-14"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load libraries and establish settings
+
+```{r}
+# Turn off scientific notation
+options(scipen=999)
+
+# load your libraries
+library(tidyverse)
+library(lubridate)
+library(janitor)
+
+```
+
+## Getting Started
+
+This week we'll be combining and joining data to make it more useful and to ask some questions about it. We'll use some of our 911 overdose call data to do this. The first thing we want to do is to combine multiple counties' data into a single dataframe so that we can ask some questions. First, let's combine data from Cecil, Carroll and Allegany counties into a new dataframe.
+
+*Before* you combine them you'll need to clean up some of the column names to make the data easier to work with - make sure you have loaded the library to do that. You also need to make sure that each column has the same name and datatype (you can check the datatypes using `glimpse`). If any of them does not, you need to fix that.
+
+```{r}
+# load and combine the call data from those three counties
+allegany_911 <- read_csv("data/allegany_911.csv")
+cecil_911 <- read_csv("data/cecil_911.csv")
+carroll_911 <- read_csv("data/carroll_911.csv") %>% clean_names()
+
+calls911_combined <- bind_rows(list(allegany_911, cecil_911, carroll_911))
+View(calls911_combined)
+```
+
+Then we'll join some demographic data with Baltimore City 911 calls and ask some questions of that. For that, you'll need to load the Baltimore City 911 data and the ZCTA demographic data, and join them based on the zip code. Remember, the zip codes in both dataframes must be the same datatype (and should be characters). You should start with your Baltimore 911 dataframe in creating your join. 
+
+```{r}
+# load and join the Baltimore-related data
+baltimore_911 <- read_csv("data/baltimore_911.csv")
+maryland_zcta <- read_csv("data/maryland_zcta.csv") %>% 
+  clean_names() %>% 
+  rename(zip_code = zcta5n)
+
+calls911_maryland_and_baltimore <- baltimore_911 %>% left_join(maryland_zcta, by="zip_code")
+```
+
+## Answer questions
+
+Q1. Let's start with our data from Allegany, Cecil and Carroll counties. Write code to generate a dataframe that shows the total number of calls for each county. What's the order of counties from most calls to least?
+
+A1. The order of the counties is Carroll (448), Cecil (438), and Allegany (418).
+
+```{r}
+calls911_combined %>% # start with our dataframe
+  group_by(county) %>% # Which "date" in 2022 had the most overdose calls? group by our date column, and if you group_by, you also use summarize. "each date"
+  summarize(count= n()) %>% # "how many" means we're counting using n()
+  arrange(desc(count)) # "the most" means were arranging in desc order by what we count
+```
+
+Q2. In your combined dataframe that you used in A1, add a column for the month of each call, then write code to show the total number of calls per county and month. Are there any outliers or noteworthy results? Describe the general pattern of the results. 
+
+Then calculate the most calls per county and location. Which location had the most calls - where and what is that location?
+
+A2. Cecil County in Maryland had the most calls with 55. I noticed that the Allegany is featured four times within the top 6 of the results. Their four entries are during the second half of the year. Also, the month of August is featured three out of the top 10, which means that month is when things usually happen.
+
+```{r}
+calls911_combined %>% # start with our dataframe
+mutate(month_of_call= month(date)) %>% 
+  group_by(county, month_of_call) %>% # Which "date" in 2022 had the most overdose calls? group by our date column, and if you group_by
+  summarize(count= n()) %>% # "how many" means we're counting using n()
+  arrange(desc(count)) # "the most" means were arranging in desc order by what we count
+```
+
+Q3. Let's turn to the Baltimore City data. You're interested in exploring calls in zip codes with a high percentage of children under 18. Write code to isolate calls in zip codes where the percentage of under 18 population is at least 75% and then show the zip code and population and how many calls occurred in each of those zip codes. 
+
+Where are those zip codes in the city? The codes are in Baltimore City. 
+
+Add a column to your code that calculates the number of calls per 1,000 people for those zip codes. To calculate a per capita rate, you might find this short guide handy: https://observablehq.com/@palewire/per-capita-calculator.
+
+Which zip code has the highest rate of calls per 1,000 people? Find the neighborhoods in that zip code that are listed in the data - you can use group_by or distinct to do this. What are some of those neighborhoods, and what else can you tell me about the population there?
+
+A3. The zip_code 21217 has the highest rate of calls per 1,000 people. Druid Hill Park, Mid Town, Madison Park are neighborhoods within the aforementioned zip_code. The population is predominantly featured by African Americans and in an urban setting in Baltimore City. Compared to the 21216 zip code near the Walbrook area in Baltimore that has 7 per 1,000 people.
+
+```{r}
+calls911_maryland_and_baltimore %>% 
+  filter(pct_under_18 > 75) %>% 
+ group_by(zip_code, population) %>% # Which "date" in 2022 had the most overdose calls? group by our date column, and if you group_by
+  summarize(count= n()) %>% # "how many" means we're counting using n()
+    mutate(people_per= count/population*1000) %>% 
+  arrange(desc(count)) # "the most" means were arranging in desc order by what we count
+```
+
+Q4. Choose your own adventure: I want you to come up with a question you could ask of the Baltimore City data that combines both the calls and the demographic information. You must use both demographics and the overdose call data in your work.
+
+A4: I want to compare the 911 call data from East and West Baltimore. I think it would be interesting to compare the data in two areas of Baltimore City that are pretty infamous with crime. 
+
+```{r}
+calls911_maryland_and_baltimore %>% 
+  filter(zip_code== 21205 | zip_code== 21217) %>% 
+ group_by(zip_code, population) %>% # Which "date" in 2022 had the most overdose calls? group by our date column, and if you group_by
+  summarize(count= n()) %>% # "how many" means we're counting using n()
+    mutate(people_per= count/population*1000) %>% 
+  arrange(desc(count)) # "the most" means were arranging in desc order by what we count
+```
