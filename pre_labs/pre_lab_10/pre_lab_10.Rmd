@@ -250,6 +250,7 @@ Next, we'll go out and get population data for each county from tidycensus. The 
 ```{r}
 md_county_population <- get_acs(geography = "county",
               variables = c(population = "B01001_001"),
+              year = 2021,
               state = "MD")
 
 md_county_population
