@@ -56,9 +56,10 @@ What do you think the story here is? Put the answer below along with the URL of 
 
 **Q3.** You want to know more about the geography of 911 overdose calls in Montgomery County, Maryland, in 2022. To do that, you'll make a choropleth map in Datawrapper. You will need to:
 
-* Search for Maryland zip codes (use the 2020 data) as the base map
-* Upload the CSV file
-* Change the tooltip to show both the amount and the percentage (you can put them side by side or put one under the other). Make sure to properly format both numbers to make them readable.
+* Read the file into R and create zip code totals and then export that CSV to use in your map.
+* Search for Maryland zip codes (use the 2020 data) as the base map.
+* Upload the CSV file.
+* Change the tooltip to show both the number and the percentage (you can put them side by side or put one under the other). Make sure to properly format both numbers to make them readable.
 * Have a title, description and source that tells readers about the data. The title and description should highlight the most newsworthy or important aspect.
 
 What do you think the story here is, and what would you want to know more about? Put the answer below along with the URL of your map.
