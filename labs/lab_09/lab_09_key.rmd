@@ -27,7 +27,7 @@ library(tidyverse)
 **Q1.** You want to explore the differences between the electoral performances of Dan Cox in 2022 and Larry Hogan in 2018. Except a map is probably not the best way to show that. Let's make a chart instead, and the type is up to you, but the goal is to clearly show the differences in total votes between the two.
 
 You MUST do the following things when answering this question:
-* Load the md_county_gov.csv and md_county_gov_18.csv files in the data folder
+* Load the md_county_gov.csv and md_gov_county_18.csv files in the data folder
 * Join those dataframes, specifying the join column. 
 * Add columns to generate percentages for Cox and Hogan.
 * Export that joined dataframe to a CSV file using `write_csv`.
