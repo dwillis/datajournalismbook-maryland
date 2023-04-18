@@ -262,39 +262,27 @@ The next step will be to join our housing data to our foreclosure notice data on
 **Answer**
 
 ```{r}
-md_voters_per_10k <- md_county_population %>%
-  left_join(voters_by_county)
+foreclosures_with_housing <- md_zip_housing %>%
+  left_join(foreclosure_zip_march_2023, by=c('GEOID'='zip'))
 
-md_voters_per_10k
+foreclosures_with_housing
 ```
-Hang on - there's at least one county with NA values - St. Mary's, which is spelled "Saint Mary's" in the voter dataframe. And Baltimore County didn't match, either. Let's fix that using if_else, which allows us to conditionally mutate:
+Our final step before visualization, let's calculate the number of foreclosure notices per 10 owner-occupied housing units and sort from highest to lowest to see what trends we can identify just from the table.
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
 **Answer**
 
 ```{r}
-md_county_population <- md_county_population %>%
-  mutate(County = if_else(County == "St. Mary's", "Saint Mary's", County)) %>% 
-  mutate(County = if_else(County == "Baltimore", "Baltimore County", County))
+foreclosures_with_housing <- md_zip_housing %>%
+  left_join(foreclosure_zip_march_2023, by=c('GEOID'='zip')) %>% 
+  mutate(pct = march_2023/estimate*10) %>%
+  arrange(desc(pct))
+
+foreclosures_with_housing
 ```
 
-Our final step before visualization, let's calculate the number of voters per 10,000 population for each county and sort from highest to lowest to see what trends we can identify just from the table.
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
-
-```{r}
-md_voters_per_10k <- md_county_population %>%
-  left_join(voters_by_county) %>%
-  mutate(voters_per_10k = TOTAL/population*10000) %>%
-  arrange(desc(voters_per_10k))
-
-md_voters_per_10k
-```
-
-Let's take a look at the result of this table.  There are some surprising ones at the top, some of Maryland's smallest counties! Worcester, Queen Anne's, Talbot may not have that many voters, but they also don't have a lot of people.  
+Let's take a look at the result of this table. There is one zip code where there have been 10 foreclosure notices for every 100 owner-occupied units, 21641.
 
 Okay, now let's visualize.  We're going to build a choropleth map, with the color of each county -- the fill -- set according to the number of voters per 10K on a color gradient.  
 
