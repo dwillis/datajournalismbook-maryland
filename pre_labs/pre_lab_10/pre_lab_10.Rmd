@@ -45,13 +45,11 @@ library(janitor)
 
 First: an aside on geographic data. There are many formats for geographic data, but data type you'll see the most is called the shapefile. It comes from a company named ERSI, which created the most widely used GIS software in the world. For years, they were the only game in town, really, and the shapefile became ubiquitous, especially so in government and utilities.
 
-So more often than not, you'll be dealing with a shapefile. But a shapefile isn't just a single file -- it's a collection of files that combined make up all the data that allow you to use it. There's a .shp file -- that's the main file that pulls it all together -- but it's important to note if your shapefiles has a .prj file, which indicates that the projection is specified.
+So more often than not, you'll be dealing with a shapefile. But a shapefile isn't just a single file -- it's a collection of files that combined make up all the data that allow you to use it. There's a .shp file -- that's the main file that pulls it all together -- but it's important to note if your shapefiles has a .prj file, which indicates that the projection is specified. You also might be working with a GeoDatabase, or a .gdb file. That's a slightly different, more compact version of a Shapefile.
 
-You also might be working with a GeoDatabase, or a .gdb file. That's a slightly different, more compact version of a Shapefile.
+The data we're going to be working with is a Shapefile of Maryland zip codes from the [state's GIS data catalog](https://data.imap.maryland.gov/datasets/38f3f8bc61bb4261b59d71b3642e3cd6_3/explore?location=38.810313%2C-77.268250%2C8.83).
 
-The data we're going to be working with is a GeoDatabase from the [Prince George's County Department of Planning](https://gisdata.pgplanning.org/opendata/) that contains information about the county's election precincts.
-
-### Task: Load the Prince George's County election precinct data.
+### Task: Load the Maryland zip code map data.
 
 Simlar to `readr`, the `sf` library has functions to read geographic data. In this case, we're going to use `st_read` to read in our precinct data. And then glimpse it to look at the columns.
 
@@ -60,39 +58,39 @@ Simlar to `readr`, the `sf` library has functions to read geographic data. In th
 **Answer**
 
 ```{r}
-pg_precincts <- st_read("data/Election_Precinct_2022_Py.gdb")
+md_zips <- st_read("data/md_zips/BNDY_ZIPCodes11Digit_MDP.shp")
 
-glimpse(pg_precincts)
+glimpse(md_zips)
 ```
 
-This looks like a normal dataframe, and mostly it is.  We have one row per precinct, and each column is some feature of that precinct: the ID, name and more.  What sets this data apart from other dataframes we've used is the last column, "Shape", which is of a new data type. It's not a character or a number, it's a "Multipolygon", which is composed of multiple longitude and latitude values. When we plot these on a grid of latitude and longitude, it will draw those shapes on a map.
+This looks like a normal dataframe, and mostly it is.  We have one row per zipcode, and each column is some feature of that precinct: the fipscode, name and more.  What sets this data apart from other dataframes we've used is the last column, "geometry", which is of a new data type. It's not a character or a number, it's a "Multipolygon", which is composed of multiple longitude and latitude values. When we plot these on a grid of latitude and longitude, it will draw those shapes on a map.
 
-Let's look at these precincts. We have 356 of them, according to this data.
+Let's look at these zip codes We have 526 of them, according to this data.
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below: what kind of information does it contain?
 **Answer**
 
 ```{r}
-View(pg_precincts)
+View(md_zips)
 ```
 
-But where in Prince George's County are these places? We can simply plot them on a longitude-latitude grid using ggplot and geom_sf.
+But where in Maryland are these places? We can simply plot them on a longitude-latitude grid using ggplot and geom_sf.
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
 **Answer**
 
 ```{r}
-pg_precincts %>%
+md_zips %>%
   ggplot() +
   geom_sf() +
   theme_minimal()
 ```
 
-Each shape is a precinct, with the boundaries plotted according to its degrees of longitude and latitude.
+Each shape is a zip code, with the boundaries plotted according to its degrees of longitude and latitude.
 
-If you know anything about Prince George's, you can kinda pick out the geographic context here. To the west is the District of Columbia, for example. College Park is near the top. But this map is not exactly ideal. It would help to have a state and county map layered underneath of it, to help make sense of the spatial nature of this data.
+If you know anything about Maryland, you can pick out the geographic context here. You can basically see where Baltimore is and where the borders of the District of Columbia touch Maryland. But this map is not exactly ideal. It would help to have a county map layered underneath of it, to help make sense of the spatial nature of this data.
 
 This is where layering becomes more clear. First, we want to go out and get another shapefile, this one showing Maryland county outlines.
 
@@ -150,7 +148,7 @@ md_counties %>%
   theme_minimal()
 ```
 
-With this county map, we can layer our places data. We'll narrow it down to just Prince George's County to get an outline.
+With this county map, we can layer our places data.
 
 Something to note: The layers are rendered in the order they appear. So the first geom_sf is rendered first. The second geom_sf is rendered ON TOP OF the first one.
 
@@ -162,38 +160,36 @@ We're also going to change things up a bit to put the datasets we want to displa
 
 ```{r}
 ggplot() +
-  geom_sf(data=md_counties %>% filter(COUNTYFP == "033")) +
-  geom_sf(data=pg_precincts) +
+  geom_sf(data=md_counties) +
+  geom_sf(data=md_zips) +
   theme_minimal()
 ```
 Notice the subtle differences at the boundaries?
 
-Let's dive back into Prince George's precincts and see what more we can find out about them. It would be useful to know, for example, what turnout was like for the July primary election. We can use [the state's data](https://elections.maryland.gov/press_room/2022_stats/Official%20by%20Party%20and%20Precinct.csv) to determine this. 
+Let's dive back into zip codes and this time bring along data on notices of intent to foreclosure by zip code (found at https://opendata.maryland.gov/Housing/Maryland-Notices-of-Intent-to-Foreclose-by-Zip-Cod/ftsr-vapt). Where are these foreclosure notices appearing?
 
-### Task: Run code to load the turnout data from the July 2022 Primary election
+### Task: Run code to load the foreclosure notice data.
 **Task** Run the following code. Describe the output in the space below.
 **Answer** 
 
 ```{r}
-primary_22 <- read_csv("data/Official by Party and Precinct.csv") %>% clean_names()
-pg_turnout <- primary_22 %>% 
-  filter(lbe == "Prince George's") %>% 
-  group_by(precinct) %>% 
-  summarise(total_polls = sum(polls), total_early = sum(early_voing), total_absentee = sum(absentee), total_provisional = sum(provisional), total_eligible = sum(eligible_voters))
+foreclosure_zip <- read_csv("data/Maryland_Notices_of_Intent_to_Foreclose_by_Zip_Code.csv") %>% clean_names()
+foreclosure_zip_march_2023 <- foreclosure_zip %>% 
+  select(zip, march_2023)
 
-View(pg_turnout)
+View(foreclosure_zip_march_2023)
 ```
-Now we can join the precincts to the turnout data.
+Now we can join the zip codes to the foreclosure data.
 
 ### Task: Run code to join the precinct shapes with the voter turnout data
 **Task** Run the following code. Describe the output in the space below.
 **Answer**
 
 ```{r}
-pg_precincts_with_turnout <- pg_precincts %>% left_join(pg_turnout, by=c("PRECINCT_ID"="precinct"))
+zip_codes_with_foreclosures <- md_zips %>% left_join(foreclosure_zip_march_2023, by=c("ZIPCODE1"="zip"))
 ```
 
-Now we can use color to distinguish precincts from each other. Let's use the total eligible voters to start with:
+Now we can use color to distinguish zip codes from each other. Let's use the number of foreclosure notices to start with:
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
@@ -201,16 +197,16 @@ Now we can use color to distinguish precincts from each other. Let's use the tot
 
 ```{r}
 ggplot() +
-  geom_sf(data=pg_precincts_with_turnout, aes(fill=total_eligible)) +
+  geom_sf(data=zip_codes_with_foreclosures, aes(fill=march_2023)) +
   scale_colour_viridis_b(option="magma") +
   theme_minimal()
 ```
 
-With these changes, what else can we make out here? First, you can pretty easily spot our "ghost precincts" - they are the ones in white, where there are no eligible voters. But you also can see that there's some pretty big variation among the number of eligible voters per precinct across the county, with some very large ones in the middle.
+With these changes, what can we make out here? First, you can pretty easily spot zip codes with a high number of foreclosures - in Prince George's County in particular, along with zip codes around Baltimore and in places in the northeast and northwest parts of the state.
 
 ## Chapter 21
 
-In the previous chapter, we looked at election precincts in Prince George's County to show a bit of a pattern regarding concentration of the precincts with the most and 0 eligible voters. Let's go little further and look at voters statewide.
+In the previous chapter, we looked at foreclosure notices by zip codes to find patterns in Maryland. Let's go further and, instead of using raw numbers, use percentages based on the number of owner-occupied housing units in each zip code.
 
 First, let's load the libraries we'll need. We're also going to load tidycensus and set an API key for tidycensus.
 
@@ -226,85 +222,40 @@ library(tidycensus)
 #census_api_key("549950d36c22ff16455fe196bbbd01d63cfbe6cf")
 ```
 
-For the rest of this chapter, we're going to work on building a map that will help us gain insight into geographic patterns in voter registration by county in Maryland. Our question: by examining the number of Democrats/Republicans/Unaffiliated voters per 100,000 people in each county, what regional geographic patterns can we identify?
+For the rest of this chapter, we're going to work on building a map that will help us gain insight into geographic patterns in foreclosure notices by zip code in Maryland. What geographic patterns can we identify?
 
-We've got voters by county, so let's load that from the data folder and take a look:
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
-
-```{r}
-voters_by_county <- read_csv("data/eligible_voters.csv")
-
-voters_by_county %>% arrange(desc(TOTAL))
-```
-So, what do we see here? Montgomery County has the most, followed by Prince George's & Baltimore County. Checks out.
-
-Next, we'll go out and get population data for each county from tidycensus. The variable for total population is B01001_001.  
+First, we'll go out and get housing data for each zip code using tidycensus. The variable for total population is B25003_002.  
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
 **Answer**
 
 ```{r}
-md_county_population <- get_acs(geography = "county",
-              variables = c(population = "B01001_001"),
-              year = 2021,
+md_zip_housing <- get_acs(geography = "zcta",
+              variables = c(owner_occupied = "B25003_002"),
+              year = 2019,
               state = "MD")
 
-md_county_population
+md_zip_housing
 ```
-
-Ultimately, we're going to join this county population table with our voters by county table, and then calculate a voters per 50,000 people statistic.  But remember, we then want to visualize this data by drawing a county map that helps us pick out trends. Thinking ahead, we know we'll need a county map shapefile.  Fortunately, we can pull this geometry information right from tidycensus at the same time that we pull in the population data by adding "geometry = TRUE" to our get_acs function.
+Ultimately, we're going to join this zip code table with owner-occupied housing units with our foreclosure notices by zip code table, and then calculate a percentage.  But remember, we then want to visualize this data by drawing a zip code map that helps us pick out trends. Thinking ahead, we know we'll need a zip code map shapefile. Fortunately, we can pull this geometry information right from tidycensus at the same time that we pull in the population data by adding "geometry = TRUE" to our get_acs function.
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
 **Answer**
 
 ```{r}
-md_county_population <- get_acs(geography = "county",
-              variables = c(population = "B01001_001"),
+md_zip_housing <- get_acs(geography = "zcta",
+              variables = c(owner_occupied = "B25003_002"),
+              year = 2019,
               state = "MD",
               geometry = TRUE)
 
-md_county_population
+md_zip_housing
 ```
 We now have a new column, geometry, that contains the "MULTIPOLYGON" data that will draw an outline of each county when we go to draw a map.
 
-The next step will be to join our population data to our voter data on the county column.
-
-But there's a problem.  The column in our population data that has county names is called "NAME", and it has the full name of the county spelled out in title case -- first word capitalized and has "County" and "Maryland" in it.  The voter data just has the name of the county.  For example, the population data has "Anne Arundel County, Maryland" and the voter data has "Anne Arundel".
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
-
-```{r}
-md_county_population
-
-voters_by_county
-```
-
-If they're going to join properly, we need to clean one of them up to make it match the other.  
-
-Let's clean the population table. We're going to rename the "NAME" column to "County", then remove ", Maryland" and "County" and make the county titlecase. Next we'll remove any white spaces after that first cleaning step that, if left in, would prevent a proper join. We're also going to rename the column that contains the population information from "estimate" to "population" and select only the county name and the population columns, along with the geometry. That leaves us with this tidy table.
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
-
-```{r}
-md_county_population <- md_county_population %>%
-  rename(County = NAME) %>%
-  mutate(County = str_to_title(str_remove_all(County,", Maryland|County"))) %>%
-  mutate(County = str_trim(County,side="both")) %>%
-  rename(population = estimate) %>%
-  select(County, population, geometry)
-
-md_county_population
-```
-Now we can join them.  
+The next step will be to join our housing data to our foreclosure notice data on the zip code column.
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
