@@ -1,7 +1,7 @@
 ---
 title: "lab_10"
 author: "Derek Willis"
-date: "11/09/2022"
+date: "2023-04-19"
 output: html_document
 ---
 
@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## You will need
 
 * the tidyverse, janitor and tigris libraries
-* you might choose to use the tidycensus library for Q3
+* the tidycensus library for Q3
 
 ## Load libraries and establish settings
 
@@ -29,11 +29,11 @@ library(tigris)
 
 ```
 
-Let's explore the election results from last night and make some maps! 
+Let's explore the election results from 2022, power outages and electric vehicle data and make some maps! 
 
 ## Questions 
 
-**Q1.** Make a county-level map of Maryland's results for governor using `md_gov_county.csv` in the data folder, calculating the difference between Wes Moore's percentage of the total votes and Dan Cox's percentage of the total votes and displaying that percentage difference on the map. What is the story here, and what is the county with the most interesting results?
+**Q1.** Make a county-level map of Maryland's results for governor using `md_gov_county.csv` in the data folder, calculating the difference between Wes Moore's percentage of the total votes and Dan Cox's percentage of the total votes and displaying that percentage difference on the map. You can get the county geometry from the tigris library. What is the story here, and what is the county with the most interesting results?
 
 **A1.**  
 
@@ -59,50 +59,26 @@ ggplot() +
 
 ```
 
-**Q2.** Make another map showing the difference between Dan Cox's county-level performance in 2022 and Larry Hogan's in 2018, using percentages to compare the two as you did in Q1. You can use the dataframe you initially loaded for Q1, and you'll need to load the 2018 governor results in the data folder and join them to it before proceeding. Are there any counties where Cox got a higher percentage than Hogan? How would you describe the map showing the Hogan-Cox difference?  
+**Q2.** Make a county-level map to explore the number of customers impacted by power outages in Maryland. Load the `county_outages_march2023.csv` file in the data folder and calculate a rate of customers with outages per 10,000 total customers for each county. Then join that dataframe to your Maryland counties dataframe you made in Q1 and create a county-level map of the results; you may need to tweak the fill scale to make the distinctions clearer. What's the potential story here? Given access to other months' outage data, what would your next steps be in reporting a story?
 
-**A2.** 
-
-```{r}
-
-md_gov_18 <- read_csv("data/md_gov_county_18.csv") %>% 
-  clean_names() %>% 
-  mutate(geoid = as.character(geoid)) %>% 
-  mutate(total = hogan + jealous + quinn + schlakman + write_ins) %>% 
-  mutate(pct_hogan = hogan/total * 100, pct_jealous = jealous/total *100, hogan_jealous_diff = pct_hogan - pct_jealous)
-
-combined_gov <- md_gov %>%
-  inner_join(md_gov_18, by=c('geoid', 'county'))
-
-md_gov_combined <- md_counties %>% 
-  inner_join(combined_gov, by=c('GEOID'='geoid')) %>% 
-  mutate(hogan_cox_diff = pct_hogan - pct_cox)
-
-ggplot() +
-  geom_sf(data=md_gov_combined, aes(fill=hogan_cox_diff)) +
-  theme_minimal() +
-  scale_fill_viridis_b(option="magma")
-
-
-```
-**Q3** Which county has the highest percentage of mail ballots remaining to be counted? Using the `mail_remaining.csv` file in the data folder, calculate the percentage of mail ballots remaining, then map a county map of those percentages. Looking at both the map and the data, are there counties where the candidate currently leading the governor's race could, in theory, change?
-
-**A3** 
+**A2.** Talbot customers did not have a good March, with a much higher rate of outages per 10,000 customers than any other county in Maryland. Frederick and Washington counties saw very little power interruption. Given other data, one path would be to create similar maps for other months to see if Talbot was an outlier in March or if there are consistent problems.
 
 ```{r}
-mail_remaining <- read_csv("data/mail_remaining.csv") %>% clean_names() %>% 
-  mutate(geoid = as.character(geoid)) %>% 
-  mutate(pct_remaining = remaining/total_returned *100)
 
-mail_remaining_with_geo <- md_counties %>% 
-  inner_join(mail_remaining, by=c('GEOID'='geoid'))
-  
+md_county_outages <- read_csv("data/county_outages_march2023.csv") %>% mutate(rate = outage_customers/total_customers*10000)
+
+md_county_outages_geo <- md_counties %>% inner_join(md_county_outages, by=c('NAME'='county'))
+
 ggplot() +
-  geom_sf(data=mail_remaining_with_geo, aes(fill=pct_remaining)) +
+  geom_sf(data=md_county_outages_geo, aes(fill=rate)) +
   theme_minimal() +
-  scale_fill_viridis_b(option="magma")
+  scale_fill_viridis_b(option="magma",trans = "log")
 
 ```
+
+**Q3.** You've been assigned a story about the use of electric vehicles in Maryland and you want to make a map of the percentage of 
+
+**A3.**
 
 
 
@@ -113,4 +89,3 @@ ggplot() +
 ```{r}
 
 ```
--30-
