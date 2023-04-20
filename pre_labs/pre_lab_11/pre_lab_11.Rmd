@@ -1,7 +1,7 @@
 ---
 title: "pre_lab_11.Rmd"
-author: "sean mussenden"
-date: "8/24/2021"
+author: "derek willis"
+date: "2023-04-20"
 output: html_document
 ---
 
@@ -9,455 +9,271 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Chapter 20
+# Scraping data with Rvest
 
-Up to now, we've been looking at patterns in data for what is more than this, or what's the middle look like. We've calculated metrics like per capita rates, or looked at how data changes over time.
+Sometimes, governments put data online on a page or in a searchable database. And when you ask them for a copy of the data underneath the website, they say no.
 
-Another way we can look at the data is geographically. Is there a spatial pattern to our data? Can we learn anything by using distance as a metric? What if we merge non-geographic data into geographic data?
+Why? Because they have a website. That's it. That's their reason. They say they don't have to give you the data because they've already given you the data, never mind that they haven't given to you in a form you can actually load into R with ease.
 
-The bad news is that there isn't a One Library To Rule Them All when it comes to geo queries in R. But there's one emerging, called Simple Features, that is very good.
+Lucky for us, there's a way for us to write code to get data even when an agency hasn't made it easy: webscraping.
 
-Go to the console and install it with `install.packages("sf")`
+One of the most powerful tools you can learn as a data journalist is how to scrape data from the web. Scraping is the process of programming a computer to act like a human that opens a web browser, goes to a website, ingests the HTML from that website into R and turns it into data.
 
-To understand geographic queries, you have to get a few things in your head first:
+The degree of difficulty here goes from "Easy" to "So Hard You Want To Throw Your Laptop Out A Window." And the curve between the two can be steep. You can learn how to scrape "Easy" in a day. The hard ones take a little more time, but it's often well worth the effort because it lets you get stories you couldn't get without it.
 
-1. Your query is using planar space. Usually that's some kind of projection of the world. If you're lucky, your data is projected, and the software will handle projection differences under the hood without you knowing anything about it.
-2. Projections are cartographers making opinionated decisions about what the world should look like when you take a spheroid -- the earth isn't perfectly round -- and flatten it. Believe it or not, every state in the US has their own geographic projection. There's dozens upon dozens of them.
-3. Geographic queries work in layers. In most geographic applications, you'll have multiple layers. You'll have a boundary file, and a river file, and a road file, and a flood file and combined together they make the map. But you have to think in layers.
-4. See 1. With layers, they're all joined together by the planar space. So you don't need to join one to the other like we did earlier -- the space has done that. So you can query how many X are within the boundaries on layer Y. And it's the plane that holds them together.
+In this chapter, we'll show you an easy one.
 
-```{r, echo=FALSE}
-knitr::include_graphics(rep("images/geolayers.jpg"))
-```
+We're going to use a library called `rvest`, which you can install it the same way we've done all installs: go to the console and `install.packages("rvest")`.
 
-## Importing and viewing data
+Like so many R package names, rvest is a bad pun.  You're supposed to read it to sound like "harvest", as in "harvesting" information from a website the same way you'd harvest crops in a field.
 
-Let's start with the absolute basics of geographic data: loading and viewing. Load libraries as usual.
-
-### Task 1: Load packages
-**Task** Run the following code to load packages.
+### Task 1: Load libraries and settings
+**Task** Run the following code in the gray-colored codeblock below to load the libraries we'll use
 
 ```{r}
+#| output: false
+library(rvest)
 library(tidyverse)
-library(sf)
 library(janitor)
 ```
 
-First: an aside on geographic data. There are many formats for geographic data, but data type you'll see the most is called the shapefile. It comes from a company named ERSI, which created the most widely used GIS software in the world. For years, they were the only game in town, really, and the shapefile became ubiquitous, especially so in government and utilities.
+For this example, we're going to work on loading a simple table of data from the Maryland State Board of Elections. This is a table of unofficial county-level election results for the Attorney General's race from the November general election.
 
-So more often than not, you'll be dealing with a shapefile. But a shapefile isn't just a single file -- it's a collection of files that combined make up all the data that allow you to use it. There's a .shp file -- that's the main file that pulls it all together -- but it's important to note if your shapefiles has a .prj file, which indicates that the projection is specified.
-
-The data we're going to be working with is a file from the Department of Homeland Security that is every hospital in the US and the number of beds they have. I'm writing this during the days of coronavirus, and suddenly the number of hospital beds is a top concern. So let's look at where hospital beds are and how many of them are there.
-
-When you do, it should look something like this:
-
-### Task: Load image
-**Task** Run the following code to load an image. Describe what you see in the answer space below.
-**Answer**
+Let's suppose we can't find a table like that for download, but we do see a version on the SBOE website at this URL: [https://elections.maryland.gov/elections/2022/general_results/gen_detail_results_2022_3_1.html](https://elections.maryland.gov/elections/2022/general_results/gen_detail_results_2022_3_1.html).
 
 ```{r, echo=FALSE}
-knitr::include_graphics(rep("images/geolayers2.png"))
+knitr::include_graphics(rep("images/rvest1.png"))
 ```
+We could get this table into R with the following manual steps: highlighting the text, copying it into Excel, saving it as a csv, and reading it into R. Or, we could write a few lines of webscraping code to have R do that for us!
 
-Simlar to `readr`, the `sf` library has functions to read geographic data. In this case, we're going to use `st_read` to read in our hospitals data. And then glimpse it to look at the columns.
+In this simple example, it's probably faster to do it manually than have R do it for us. But during the time when ballots are being counted, this table is likely to change, and we don't want to keep doing manual repetitive tasks.
 
-### Task: Load data
-**Task** Run the following code to load data. Describe what you see in the answer space below. What columns exist in this data?
-**Answer**
+Why would we ever write code to grab a single table? There's several reasons:
+
+1. Our methods are transparent. If a colleague wants to run our code from scratch to factcheck our work, they don't need to repeat the manual steps, which are harder to document than writing code.
+2. Let's suppose we wanted to grab the same table every day, to monitor for changes.  Writing a script once, and pressing a single button every day is going to be much more efficient than doing this manually every day.
+3. If we're doing it manually, we're more likely to make a mistake, like maybe failing to copy every row from the whole table.
+4. It's good practice to prepare us to do more complex scraping jobs.  As we'll see in the next chapter, if we ever want to grab the same table from hundreds of pages, writing code is much faster and easier than going to a hundred different pages ourselves and downloading data.
+
+So, to scrape, the first thing we need to do is start with the URL. Let's store it as an object called ag_url.
+
+### Task 2: Save the URL as a variable
+**Task** Run the following code in the gray-colored codeblock below to save the URL
 
 ```{r}
-hospitals <- st_read("data/Hospitals/Hospitals.shp")
-
-glimpse(hospitals)
+courts_url <- "https://www.courts.state.md.us/media/news"
 ```
 
-This looks like a normal dataframe, and mostly it is.  We have one row per hospital, and each column is some feature of that hospital: the name, the address, it's open/closed status and more.  What sets this data apart from other dataframes we've used is the last column, "geometry", which is of a new data type.  It's not a character or a number, it's a "POINT", which is composed of a longitude value and a latitude value.  When we plot these on a grid of latitude and longitude, it will place a point where those two numbers intersect.
+When we go to the web page, we can see a nicely-designed page that contains our information.
 
-Let's look at just Maryland hospitals. Good news -- `sf` plays very nicely with the tidyverse, so we can filter data the way we are accustomed.
+But what we really care about, for our purposes, is the html code that creates that page.
 
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+In our web browser, if we right-click anywhere on the page and select "view source" from the popup menu, we can see the source code.  Or you can just copy this into Google Chrome: view-source:https://elections.maryland.gov/elections/2022/general_results/gen_detail_results_2022_3_1.html.
+
+Here's a picture of what some of the source code looks like.
+
+```{r, echo=FALSE}
+knitr::include_graphics("images/rvest2.png")
+```
+We'll use those HTML tags -- things like `<table>` and `<tr>` -- to grab the info we need.
+
+Okay, step 1.
+
+Let's write a bit of code to tell R to go to the URL for the page and ingest all of that HTML code. In the code below, we're starting with our URL and using the read_html() function from rvest to ingest all of the page html, storing it as an object called results.
+
+### Task 3: Ingest the HTML from the URL
+**Task** Run the following code in the gray-colored codeblock below to save the HTML from that URL as a variable
 
 ```{r}
-md_hospitals <- hospitals %>%
-  filter(STATE == "MD")
+# read in the html
+results <- courts_url %>%
+  read_html()
 
-md_hospitals
+# display the html below
+results
+
 ```
 
-We have 72 hospitals, according to this data.
+If you're running this code in R Studio, in our environment window at right, you'll see results as a "list of 2".
 
-What kind of hospitals do we have?
+This is not a dataframe, it's a different type of data structure a "nested list."
 
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+If we click on the name "results" in our environment window, we can see that it's pulled in the html and shown us the general page structure. Nested within the `<html>` tag is the `<head>` and `<body>`, the two fundamental sections of most web pages. We're going to pull information out of the `<body>` tag in a bit.
+
+```{r, echo=FALSE}
+knitr::include_graphics("images/rvest3.png")
+```
+
+Now, our task is to just pull out the section of the html that contains the information we need.
+
+But which part do we need from that mess of html code? To figure that out, we can go back to the page in a web browser like chrome, and use built in developer tools to "inspect" the html code underlying the page.
+
+On the page, find the data we want to grab -- "Vote for 1" - and right click on the word "Jurisdiction" in the column header of the table.  That will bring up a dropdown menu. Select "Inspect", which will pop up a window called the "element inspector" that shows us where different elements on the page are located, what html tags created those elements, and other info.
+
+```{r, echo=FALSE}
+knitr::include_graphics("images/rvest4.png")
+```
+
+The entire table that we want of results is actually contained inside an html `<table>`. It has a `<tbody>` that contains one row `<tr>` per county.
+
+Because it's inside of a table, and not some other kind of element (like a `<div>`), rvest has a special function for easily extracting and converting html tables, called html_table(). This function extracts all the html tables on the page, but this page only has one so we're good.
+
+### Task 4: Extract tables from the HTML source
+**Task** Run the following code in the gray-colored codeblock below to extract all tables in the HTML as a variable
 
 ```{r}
-md_hospitals %>%
-  group_by(TYPE) %>%
-  summarise(
-    count=n()
-  ) %>%
-  arrange(desc(count))
+# read in the html and extract all the tables
+results <- courts_url %>%
+  read_html() %>%
+  html_table()
+
+# show the dataframe
+
+results
 ```
 
-Let's narrow our data to only look at the 50 "General Acute Care hospitals."
+In the environment window at right, look at results  Note that it's now a "list of 11".
 
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+This gets a little complicated, but what you're seeing here is a nested list that contains one data frame -- also called tibbles --  one for each table that exists on the web page we scraped. There are tables for each year on the page, so we have 11 years' worth of press releases.
+
+Let's say we are interested in 2023, so all we need to do now is to store that first dataframe as an object.  We can do that with this code, which says "keep only the first dataframe from our nested list."
+
+### Task 5: Save one table from the HTML source
+**Task** Run the following code in the gray-colored codeblock below to extract all tables in the HTML and save it as a dataframe. What do you notice about the columns?
+**Answer** 
 
 ```{r}
+# Read in all html from table, store all tables on page as nested list of dataframes.
+results <- courts_url %>%
+  read_html() %>%
+  html_table()
 
-md_hospitals <- hospitals %>%
-  filter(STATE == "MD") %>%
-  filter(TYPE == "GENERAL ACUTE CARE")
+# Just keep the first dataframe in our list
 
-md_hospitals
+results <- results[[1]]
 
+# show the dataframe
+
+results
 ```
+We now have a proper dataframe, albeit one that we could improve, especially in terms of column names.
 
-That gives us 50 hospitals in Maryland. Where are they?
+From here, we can do a little cleaning. First we'll use clean_names() to lower the column names. Then use rename() to replace the candidate column names with simpler versions. We can just use the column positions instead of writing out the full names, which is nice.
 
-We can simply plot them on a longitude-latitude grid using ggplot.
+Then let's use slice() to remove the last row -- row number 25 -- which contains totals and percentages that we don't need. Finally, we'll make sure the vote tallies are numbers using mutate and `gsub()`, which we use to replace all the commas with nothing.
 
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+### Task 6: Clean up the data
+**Task** Run the following code to extract the table we want, clean up the names and change the date column to an actual date. Look at the dataframe; what other information about these releases might you want to add?
+**Answer** 
 
 ```{r}
-md_hospitals %>%
-  ggplot() +
-  geom_sf() +
-  theme_minimal()
+# Read in all html from table, get the HTML table.
+results <- courts_url %>%
+  read_html() %>%
+  html_table()
+
+# Standardize column headers, remove last row
+
+results <- results[[1]] %>%
+  clean_names() %>%
+  rename(title = news_release_news_item) %>%
+  mutate(date = mdy(date))
+
+# show the dataframe
+results
+
 ```
+And there we go. We now have a nice tidy dataframe of Maryland state court press releases. We could combine all 11 dataframes if we wanted to have the whole set.
 
-Each point is a hospital. Each hospital has been plotted according to its degrees of longitude and latitude.
+What about HTML that doesn't have a table? Well, that's where things get a bit more complicated, and rely on your ability to read HTML and identify particular elements of it.
 
-If you know anything about the state of Maryland, you can kinda pick out the shape of the state there. The point in the top left is in Western Maryland. The point at the extreme bottom right is on the Eastern Shore. But this map is not exactly ideal. It would help to have a state and county map layered underneath of it, to help make sense of the spatial nature of this data.
+Let's consider the list of press releases from the little-known but fascinating Office of the State Prosecutor: https://osp.maryland.gov/press-releases/. Let's save that URL as a variable as we did above:
 
-This is where layering becomes more clear. First, we want to go out and get another shapefile, this one showing Maryland county outlines.
-
-Instead of loading it from our local machine, like we did above, we're going to use a package to directly download it from the U.S. Census.  The package is called `tigris` and it's developed by the same person who made `tidycensus`.
-
-In the console, install tigris with `install.packages('tigris')`
-
-Then load it:
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+### Task 7: Save the URL as a variable
+**Task** Run the following code in the gray-colored codeblock below to save the URL
 
 ```{r}
-# install.packages('tigris')
-library(tigris)
+osp_url <- "https://osp.maryland.gov/press-releases/"
 ```
 
-Now, let's use the counties() function from tigris to pull down a shapefile of all U.S. counties.
+The next step is similar to before, too, except this time we're not going to call `html_table()` because there are no tables here that we want. In order to find what we want, we'll need to right-click on the first release date and choose "Inspect":
 
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
-```{r}
+### Task 8: Inspect the HTML elements
+**Task** Right-click on the first release date and choose "Inspect". You should see multiple <li> tags inside a <ul> tag.
 
-counties <- counties()
+One reason that we use HTML elements like ul and li is to help organize the code and make it easier to maintain. But it also helps with scraping, because we can zero in on the elements we want. Let's start by reading it in:
 
-glimpse(counties)
-```
-
-This looks pretty similar to our hospital shapefile, in that it looked mostly like a normal dataframe with the exception of the new geometry column.
-
-But instead of POINT, this geometry is of the datatype "MULTIPOLYGON".  Points are shape data represented by one pair of longitude or latitude coordinates. Polygons are made up of LOTS of pairs of longitude and latitude coordinates, connected by a boundary line into a complex shape.  
-
-If you've ever filled in a "connect the dots" picture by drawing lines between points, in order to reveal a hidden shape, then you're familiar with the concept.
-
-This county shapefile has all 3233 U.S. counties.  We only want the Maryland counties, so we're going to filter the data to only keep Maryland counties.  There is no STATE column, but there is a STATEFP column, with each number representing a state.  Maryland's FP number is 24.
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+### Task 9: Read the HTML source
+**Task** Run the following code in the gray-colored codeblock below to save the HTML as a variable
 
 ```{r}
-md_counties <- counties %>%
-  filter(STATEFP == "24")
+osp_results <- osp_url %>%
+  read_html()
 
+# show the result
+osp_results
 ```
 
-To see what this looks like, let's plot it out with ggplot. We can pretty clearly see the shapes of Maryland counties.
+Once again we get a list of two as our result. In this case, we don't want to isolate the first item in our list. Instead, we want to try to locate all of the `li` tags inside this HTML. Since the `li` tag is an HTML element, we use the function `html_elements()` to get them. If we only wanted a single element, we'd use `html_element()`:
 
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+### Task 10: Isolate the list of `li` tags inside the HTML using `html_elements`
+**Task** Run the following code in the gray-colored codeblock below to find the <li> tags. What does the output suggest about how many <ul> tags there are in the HTML source?
+**Answer** 
 
 ```{r}
-md_counties %>%
-  ggplot() +
-  geom_sf() +
-  theme_minimal()
+osp_results %>% html_elements('li')
 ```
 
-With this county map, we can layer our hospital data.
+Good news and bad news here: we have all of the <li> tags, but we have lots of them, and it's hard to see if we have the right ones. Let's see what we're dealing with and just look at the text *inside* the <li> tags. To do that, we add `html_text()` to the end of the last code block:
 
-Something to note: The layers are rendered in the order they appear. So the first geom_sf is rendered first. The second geom_sf is rendered ON TOP OF the first one.
-
-We're also going to change things up a bit to put the datasets we want to display INSIDE of the geom_sf() function, instead of starting with a dataframe.  We have two to plot now, so it's easier this way.
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+### Task 10: Isolate the text of `li` tags inside the HTML using `html_text`
+**Task** Run the following code in the gray-colored codeblock below to find the text inside <li> tags. Describe the output:
+**Answer** 
 
 ```{r}
-
-ggplot() +
-  geom_sf(data=md_counties) +
-  geom_sf(data=md_hospitals) +
-  theme_minimal()
+osp_results %>% html_elements('li') %>% html_text()
 ```
-What can we tell from this?
 
-Well, hospitals are clustered around the state's most populous areas, the Baltimore to Washington corridor. There are fewer hospitals in rural Eastern and Western counties. And two counties have no hospital at all.
+Ok, so now we can see the press releases. But they are surrounded by a bunch of things we don't want, and this *still* isn't a dataframe. Let's solve the second problem first with the `as_tibble()` function:
 
-This is a pretty blunt visualization. Not all hospitals are equal. Some have more beds than the others, and bed space is a critical factor in how full hospitals get during COVID-19 surges.  
-
-We can get a sense of where the largest hospitals are, by changing the color of the points according to the number of beds. We do this by setting the aesthetic -- or aes -- to use the BEDS column inside of the geom_sf function.  To make the differences easier to see, we're going to change the fill of the counties white, too, and use a special color palette, viridis magma. We're also going to make the points slightly bigger.
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+### Task 11: Turn the contents of the <li> tags into a dataframe
+**Task** Run the following code in the gray-colored codeblock below to make a dataframe. Describe the output:
+**Answer** 
 
 ```{r}
-
-ggplot() +
-  geom_sf(data=md_counties, fill="white") +
-  geom_sf(data=md_hospitals, aes(color=BEDS), size=2) +
-  scale_colour_viridis_b(option="magma") +
-  theme_minimal()
-
+releases <- osp_results %>% html_elements('li') %>% html_text() %>% as_tibble()
 ```
 
-With these changes, what else can we make out here?  Well, not only are most hospitals clustered in the center of Maryland, the largest ones are too. Rural areas have fewer and typically smaller hospitals.
+Now we're getting closer. The press releases have a specific HTML class tied to the <li> tag - in this case "listing-item". We can isolate those:
 
-
-## Chapter 21
-
-In the previous chapter, we looked at Maryland's hospitals and used layers to show where hospitals sit on a map of Maryland's counties, and to show a bit of a pattern regarding concentration of the largest hospitals. Let's go little further.
-
-First, let's load the libraries we'll need. We're also going to load tidycensus and set an API key for tidycensus.
-
-### Task: Load libraries
-**Task** Run the following code. Describe the output in the space below. Be sure to input your census api key.
-**Answer**
+### Task 12: Isolate just the <li class="listing-item"> elements
+**Task** Run the following code in the gray-colored codeblock below to remove the unwanted rows from our dataframe:
 
 ```{r}
-library(tidyverse)
-library(sf)
-library(janitor)
-library(tidycensus)
-#census_api_key("549950d36c22ff16455fe196bbbd01d63cfbe6cf")
-
+releases <- osp_results %>% html_elements('li.listing-item') %>% html_text() %>% as_tibble()
 ```
 
-And now let's load the dataframe of hospital information from the previous chapter, and filter for the 50 General Acute Care hospitals in Maryland.
+Ok, this is _better_, but it's still not great. We have at least two issues: 
 
+1. The column is called `value`
+2. The column has two kinds of information in it: a date and the title.
 
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+Let's solve both of those using the `separate()` function, which does what you think it does and gives us a chance to rename the columns:
+
+### Task 13: Clean up our elements
+**Task** Run the following code in the gray-colored codeblock below to split the `value` column into two columns based on the ":" character and name them:
 
 ```{r}
-md_hospitals <- st_read("data/Hospitals/Hospitals.shp") %>%
-  filter(STATE == "MD") %>%
-  filter(TYPE == "GENERAL ACUTE CARE")
-
-md_hospitals
+releases <- osp_results %>% html_elements('li.listing-item') %>% html_text() %>% as_tibble() %>% separate(value, c('date', 'title'), sep=":")
 ```
 
-For the rest of this chapter, we're going to work on building a map that will help us gain insight into geographic patterns in hospital bed availability by county in Maryland. Our question: by examining the number of hospital beds per 100,000 people in each county, what regional geographic patterns can we identify?
+That worked, but it also exposed a couple of things: not all of the rows had a colon in them and the `title` column has a leading space. Let's fix both of those - we'll drop the rows where the title is NA.
 
-Each hospital exists inside of a county, so we're going to first calculate the total number of beds in each county. We do this by first converting the md_hospitals data to a standard dataframe (instead of a spatial dataframe) using as_tibble(), then grouping by county and totaling the number of beds. Finally, let's sort by total_beds to see which county has the most.
-
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+### Task 14: Clean up our elements more
+**Task** Run the following code in the gray-colored codeblock below to get rid of releases without dates and trim the leading spaces. Just for fun, we'll convert the dates into actual dates, too:
 
 ```{r}
-
-md_beds_by_county <- md_hospitals %>%
-  as_tibble() %>%
-  group_by(COUNTY) %>%
-  summarise(
-    total_beds = sum(BEDS)
-  ) %>%
-  arrange(desc(total_beds))
-
-md_beds_by_county
-```
-So, what do we see here? Baltimore City has the most, followed by Montgomery, Baltimore County and Prince George's.  All big counties.
-
-Next, we'll go out and get population data for each county from tidycensus.  The variable for total population is B01001_001.  
-
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
-
-```{r}
-
-md_county_population <- get_acs(geography = "county",
-              variables = c(population = "B01001_001"),
-              state = "MD")
-
-md_county_population
+releases <- osp_results %>% html_elements('li.listing-item') %>% html_text() %>% as_tibble() %>% separate(value, c('date', 'title'), sep=":") %>% drop_na(title) %>% mutate(title = str_squish(title), date = mdy(date))
 ```
 
-Ultimately, we're going to join this county population table with our beds by county table, and then calculate a beds per 100,000 people statistic.  But remember, we then want to visualize this data by drawing a county map that helps us pick out trends. Thinking ahead, we know we'll need a county map shapefile.  Fortunately, we can pull this geometry information right from tidycensus at the same time that we pull in the population data by adding "geometry = TRUE" to our get_acs function.
-
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
-
-```{r}
-
-md_county_population <- get_acs(geography = "county",
-              variables = c(population = "B01001_001"),
-              state = "MD",
-              geometry = TRUE)
-
-md_county_population
-```
-
-We now have a new column, geometry, that contains the "MULTIPOLYGON" data that will draw an outline of each county when we go to draw a map.
-
-The next step will be to join our population data to our hospital bed data on the county column.
-
-But there's a problem.  The column in our population data that has county names is called "NAME", and it has the full name of the county spelled out in title case -- first word capitalized and has "County" and "Maryland" in it.  The beds data just has the uppercase name of the county.  For example, the population data has "Anne Arundel County, Maryland" and the beds data has "ANNE ARUNDEL".
-
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
-
-```{r}
-
-md_county_population
-
-md_beds_by_county
-```
-
-If they're going to join properly, we need to clean one of them up to make it match the other.  
-
-Let's clean the population table. We're going to rename the "NAME" column to "COUNTY", then convert it to uppercase while also removing ", Maryland" and "County". Next we'll remove any white spaces after that first cleaning step that, if left in, would prevent a proper join. We're also going to rename the column that contains the population information from "estimate" to "population" and select only the county name and the population columns, along with the geometry. That leaves us with this tidy table.
-
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
-
-```{r}
-md_county_population <- md_county_population %>%
-  rename(COUNTY = NAME) %>%
-  mutate(COUNTY = toupper(str_remove_all(COUNTY,", Maryland|County"))) %>%
-  mutate(COUNTY = str_trim(COUNTY,side="both")) %>%
-  rename(population = estimate) %>%
-  select(COUNTY, population, geometry)
-
-md_county_population
-
-```
-
-Now we can join them.  
-
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
-
-```{r}
-md_beds_per_100k <- md_county_population %>%
-  left_join(md_beds_by_county)
-
-md_beds_per_100k
-```
-
-
-We have two NAs after we join, for Queen Anne's County and Caroline County.  That's not an error.  There are no General Acute Care hospitals in those counties, according to our data (it's why our beds table has 22 rows, not 24).  So let's convert those values to 0 using replace_na().
-
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
-
-```{r}
-md_beds_per_100k <- md_county_population %>%
-  left_join(md_beds_by_county) %>%
-  mutate(total_beds = replace_na(total_beds,0))
-
-md_beds_per_100k
-```
-
-Our final step before visualization, let's calculate the number of beds per 100,000 for each county and sort from highest to lowest to see waht trends we can identify just from the table.
-
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
-
-```{r}
-md_beds_per_100k <- md_county_population %>%
-  left_join(md_beds_by_county) %>%
-  mutate(total_beds = replace_na(total_beds,0)) %>%
-  mutate(beds_per_100k = total_beds/population*100000) %>%
-  arrange(desc(beds_per_100k))
-
-md_beds_per_100k
-```
-
-Let's take a look at the result of this table.  Baltimore City is still up there at the top, even when measuring by beds per 100k.  But there are some surpising ones at the top, some of Maryland's smallest counties! Allegany, Talbot, Somerset may not have that many beds, but they also don't have a lot of people.  
-
-Okay, now let's visualize.  We're going to build a choropleth map, with the color of each county -- the fill -- set according to the number of beds per 100K on a color gradient.  
-
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
-
-```{r}
-ggplot() +
-  geom_sf(data=md_beds_per_100k, aes(fill=beds_per_100k)) +
-  theme_minimal()
-```
-This map is okay, but the color scale makes it hard to draw fine-grained differences. Let's try applying the magma color scale we learned in the last chapter.
-
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
-
-```{r}
-ggplot() +
-  geom_sf(data=md_beds_per_100k, aes(fill=beds_per_100k)) +
-  theme_minimal() +
-  scale_fill_viridis_b(option="magma")
-```
-The highest ranking counties stand out nicely in this version, but it's still hard to make out fine-grained differences between counties.
-
-So let's change the color scale to a "log" scale, which will help us see those differences a bit more clearly.
-
-
-### Task: Run code
-**Task** Run the following code. Describe the output in the space below. What patterns do you see?
-**Answer**
-
-```{r}
-ggplot() +
-  geom_sf(data=md_beds_per_100k, aes(fill=beds_per_100k)) +
-  theme_minimal() +
-  scale_fill_viridis_b(option="magma",trans = "log")
-```
-Some interesting regional patterns finally emerge.  
-
-The Eastern Shore and Western Maryland have more beds per capita than Central Maryland (with the exception of Baltimore City). And Southern Maryland -- PG, Charles, Calvert and St. Mary's -- has by far the fewest beds per capita of any other region.
+And now you have the data.
