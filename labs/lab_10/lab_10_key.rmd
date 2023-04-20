@@ -29,31 +29,34 @@ library(tigris)
 
 ```
 
-Let's explore the election results from 2022, power outages and electric vehicle data and make some maps! 
+Let's explore Maryland elections, power outages and electric vehicle data and make some maps! 
 
 ## Questions 
 
-**Q1.** Make a county-level map of Maryland's results for governor using `md_gov_county.csv` in the data folder, calculating the difference between Wes Moore's percentage of the total votes and Dan Cox's percentage of the total votes and displaying that percentage difference on the map. You can get the county geometry from the tigris library. What is the story here, and what is the county with the most interesting results?
+**Q1.** Maryland voters made history in November by electing the state's first two African-American statewide office holders: Wes Moore as governor and Anthony Brown as attorney general. You want to compare the two's electoral performances. Using the `md_statewide_county.csv` file in the data folder, calculate the total number of votes for both the governor's race and the attorney general's race, then percentages for both Moore and Brown _based on the total of their respective contests_. Then calculate the difference between their percentages.
 
-**A1.**  
+Get the geometry for Maryland's counties using tigris and, joining that dataframe to your results dataframe, make a county-level map of the differences between Moore and Brown's percentages. What is the story here, and what is the county with the most interesting results?
+
+**A1.** Moore did better than Brown almost everywhere except Baltimore City and Prince George's County, and in particular did better in rural, whiter counties on the eastern shore. The most interesting county might be Harford.
 
 ```{r}
-md_gov <- read_csv("data/md_gov_county.csv") %>% 
+md_statewide <- read_csv("data/md_statewide_county.csv") %>% 
   clean_names() %>% 
   mutate(geoid = as.character(geoid)) %>% 
-  mutate(total = cox + moore + lashar + wallace + harding + write_ins) %>% 
-  mutate(pct_moore = moore/total * 100, pct_cox = cox/total *100, moore_cox_diff = pct_moore - pct_cox)
+  mutate(total_ag = peroutka + brown + ag_writein) %>% 
+  mutate(total_gov = cox + moore + lashar + wallace + harding + sefcik + gov_writein) %>%
+  mutate(pct_brown = brown/total_ag * 100, pct_moore = moore/total_gov *100, moore_brown_diff = pct_moore - pct_brown)
 
 counties <- counties()
 
 md_counties <- counties %>%
   filter(STATEFP == "24")
 
-md_gov_geometry <- md_counties %>% 
-  inner_join(md_gov, by=c('GEOID'='geoid'))
+md_statewide_geometry <- md_counties %>% 
+  inner_join(md_statewide, by=c('GEOID'='geoid'))
 
 ggplot() +
-  geom_sf(data=md_gov_geometry, aes(fill=moore_cox_diff)) +
+  geom_sf(data=md_statewide_geometry, aes(fill=moore_brown_diff)) +
   theme_minimal() +
   scale_fill_viridis_b(option="magma")
 
@@ -76,16 +79,38 @@ ggplot() +
 
 ```
 
-**Q3.** You've been assigned a story about the use of electric vehicles in Maryland and you want to make a map of the percentage of 
+**Q3.** You've been assigned a story about the use of electric vehicles in Maryland and you want to make a map of the prevalence of electric vehicles in each county. Load the `ev_2020_2023.csv` file, which has the number of electric and hybrid vehicles per county from July 2020 and March 2023 and calculate a percentage change for each county (remember, that's `new-old/old`). Using the Maryland counties dataframe you made for Q1, make a county map showing the percentage change.What counties stand out to you? What questions do you have about the changes you're seeing?
 
-**A3.**
+Next, use tidycensus to retrieve county population data for Maryland from 2021 (you did this in the pre_lab) and join it to your vehicles dataframe. HINT: you may not need to join it on the county name, and you should already have the geometry!
 
+Then, calculate a per capita rate of electric & hybrid vehicles using the March 2023 figure and the population estimate. You will need to choose the "per capita" value.
 
+Finally, make a second county map showing the per capita rate. What counties stand out on this map? How is it different from the first one you made?
 
-**Q4.** Choose your own map adventure! In the data folder I've included county-level results for several other 2022 contests, including the Comptroller, Attorney General and the marijuana legalization amendment. I've also added the 2020 presidential results by county. Using one of the 2022 races that we haven't already used and at least one other contest for comparison, make a county-level map showing what you think is the most interesting aspect of that data, and describe the results in terms of a possible story. You can bring in other data, such as Census information, if you like.
+**A3.** Caroline County stands out for the growth of EVs & hybrids, although it started from a small basis. In general, the bigger percentage change has come in Maryland's rural counties rather than in places where there already was a certain appeal for these vehicles like Montgomery and Baltimore County. The difference between Caroline's change and Dorchester's, right next door, raises some questions in my mind.
 
-**A4.**  
+For the second map, it's Montgomery and Howard counties, and then every other county in the state, which makes sense. With the exception of Wicomico County, most of the eastern and western parts of Maryland trail far behind.
 
 ```{r}
+electric_hybrid <- read_csv("data/ev_2020_2023.csv") %>% mutate(pct_change = (march_2023-july_2020)/july_2020 *100)
 
+electric_hybrid_with_geo <- md_counties %>% inner_join(electric_hybrid, by=c('NAME'='county'))
+
+ggplot() +
+  geom_sf(data=electric_hybrid_with_geo, aes(fill=pct_change)) +
+  theme_minimal() +
+  scale_fill_viridis_b(option="magma", trans='log')
+
+md_county_population <- get_acs(geography = "county",
+              variables = c(population = "B01001_001"),
+              year = 2021,
+              state = "MD")
+
+electric_hybrid_with_geo_pop <- electric_hybrid_with_geo %>% inner_join(md_county_population, by=('GEOID')) %>% mutate(rate = march_2023/estimate*10000)
+
+ggplot() +
+  geom_sf(data=electric_hybrid_with_geo_pop, aes(fill=rate)) +
+  theme_minimal() +
+  scale_fill_viridis_b(option="magma", trans='log')
 ```
+
