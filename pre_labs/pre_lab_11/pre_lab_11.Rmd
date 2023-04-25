@@ -38,16 +38,16 @@ library(janitor)
 library(lubridate)
 ```
 
-For this example, we're going to work on loading a simple table of data from the Maryland State Board of Elections. This is a table of unofficial county-level election results for the Attorney General's race from the November general election.
+For this example, we're going to work on loading a simple table of press releases from the Maryland State Courts.
 
-Let's suppose we can't find a table like that for download, but we do see a version on the SBOE website at this URL: [https://elections.maryland.gov/elections/2022/general_results/gen_detail_results_2022_3_1.html](https://elections.maryland.gov/elections/2022/general_results/gen_detail_results_2022_3_1.html).
+Let's suppose we can't find a table like that for download, but we do see a version on the website at this URL: [https://www.courts.state.md.us/media/news](https://www.courts.state.md.us/media/news).
 
 ```{r, echo=FALSE}
 knitr::include_graphics(rep("images/rvest1.png"))
 ```
 We could get this table into R with the following manual steps: highlighting the text, copying it into Excel, saving it as a csv, and reading it into R. Or, we could write a few lines of webscraping code to have R do that for us!
 
-In this simple example, it's probably faster to do it manually than have R do it for us. But during the time when ballots are being counted, this table is likely to change, and we don't want to keep doing manual repetitive tasks.
+In this simple example, it's probably faster to do it manually than have R do it for us. But this table is likely to change, and we don't want to keep doing manual repetitive tasks.
 
 Why would we ever write code to grab a single table? There's several reasons:
 
