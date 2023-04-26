@@ -1,7 +1,7 @@
 ---
 title: "lab_11"
-author: "sean mussenden"
-date: "8/26/2021"
+author: "derek willis"
+date: "2023-04-26"
 output: html_document
 ---
 
@@ -11,55 +11,43 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## You will need
 
-* A Census API key
+* Our usual libraries for working with data, plus rvest.
 
 ## Load libraries and establish settings
 
-**Task** Create a codeblock and load appropriate packages and settings for this lab. You'll need tidyverse, tidycensus, janitor, sf and tigris, and you'll also need to install your census API key.
+**Task** Create a codeblock and load appropriate packages and settings for this lab.
 
-## Load data
-
-**Task** Create a codeblock and load the WV slice of the PPP loan data, which is in the data folder and is called lab_11.rds.
+Let's get to scraping.
 
 ## Questions
 
-**Q1.** You are interested in doing some reporting on how West Virginia companies in the "Mining, Quarrying, and Oil and Gas Extraction" industry (https://www.naics.com/six-digit-naics/?code=21) used PPP loans during the pandemic (West Virginia is a big coal mining state).  
+**Q1**. Scrape the listing of available Maryland state grants at https://grants.maryland.gov/Pages/StateGrants.aspx into a dataframe. You should have three columns, one of which is a date, so make sure the date column has a date datatype. Then, write code to count the number of grants opportunities offered by each organization listed in your dataframe, showing the organization with the most grant opportunities first. Which state agency has the most?
 
-Then produce a choropleth map that shows West Virginia counties shaded according to the total amount of loans to that industry per 100,000 population.
+**A1** 
 
-Use the magma color palette, and shade on a "log" scale. Also produce a table that shows the total amount of loans per 100,000 population for each county, ranked from highest to lowest, along with the total amount of loans and the total number of loans.
+```{r}
+```
 
-Then answer these questions:
+**Q2** Next, let's scrape the list of press releases from Maryland's Office of the Public Defender, https://www.opd.state.md.us/press-releases. This isn't a table, so you'll need to use `html_elements()` and your browser's inspector and do some clean up on the results. The result should be a dataframe with two columns that contain the date and title, and the date column should have a date datatype. The challenge here is figuring out how to isolate the releases.
 
-* Based on the map, what region of the state appears to have gotten more loans in this industry? What geographic pattern do you notice in the data?
-* Based on the table, what county got the highest total loan amount? What was the total amount per 100K population, the total amount of loans (not population adjusted), how many loans were there, and what's the population?
+When you finish scraping into a dataframe, write code to find the press releases that have the word "police" in the title.
 
-**A1.**
+**A2** 
 
-**Q2.** You want to understand WHY the spatial pattern you saw above exists.  So you grab a shapefile with the latitude and longitude coordinates of every mine permit in West Virginia from the state Department of Environmental Protection.
+```{r}
+```
 
-Here's the url: https://tagis.dep.wv.gov/arcgis/rest/services/WVDEP_enterprise/mining_reclamation/MapServer/0/query?where=1%3D1&outFields=*&geometry=&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outSR=4326&f=json
+**Q3** Sen. Ben Cardin, D-Maryland, has posted hundreds of press releases at https://www.cardin.senate.gov/?post_type=press-releases. It would be great to have all of them in a dataframe that has the following columns: date, title and url.
 
-(It's in a slightly different format than the .shp file in the lab. It's another type of shapefile called "geojson".  It will work just the same, though, despite that difference. You can read it directly into R without manually downloading it, by putting the url in the st_read() function we learned about in this week's prelab.)
+To do this, you will need to scrape the page's html and save that to a variable, and _then_ extract the dates, titles and urls into separate dataframes using html_elements(). The function `html_text()` pulls out the contents of a tag, but for urls we want the HTML attribute. Rvest gives you a way to extract the URL from a link; google to find out what it is. Remember how we turn a list into a dataframe.
 
-This data includes both currently operating mines and old ones that have closed.  You want to examine only mines that have a permit expiration date after Sept. 1, 2021.
+At the end, you'll have three dataframes that you want to combine into a single dataframe. When we want to combine the rows of identical dataframes, we used `bind_rows()`. If you were combining columns instead of rows, there's a similar function. Find out what it is and use it to put all of the dataframes together into a single one.
 
-Make a map with a point for each one of these mine permits and put a blank map with the outline of West Virginia counties (which you can get from Tigris) behind it.
+When you're done, rename the columns so they make sense, then make sure the date column is an actual date.
 
-What spatial pattern do you see? How does it compare to the spatial pattern in the first map you made?
+Finally, tell me what questions you could ask of this data. Be creative.
 
-**A2.**
+**A3** 
 
-**Q3.** To confirm the spatial comparison you identified in question 2, let's create a new map that layers the mine location points on top of our PPP choropleth map we created in question 1. What do you notice about the number of mines in the county that has the highest total loan amount per 100K?
-
-**A3.**
-
-**Q4.** Starting from the original WV ppp dataframe, examine the loans to companies in "Mining, Quarrying, and Oil and Gas Extraction" in the county with the highest total loan amount per 100K (you can use the table you created in question 1 to identify the top county).
-
-* What single company accounts for the biggest chunk of the total loan amount?
-* What specific industry are they in, based on their 6-digit NAICS code? Look them up on the web. What services do they provide?
-* How many jobs did they save, according to the data?
-* What's your hypothesis for why a company in their specific industry would need to seek a PPP loan during the pandemic?
-
-**A4.**
--30-
+```{r}
+```
