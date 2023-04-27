@@ -30,7 +30,7 @@ Let's get to scraping.
 
 **Q2** Next, let's scrape the list of press releases from Maryland's Office of the Public Defender, https://www.opd.state.md.us/press-releases. This isn't a table, so you'll need to use `html_elements()` and your browser's inspector and do some clean up on the results. The result should be a dataframe with two columns that contain the date and title, and the date column should have a date datatype. The challenge here is figuring out how to isolate the releases.
 
-When you finish scraping into a dataframe, write code to find the press releases that have the word "police" in the title.
+When you finish scraping into a dataframe, write code to find the press releases that have the word "police" in the title. How many are there and when was the most recent one?
 
 **A2** 
 
@@ -39,7 +39,7 @@ When you finish scraping into a dataframe, write code to find the press releases
 
 **Q3** Sen. Ben Cardin, D-Maryland, has posted hundreds of press releases at https://www.cardin.senate.gov/?post_type=press-releases. It would be great to have all of them in a dataframe that has the following columns: date, title and url.
 
-To do this, you will need to scrape the page's html and save that to a variable, and _then_ extract the dates, titles and urls into separate dataframes using html_elements(). The function `html_text()` pulls out the contents of a tag, but for urls we want the HTML attribute. Rvest gives you a way to extract the URL from a link; google to find out what it is. Remember how we turn a list into a dataframe.
+To do this, you will need to scrape the page's html and save that to a variable, and _then_ extract the dates, titles and urls into _separate_ dataframes using html_elements(). And remember how we turn a list into a dataframe. The function `html_text()` pulls out the contents of a tag, but for urls we want the HTML attribute. Rvest gives you a way to extract the URL from a link; google to find out what it is.
 
 At the end, you'll have three dataframes that you want to combine into a single dataframe. When we want to combine the rows of identical dataframes, we used `bind_rows()`. If you were combining columns instead of rows, there's a similar function. Find out what it is and use it to put all of the dataframes together into a single one.
 
