@@ -41,6 +41,7 @@ Let's start with the absolute basics of geographic data: loading and viewing. Lo
 library(tidyverse)
 library(sf)
 library(janitor)
+#library(maptools)
 ```
 
 First: an aside on geographic data. There are many formats for geographic data, but data type you'll see the most is called the shapefile. It comes from a company named ERSI, which created the most widely used GIS software in the world. For years, they were the only game in town, really, and the shapefile became ubiquitous, especially so in government and utilities.
@@ -196,6 +197,9 @@ Now we can use color to distinguish zip codes from each other. Let's use the num
 **Answer**
 
 ```{r}
+
+county_centroids <- st_centroid(zip_codes_with_foreclosures)
+
 ggplot() +
   geom_sf(data=zip_codes_with_foreclosures, aes(fill=march_2023)) +
   scale_colour_viridis_b(option="magma") +
@@ -323,8 +327,14 @@ Okay, now let's visualize.  We're going to build a choropleth map, with the colo
 **Answer**
 
 ```{r}
+
+county_centroids <- st_centroid(md_counties)
+county_centroids_df <- as.data.frame(st_coordinates(county_centroids))
+county_centroids_df$NAME <- county_centroids$NAME
+
 ggplot() +
   geom_sf(data=md_pop_with_foreclosures, aes(fill=rate)) +
+  geom_text(aes(x = X, y = Y, label = NAME), data = county_centroids_df, size = 3, check_overlap = TRUE) +
   theme_minimal()
 ```
 This map is okay, but the color scale makes it hard to draw fine-grained differences. Let's try applying the magma color scale we learned in the last chapter.
