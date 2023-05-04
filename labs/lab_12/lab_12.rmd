@@ -33,7 +33,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 ```
 
-**Q3.** Let's drop back down to more traditional analysis - take the top trigram from Q2 and write code to see how many times it occurs in the text column in each fiscal year. If you come across an error, google the error message and tack on "tidytext". What do you think the answer produced by your code suggests?
+**Q3.** Let's drop back down to more traditional text analysis - take the top trigram from Q2 and write code to see how many times it occurs in the text column in each fiscal year. What do you think the answer produced by your code suggests? What else could you do to try and clarify the most important reasons attorneys get sanctioned?
 
 **A3.** 
 

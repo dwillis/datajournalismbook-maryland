@@ -56,19 +56,21 @@ unique_words %>%
 
 ```{r}
 md_attorney_sanctions %>%
-  unnest_tokens(trigram, text, token = "ngrams", n = 3) %>%
-  separate(trigram, c("word1", "word2", "word3"), sep = " ") %>%
+  unnest_tokens(fiver, text, token = "ngrams", n = 5) %>%
+  separate(fiver, c("word1", "word2", "word3", "word4", "word5"), sep = " ") %>%
   filter(!word1 %in% stop_words$word) %>%
   filter(!word2 %in% stop_words$word) %>%
   filter(!word3 %in% stop_words$word) %>%
-  mutate(trigram = paste(word1, word2, word3, sep=" ")) %>%
-  group_by(trigram) %>%
+  filter(!word4 %in% stop_words$word) %>%
+  filter(!word5 %in% stop_words$word) %>%
+  mutate(fiver = paste(word1, word2, word3, word4, word5, sep=" ")) %>%
+  group_by(fiver) %>%
   tally(sort=TRUE) %>%
   mutate(percent = (n/sum(n))*100) %>%
   top_n(10)
 ```
 
-**Q3.** Let's drop back down to more traditional analysis - take the top trigram from Q2 and write code to see how many times it occurs in the text column in each fiscal year. If you come across an error, google the error message and tack on "tidytext". What do you think the answer produced by your code suggests?
+**Q3.** Let's drop back down to more traditional analysis - take the top trigram from Q2 and write code to see how many times it occurs in the text column in each fiscal year. If you come across an error (you may not), google the error message and tack on "tidytext". What do you think the answer produced by your code suggests?
 
 **A3.** FY 2021 saw the most sanction actions mentioning "attorney trust account", with 37, slightly more than in 2022, which had 32. Since the start of the pandemic each year has seen totals that exceed any pre-pandemic year (and there are just three so far in FY 2023, which suggests that things are returning to a more normal level).
 
@@ -76,7 +78,7 @@ md_attorney_sanctions %>%
 md_attorney_sanctions %>% 
   filter(str_detect(text, "attorney trust account")) %>% 
   group_by(fiscal_year) %>% 
-  dplyr::summarize(times = n()) %>% 
-  arrange(desc(times))
+  tally(sort=TRUE)
+
 
 ```
