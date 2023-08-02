@@ -45,7 +45,7 @@ umd_courses <- read_rds("lab_01.rds")
 ```{r}
 ```
 
-**Q2** Find out the greatest number of times any individual class has been offered in our dataset. You must show the greatest number of classes first.
+**Q2** Find out the greatest number of times any individual class has been offered in our dataset. Your code must show the greatest number of classes first.
 **A2** 
 
 ```{r}
@@ -57,7 +57,7 @@ umd_courses <- read_rds("lab_01.rds")
 ```{r}
 ```
 
-**Q4** Given the results for Q3, what would have made it easier to find the answer? You don't have to know _how_ to accomplish this; I want you to describe in words what would make the answer easier to see.
+**Q4** Given the results for Q3, what would have made it easier to find the answer? You don't have to know _how_ to accomplish this; I want you to describe in words what would make the answer easier to see. How confident are you that the answer you got is the right one, and why?
 **A4**
 
 **Q5** Take one of the questions you listed in the final question of the pre_lab and try to answer it here in code. If you don't know how to fully answer it, write what code you can and describe in words what else you would need to do. If you got an answer, is it interesting?

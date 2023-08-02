@@ -1,7 +1,7 @@
 ---
 title: "lab_01"
 author: "Derek Willis"
-date: "2023-01-05"
+date: "2023-08-02"
 output: html_document
 ---
 
@@ -40,7 +40,7 @@ umd_courses <- read_rds("lab_01.rds")
 ## Answer questions
 
 **Q1** Which department has the highest mean (average) number of seats for its classes? You need to show the department with the highest average first.
-**A1** Engineering, Cooperative Education, with 314.28 seats
+**A1** Engineering, Cooperative Education, with 306.66 seats
 
 ```{r}
 umd_courses %>% 
@@ -50,7 +50,7 @@ umd_courses %>%
 ```
 
 **Q2** Find out the greatest number of times any individual class has been offered in our dataset. You must show the greatest number of classes first.
-**A2** There are more than 150 that have been offered 21 times each.
+**A2** There are more than 150 that have been offered 22 times each.
 
 ```{r}
 umd_courses %>% 
