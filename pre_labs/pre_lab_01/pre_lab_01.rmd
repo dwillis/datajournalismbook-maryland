@@ -208,7 +208,7 @@ Compared to the previous codeblock, what has changed and how did that affect the
 
 ### Task 14: more aggregations
 
-**Task** Run the following codeblock to group the umd_courses dataframe by the department. Then do the following summarizations for each group: count the number of courses, add up the total of all seats, calculate the mean and median number of seats and calculate the smallest and largest seat numbers. Then sort so the department with the largest total number of seats is listed first.
+**Task** Run the following codeblock to group the umd_courses dataframe by the department. Then do the following summarizations for each group: count the number of courses, add up the total of all seats, calculate the mean and median number of seats and then add lines to calculate the smallest and largest seat numbers using the `min()` and `max()` functions. Then sort so the department with the largest total number of seats is listed first.
 
 ```{r}
 umd_courses %>%
@@ -218,8 +218,8 @@ umd_courses %>%
     total_seats = sum(seats),
     mean_seats = mean(seats),
     median_seats = median(seats),
-    min_seats = min(seats),
-    max_seats = max(seats)
+    # add minimum seats here
+    # add maximum seats here
   ) %>%
   arrange(desc(total_seats))
 ```
