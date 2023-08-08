@@ -25,7 +25,7 @@ Not all of these data smells are detectable in code. You may have to ask people 
 
 But with several of these data smells, we can do them first, before we do anything else.
 
-We're going to examine several here as they apply to some [Maryland state government payments data](https://opendata.maryland.gov/Budget/State-of-Maryland-Payments-Data-FY2008-to-FY2023/7syw-q4cy) and [Maryland state government grant & loan data](https://opendata.maryland.gov/Budget/State-of-Maryland-Grant-and-Loan-Data-FY2009-to-FY/absk-avps).
+We're going to examine several here as they apply to some [Maryland state government payments data](https://opendata.maryland.gov/Budget/State-of-Maryland-Payments-Data-FY2008-to-FY2024/7syw-q4cy) and [Maryland state government grant & loan data](https://opendata.maryland.gov/Budget/State-of-Maryland-Grant-and-Loan-Data-FY2009-to-FY/absk-avps).
 
 ## Wrong Type
 
@@ -50,7 +50,7 @@ We're also going to introduce a new argument to our function that reads in the d
 
 ```{r}
 # Load the data
-payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2023.csv", guess_max=10)
+payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2024.csv", guess_max=10)
 ```
 
 Pay attention to the red warning that signals "one or more parsing issues." It advises us to run the problems() function to see what went wrong. Let's do that.
@@ -64,7 +64,7 @@ It produces a table of all the parsing problems. It has 280 rows, which means we
 The easy way to fix this is to set the guess_max argument higher. It will take a little longer to load, but we'll use every single row in the data set to guess the column type -- all 322,138 of them.
 
 ```{r}
-payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2023.csv", guess_max=322138)
+payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2024", guess_max=373564)
 ```
 
 No parsing errors this time! You can see what the columns are using the `glimpse` function:
