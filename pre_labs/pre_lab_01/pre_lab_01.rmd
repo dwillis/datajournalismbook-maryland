@@ -123,6 +123,10 @@ In the space below, write the name of the business from the first row of the "na
 
 ### Task 9: Group and count
 
+So what if we wanted to know how many classes were offered in each term?
+
+To do that by hand, we'd have to take each of the 60,672 individual rows (or observations or records) and sort them into a pile. We'd put them in groups -- one for each term -- and then count them. To do this, we'll take our dataset and we'll introduce a new operator: `%>%`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." The keyboard shortcut for this is cmd-shift-m on the Mac and ctrl-shift-m on Windows. Don't like that character? R now has a new one that does the same thing: `|>`.
+
 **Task** Run the following codeblock:
 
 ```{r}

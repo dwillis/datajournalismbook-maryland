@@ -98,11 +98,11 @@ We can also click on the data name in the R Studio environment window to explore
 
 So what if we wanted to know how many classes were offered in each term?
 
-To do that by hand, we'd have to take each of the 55,632 individual rows (or observations or records) and sort them into a pile. We'd put them in groups -- one for each term -- and then count them.
+To do that by hand, we'd have to take each of the 60,672 individual rows (or observations or records) and sort them into a pile. We'd put them in groups -- one for each term -- and then count them.
 
 `dplyr` has a group by function in it that does just this. A massive amount of data analysis involves grouping like things together and then doing simple things like counting them, or averaging them together. So it's a good place to start.
 
-So to do this, we'll take our dataset and we'll introduce a new operator: `%>%`. The best way to read that operator, in my opinion, is to interpret that as "and then do this."
+So to do this, we'll take our dataset and we'll introduce a new operator: `%>%`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." The keyboard shortcut for this is cmd-shift-m on the Mac and ctrl-shift-m on Windows. Don't like that character? R now has a new one that does the same thing: `|>`.
 
 We're going to establish a pattern that will come up again and again throughout this book: `data %>% function`. In English: take your data set and then do this specific action to it.
 
