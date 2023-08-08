@@ -98,12 +98,12 @@ maryland_expenses_with_state <- maryland_expenses %>%
         str_detect(address, " Massachusetts ") ~ "MA",
         str_detect(address, " West Virginia ") ~ "WV",
         str_detect(address, " Virginia ") ~ "VA",
-        TRUE ~ as.character(NA)
+        .default = NA
       )
   )
 ```
 
-There's a lot going on here, so let's unpack it. It starts out as a typical mutate statement, but `case_when` introduces some new things. Each line checks to see if the pattern is contained in the address column, followed by `~` and then a value for the new column for records that match that check. You can read it like this: "If we find ' Maryland ' in the address column, then put 'MD' in the state column." Here is [more detail](https://www.sharpsightlabs.com/blog/case-when-r/) on using `case_when`.
+There's a lot going on here, so let's unpack it. It starts out as a typical mutate statement, but `case_when` introduces some new things. Each line checks to see if the pattern is contained in the address column, followed by `~` and then a value for the new column for records that match that check. You can read it like this: "If we find ' Maryland ' in the address column, then put 'MD' in the state column" for Maryland and then a handful of states, and if we don't match any state we're looking for, make state `NA`.
 
 We can then use our new `state` column in group_by statements to make summarizing easier.
 
