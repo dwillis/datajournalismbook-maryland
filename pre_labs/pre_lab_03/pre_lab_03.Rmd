@@ -1,7 +1,7 @@
 ---
 title: "pre_lab_03.Rmd"
 author: "Derek Willis"
-date: "2023-01-09"
+date: "2023-08-08"
 output: html_document
 ---
 
@@ -245,10 +245,10 @@ cleaned_md_grants_loans <- md_grants_loans %>%
   distinct() %>%
   mutate(zip5 = str_sub(zip_code, start=1L, end=5L)) %>%
   mutate(zip5 = case_when(
-    zip5 == "Vario" ~ as.character(NA),
-    zip5 == "UB7 O" ~ as.character(NA),
-    zip5 == "UB7 " ~ as.character(NA),
-    TRUE ~ zip5
+    zip5 == "Vario" ~ NA,
+    zip5 == "UB7 O" ~ NA,
+    zip5 == "UB7 " ~ NA,
+    .default = zip5
   ))
 
 # display the cleaned dataset
@@ -268,9 +268,9 @@ cleaned_md_grants_loans <- md_grants_loans %>%
   distinct() %>%
   mutate(zip5 = str_sub(zip_code, start=1L, end=5L)) %>%
   mutate(zip5 = case_when(
-    zip5 == "Vario" ~ as.character(NA),
-    str_detect(zip5, "^UB7") ~ as.character(NA),
-    TRUE ~ zip5
+    zip5 == "Vario" ~ NA,
+    str_detect(zip5, "^UB7") ~ NA,
+    .default = zip5
   ))
 
 # display the cleaned dataset
@@ -279,7 +279,7 @@ cleaned_md_grants_loans
 
 ### Task 11: Answer our question!
 
-**Task** Write and run code to answer our original question: which zip code has gotten the most amount of money from the Maryland Tourism Board?
+**Task** Write and run code to answer our original question: which zip code has gotten the most amount of money from the Maryland Tourism Board? Does that zip code make sense to you?
 
 ```{r}
 

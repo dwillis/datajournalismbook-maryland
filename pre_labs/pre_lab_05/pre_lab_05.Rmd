@@ -26,7 +26,7 @@ library(tidyverse)
 
 ## PDF Parsing with Tabula
 
-Tabula works best when tables in PDFs are clearly defined and have nicely-formatted information. Here's a perfect example: [active voters by county in Maryland](https://www.elections.maryland.gov/press_room/2022_stats/Eligible%20Active%20Voters%20by%20County%20-%20GP22.pdf).
+Tabula works best when tables in PDFs are clearly defined and have nicely-formatted information. Here's a perfect example: [active voters by county in Maryland](https://www.elections.maryland.gov/press_room/2022_stats/GG22/Eligible%20Active%20Voters%20by%20County%20-%20GG22.pdf).
 
 ### Task 1: Download and Install Tabula
 
