@@ -14,33 +14,27 @@ census_api_key("549950d36c22ff16455fe196bbbd01d63cfbe6cf")
 
 ```
 
-For the rest of this chapter, we're going to work on building a map that will help us gain insight into geographic patterns in voter registration by county in Maryland. Our question: by examining the number of Democrats/Republicans/Unaffiliated voters per 100,000 people in each county, what regional geographic patterns can we identify?
+In the previous chapter, we looked at foreclosure notices by zip codes to find patterns in Maryland. Let's go further and, instead of using raw numbers, use percentages based on the number of owner-occupied housing units in each zip code.
 
-We've got voters by county, so let's load that and take a look:
+For the rest of this chapter, we're going to work on building a map that will help us gain insight into geographic patterns in foreclosure notices by county in Maryland. What geographic patterns can we identify?
 
-```{r}
-voters_by_county <- read_csv("data/eligible_voters.csv")
-
-voters_by_county %>% arrange(desc(TOTAL))
-```
-
-So, what do we see here? Montgomery County has the most, followed by Prince George's & Baltimore County. Checks out.
-
-Next, we'll go out and get population data for each county from tidycensus. The variable for total population is B01001_001.  
+First, we'll go out and get the county foreclosure notices and population data for each county using tidycensus. The variable for total population is B01001_001  
 
 ```{r}
+md_county_notices <- read_csv("data/Maryland_Foreclosure_Data_by_County.csv") %>% slice(1) %>% pivot_longer(cols=-c('Date', 'Type'), names_to='county', values_to = 'notices')
+
 md_county_population <- get_acs(geography = "county",
               variables = c(population = "B01001_001"),
+              year = 2021,
               state = "MD")
-
-md_county_population
 ```
 
-Ultimately, we're going to join this county population table with our voters by county table, and then calculate a voters per 50,000 people statistic.  But remember, we then want to visualize this data by drawing a county map that helps us pick out trends. Thinking ahead, we know we'll need a county map shapefile.  Fortunately, we can pull this geometry information right from tidycensus at the same time that we pull in the population data by adding "geometry = TRUE" to our get_acs function.
+Ultimately, we're going to join this county table with population with foreclosure notices by county, and then calculate a percentage.  But remember, we then want to visualize this data by drawing a zip code map that helps us pick out trends. Thinking ahead, we know we'll need a zip code map shapefile. Fortunately, we can pull this geometry information right from tidycensus at the same time that we pull in the population data by adding "geometry = TRUE" to our get_acs function.
 
 ```{r}
 md_county_population <- get_acs(geography = "county",
               variables = c(population = "B01001_001"),
+              year = 2021,
               state = "MD",
               geometry = TRUE)
 
@@ -49,14 +43,14 @@ md_county_population
 
 We now have a new column, geometry, that contains the "MULTIPOLYGON" data that will draw an outline of each county when we go to draw a map.
 
-The next step will be to join our population data to our voter data on the county column.
+The next step will be to join our population data to our foreclosure data on the county column.
 
-But there's a problem.  The column in our population data that has county names is called "NAME", and it has the full name of the county spelled out in title case -- first word capitalized and has "County" and "Maryland" in it.  The voter data just has the name of the county.  For example, the population data has "Anne Arundel County, Maryland" and the voter data has "Anne Arundel".
+But there's a problem.  The column in our population data that has county names is called "NAME", and it has the full name of the county spelled out in title case -- first word capitalized and has "County" and "Maryland" in it.  The foreclosure data just has the name of the county.  For example, the population data has "Anne Arundel County, Maryland" and the foreclosure data has "Anne Arundel County".
 
 ```{r}
 md_county_population
 
-voters_by_county
+md_county_notices
 ```
 
 If they're going to join properly, we need to clean one of them up to make it match the other.  
@@ -65,11 +59,11 @@ Let's clean the population table. We're going to rename the "NAME" column to "Co
 
 ```{r}
 md_county_population <- md_county_population %>%
-  rename(County = NAME) %>%
-  mutate(County = str_to_title(str_remove_all(County,", Maryland|County"))) %>%
-  mutate(County = str_trim(County,side="both")) %>%
+  rename(county = NAME) %>%
+  mutate(county = str_to_title(str_remove_all(county,", Maryland"))) %>%
+  mutate(county = str_trim(county,side="both")) %>%
   rename(population = estimate) %>%
-  select(County, population, geometry)
+  select(county, population, geometry)
 
 md_county_population
 ```
@@ -77,38 +71,35 @@ md_county_population
 Now we can join them.  
 
 ```{r}
-md_voters_per_10k <- md_county_population %>%
-  left_join(voters_by_county)
+md_pop_with_foreclosures <- md_county_population %>%
+  left_join(md_county_notices, join_by(county))
 
-md_voters_per_10k
+md_pop_with_foreclosures
 ```
 
-Hang on - there's at least one county with NA values - St. Mary's, which is spelled "Saint Mary's" in the voter dataframe. And Baltimore County didn't match, either. Let's fix that using if_else, which allows us to conditionally mutate:
+Our final step before visualization, let's calculate the number of foreclosure notices per 1000 population and sort from highest to lowest to see what trends we can identify just from the table.
 
 ```{r}
-md_county_population <- md_county_population %>%
-  mutate(County = if_else(County == "St. Mary's", "Saint Mary's", County)) %>% 
-  mutate(County = if_else(County == "Baltimore", "Baltimore County", County))
+md_pop_with_foreclosures <- md_county_population %>%
+  left_join(md_county_notices, join_by(county)) %>% 
+  mutate(rate = notices/population*1000) %>%
+  arrange(desc(rate))
+
+md_pop_with_foreclosures
 ```
 
-Our final step before visualization, let's calculate the number of voters per 10,000 population for each county and sort from highest to lowest to see what trends we can identify just from the table.
+Let's take a look at the result of this table. The variances in the rates aren't huge, but there are some clear differences: Charles County and Prince George's County have higher rates, followed by Baltimore City and some more rural counties.
+
+Okay, now let's visualize.  We're going to build a choropleth map, with the color of each county -- the fill -- set according to the number of notices per 1K population on a color gradient.  
 
 ```{r}
-md_voters_per_10k <- md_county_population %>%
-  left_join(voters_by_county) %>%
-  mutate(voters_per_10k = TOTAL/population*10000) %>%
-  arrange(desc(voters_per_10k))
+county_centroids <- st_centroid(md_counties)
+county_centroids_df <- as.data.frame(st_coordinates(county_centroids))
+county_centroids_df$NAME <- county_centroids$NAME
 
-md_voters_per_10k
-```
-
-Let's take a look at the result of this table.  There are some surprising ones at the top, some of Maryland's smallest counties! Worcester, Queen Anne's, Talbot may not have that many voters, but they also don't have a lot of people.  
-
-Okay, now let's visualize.  We're going to build a choropleth map, with the color of each county -- the fill -- set according to the number of voters per 10K on a color gradient.
-
-```{r}
 ggplot() +
-  geom_sf(data=md_voters_per_10k, aes(fill=voters_per_10k)) +
+  geom_sf(data=md_pop_with_foreclosures, aes(fill=rate)) +
+  geom_text(aes(x = X, y = Y, label = NAME), data = county_centroids_df, size = 3, check_overlap = TRUE) +
   theme_minimal()
 ```
 
@@ -116,7 +107,7 @@ This map is okay, but the color scale makes it hard to draw fine-grained differe
 
 ```{r}
 ggplot() +
-  geom_sf(data=md_voters_per_10k, aes(fill=voters_per_10k)) +
+  geom_sf(data=md_pop_with_foreclosures, aes(fill=rate)) +
   theme_minimal() +
   scale_fill_viridis_b(option="magma")
 ```
@@ -127,25 +118,7 @@ So let's change the color scale to a "log" scale, which will help us see those d
 
 ```{r}
 ggplot() +
-  geom_sf(data=md_voters_per_10k, aes(fill=voters_per_10k)) +
+  geom_sf(data=md_pop_with_foreclosures, aes(fill=rate)) +
   theme_minimal() +
   scale_fill_viridis_b(option="magma",trans = "log")
 ```
-
-Let's repeat that for Unaffiliated voters:
-
-```{r}
-md_voters_per_10k <- md_voters_per_10k %>% 
-  mutate(una_voters_per_10k = UNA/population*10000)
-```
-
-And then map it:
-
-```{r}
-ggplot() +
-  geom_sf(data=md_voters_per_10k, aes(fill=una_voters_per_10k)) +
-  theme_minimal() +
-  scale_fill_viridis_b(option="magma",trans = "log")
-```
-
-What regional patterns do you see, especially on the ends of the scale?

@@ -298,7 +298,7 @@ Now we can join them!
 
 ```{r}
 md_pop_with_foreclosures <- md_county_population %>%
-  left_join(md_county_notices, by='county')
+  left_join(md_county_notices, join_by(county))
 
 md_pop_with_foreclosures
 ```
@@ -310,7 +310,7 @@ Our final step before visualization, let's calculate the number of foreclosure n
 
 ```{r}
 md_pop_with_foreclosures <- md_county_population %>%
-  left_join(md_county_notices, by='county') %>% 
+  left_join(md_county_notices, join_by(county)) %>% 
   mutate(rate = notices/population*1000) %>%
   arrange(desc(rate))
 
