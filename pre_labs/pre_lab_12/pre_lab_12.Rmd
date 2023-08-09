@@ -159,9 +159,7 @@ results
 ```
 We now have a proper dataframe, albeit one that we could improve, especially in terms of column names.
 
-From here, we can do a little cleaning. First we'll use clean_names() to lower the column names. Then use rename() to replace the candidate column names with simpler versions. We can just use the column positions instead of writing out the full names, which is nice.
-
-Then let's use slice() to remove the last row -- row number 25 -- which contains totals and percentages that we don't need. Finally, we'll make sure the vote tallies are numbers using mutate and `gsub()`, which we use to replace all the commas with nothing.
+From here, we can do a little cleaning. First we'll use clean_names() to lower the column names. Then use rename() to replace the title column with a simpler version and properly format the date.
 
 ### Task 6: Clean up the data
 **Task** Run the following code to extract the table we want, clean up the names and change the date column to an actual date. Look at the dataframe; what other information about these releases might you want to add?

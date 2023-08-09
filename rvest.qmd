@@ -27,9 +27,9 @@ library(tidyverse)
 library(janitor)
 ```
 
-For this example, we're going to work on loading a simple table of data from the Maryland State Board of Elections. This is a table of unofficial county-level election results for the Attorney General's race from the November general election.
+For this example, we're going to work on loading a simple table of press releases from the Maryland State Courts.
 
-Let's suppose we can't find a table like that for download, but we do see a version on the SBOE website at this URL: [https://elections.maryland.gov/elections/2022/general_results/gen_detail_results_2022_3_1.html](https://elections.maryland.gov/elections/2022/general_results/gen_detail_results_2022_3_1.html).
+Let's suppose we can't find a table like that for download, but we do see a version on the website at this URL: [https://www.courts.state.md.us/media/news](https://www.courts.state.md.us/media/news).
 
 ```{r, echo=FALSE}
 knitr::include_graphics(rep("images/rvest1.png"))
@@ -48,14 +48,14 @@ Why would we ever write code to grab a single table? There's several reasons:
 So, to scrape, the first thing we need to do is start with the URL. Let's store it as an object called ag_url.
 
 ```{r}
-ag_url <- "https://elections.maryland.gov/elections/2022/general_results/gen_detail_results_2022_3_1.html"
+courts_url <- "https://www.courts.state.md.us/media/news"
 ```
 
 When we go to the web page, we can see a nicely-designed page that contains our information.
 
 But what we really care about, for our purposes, is the html code that creates that page.
 
-In our web browser, if we right-click anywhere on the page and select "view source" from the popup menu, we can see the source code.  Or you can just copy this into Google Chrome: view-source:https://elections.maryland.gov/elections/2022/general_results/gen_detail_results_2022_3_1.html.
+In our web browser, if we right-click anywhere on the page and select "view source" from the popup menu, we can see the source code.  Or you can just copy this into Google Chrome: view-source:https://www.courts.state.md.us/media/news.
 
 Here's a picture of what some of the source code looks like.
 
@@ -70,7 +70,7 @@ Let's write a bit of code to tell R to go to the URL for the page and ingest all
 
 ```{r}
 # read in the html
-results <- ag_url %>%
+results <- courts_url %>%
   read_html()
 
 # display the html below
@@ -92,19 +92,19 @@ Now, our task is to just pull out the section of the html that contains the info
 
 But which part do we need from that mess of html code? To figure that out, we can go back to the page in a web browser like chrome, and use built in developer tools to "inspect" the html code underlying the page.
 
-On the page, find the data we want to grab -- "Vote for 1" - and right click on the word "Jurisdiction" in the column header of the table.  That will bring up a dropdown menu. Select "Inspect", which will pop up a window called the "element inspector" that shows us where different elements on the page are located, what html tags created those elements, and other info.
+On the page, find the data we want to grab and right click on the word "Date" in the column header of the table.  That will bring up a dropdown menu. Select "Inspect", which will pop up a window called the "element inspector" that shows us where different elements on the page are located, what html tags created those elements, and other info.
 
 ```{r, echo=FALSE}
 knitr::include_graphics("images/rvest4.png")
 ```
 
-The entire table that we want of results is actually contained inside an html `<table>`. It has a `<tbody>` that contains one row `<tr>` per county.
+The table that we want is actually contained inside an html `<table>`. It has a `<tbody>` that contains one row `<tr>` per release.
 
 Because it's inside of a table, and not some other kind of element (like a `<div>`), rvest has a special function for easily extracting and converting html tables, called html_table(). This function extracts all the html tables on the page, but this page only has one so we're good.
 
 ```{r}
 # read in the html and extract all the tables
-results <- ag_url %>%
+results <- courts_url %>%
   read_html() %>%
   html_table()
 
@@ -113,15 +113,15 @@ results <- ag_url %>%
 results
 ```
 
-In the environment window at right, look at results  Note that it's now a "list of 1".
+In the environment window at right, look at results  Note that it's now a "list of 11".
 
-This gets a little complicated, but what you're seeing here is a nested list that contains one data frame -- also called tibbles --  one for each table that exists on the web page we scraped.
+This gets a little complicated, but what you're seeing here is a nested list that contains one data frame -- also called tibbles --  one for each table that exists on the web page we scraped. There are tables for each year on the page, so we have 11 years' worth of press releases.
 
-So, all we need to do now is to store that single dataframe as an object.  We can do that with this code, which says "keep only the first dataframe from our nested list."
+Let's say we are interested in 2023, so all we need to do now is to store that first dataframe as an object.  We can do that with this code, which says "keep only the first dataframe from our nested list."
 
 ```{r}
 # Read in all html from table, store all tables on page as nested list of dataframes.
-results <- ag_url %>%
+results <- courts_url %>%
   read_html() %>%
   html_table()
 
@@ -135,13 +135,11 @@ results
 ```
 We now have a proper dataframe, albeit with some lengthy column headers.
 
-From here, we can do a little cleaning. First we'll use clean_names() to lower the column names. Then use rename() to replace the candidate column names with simpler versions. We can just use the column positions instead of writing out the full names, which is nice.
-
-Then let's use slice() to remove the last row -- row number 25 -- which contains totals and percentages that we don't need. Finally, we'll make sure the vote tallies are numbers using mutate and `gsub()`, which we use to replace all the commas with nothing.
+From here, we can do a little cleaning. First we'll use clean_names() to lower the column names. Then use rename() to replace the title column with a simpler version and properly format the date.
 
 ```{r}
 # Read in all html from table, get the HTML table.
-results <- ag_url %>%
+results <- courts_url %>%
   read_html() %>%
   html_table()
 
@@ -149,14 +147,74 @@ results <- ag_url %>%
 
 results <- results[[1]] %>%
   clean_names() %>%
-  rename(peroutka = 2, brown = 3, write_ins = 4) %>%
-  slice(-25) %>%
-  mutate(peroutka = as.numeric(gsub(",","", peroutka))) %>%
-  mutate(brown = as.numeric(gsub(",","", brown))) %>%
-  mutate(write_ins = as.numeric(gsub(",","", write_ins)))
+  rename(title = news_release_news_item) %>%
+  mutate(date = mdy(date))
 
 # show the dataframe
 results
 ```
 
-And there we go. We now have a nice tidy dataframe of Maryland attorney general election results that we could ask some questions of.
+And there we go. We now have a nice tidy dataframe of Maryland state court press releases. We could combine all 11 dataframes if we wanted to have the whole set.
+
+What about HTML that doesn't have a table? Well, that's where things get a bit more complicated, and rely on your ability to read HTML and identify particular elements of it.
+
+Let's consider the list of press releases from the little-known but fascinating Office of the State Prosecutor: https://osp.maryland.gov/press-releases/. Let's save that URL as a variable as we did above:
+
+```{r}
+osp_url <- "https://osp.maryland.gov/press-releases/"
+```
+
+The next step is similar to before, too, except this time we're not going to call `html_table()` because there are no tables here that we want. In order to find what we want, we'll need to right-click on the first release date and choose "Inspect".
+
+One reason that we use HTML elements like ul and li is to help organize the code and make it easier to maintain. But it also helps with scraping, because we can zero in on the elements we want. Let's start by reading it in:
+
+```{r}
+osp_results <- osp_url %>%
+  read_html()
+
+# show the result
+osp_results
+```
+
+Once again we get a list of two as our result. In this case, we don't want to isolate the first item in our list. Instead, we want to try to locate all of the `li` tags inside this HTML. Since the `li` tag is an HTML element, we use the function `html_elements()` to get them. If we only wanted a single element, we'd use `html_element()`:
+
+```{r}
+osp_results %>% html_elements('li')
+```
+
+Good news and bad news here: we have all of the <li> tags, but we have lots of them, and it's hard to see if we have the right ones. Let's see what we're dealing with and just look at the text *inside* the <li> tags. To do that, we add `html_text()` to the end of the last code block:
+
+```{r}
+osp_results %>% html_elements('li') %>% html_text()
+```
+
+Ok, so now we can see the press releases. But they are surrounded by a bunch of things we don't want, and this *still* isn't a dataframe. Let's solve the second problem first with the `as_tibble()` function:
+
+```{r}
+releases <- osp_results %>% html_elements('li') %>% html_text() %>% as_tibble()
+```
+
+Now we're getting closer. The press releases have a specific HTML class tied to the <li> tag - in this case "listing-item". We can isolate those:
+
+```{r}
+releases <- osp_results %>% html_elements('li.listing-item') %>% html_text() %>% as_tibble()
+```
+
+Ok, this is _better_, but it's still not great. We have at least two issues: 
+
+1. The column is called `value`
+2. The column has two kinds of information in it: a date and the title.
+
+Let's solve both of those using the `separate()` function, which does what you think it does and gives us a chance to rename the columns:
+
+```{r}
+releases <- osp_results %>% html_elements('li.listing-item') %>% html_text() %>% as_tibble() %>% separate(value, c('date', 'title'), sep=":")
+```
+
+That worked, but it also exposed a couple of things, as that Warning message indicates: not all of the rows had a colon in them and the `title` column has a leading space. Let's fix both of those - we'll drop the rows where the title is NA and convert the dates into actual dates.
+
+```{r}
+releases <- osp_results %>% html_elements('li.listing-item') %>% html_text() %>% as_tibble() %>% separate(value, c('date', 'title'), sep=":") %>% drop_na(title) %>% mutate(title = str_squish(title), date = mdy(date))
+```
+
+And now you have the data.
