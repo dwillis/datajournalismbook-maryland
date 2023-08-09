@@ -1,7 +1,7 @@
 ---
 title: "pre_lab_10.Rmd"
 author: "Derek Willis"
-date: "11/4/2022"
+date: "2023-08-09"
 output: html_document
 ---
 
@@ -46,7 +46,7 @@ library(janitor)
 
 First: an aside on geographic data. There are many formats for geographic data, but data type you'll see the most is called the shapefile. It comes from a company named ERSI, which created the most widely used GIS software in the world. For years, they were the only game in town, really, and the shapefile became ubiquitous, especially so in government and utilities.
 
-So more often than not, you'll be dealing with a shapefile. But a shapefile isn't just a single file -- it's a collection of files that combined make up all the data that allow you to use it. There's a .shp file -- that's the main file that pulls it all together -- but it's important to note if your shapefiles has a .prj file, which indicates that the projection is specified. You also might be working with a GeoDatabase, or a .gdb file. That's a slightly different, more compact version of a Shapefile.
+More often than not, you'll be dealing with a shapefile. But a shapefile isn't just a single file -- it's a collection of files that combined make up all the data that allow you to use it. There's a .shp file -- that's the main file that pulls it all together -- but it's important to note if your shapefiles has a .prj file, which indicates that the projection is specified. You also might be working with a GeoDatabase, or a .gdb file. That's a slightly different, more compact version of a Shapefile.
 
 The data we're going to be working with is a Shapefile of Maryland zip codes from the [state's GIS data catalog](https://data.imap.maryland.gov/datasets/38f3f8bc61bb4261b59d71b3642e3cd6_3/explore?location=38.810313%2C-77.268250%2C8.83).
 
@@ -187,7 +187,7 @@ Now we can join the zip codes to the foreclosure data.
 **Answer**
 
 ```{r}
-zip_codes_with_foreclosures <- md_zips %>% left_join(foreclosure_zip_march_2023, by=c("ZIPCODE1"="zip"))
+zip_codes_with_foreclosures <- md_zips %>% left_join(foreclosure_zip_march_2023, join_by(ZIPCODE1=zip))
 ```
 
 Now we can use color to distinguish zip codes from each other. Let's use the number of foreclosure notices to start with:
@@ -197,7 +197,6 @@ Now we can use color to distinguish zip codes from each other. Let's use the num
 **Answer**
 
 ```{r}
-
 county_centroids <- st_centroid(zip_codes_with_foreclosures)
 
 ggplot() +
