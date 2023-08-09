@@ -23,20 +23,20 @@ book:
     - replication.qmd
     - aggregates.qmd
     - filters.qmd
-    - mutating.qmd
     - workingwithdates.qmd
+    - mutating.qmd
     - data-cleaning-part-i.qmd
     - data-cleaning-part-ii.qmd
     - open-refine.qmd
     - pdfs.qmd
     - merging.qmd
-    - rvest.qmd
     - census.qmd
     - visualizing-for-reporting.qmd
     - visualizing-for-publication.qmd
     - geographic-basics.qmd
     - geographicanalysis.qmd
     - textanalysis.qmd
+    - rvest.qmd
     - basicstats.qmd
     - writingwithdata.qmd
 
