@@ -8,7 +8,7 @@ Let's explore.
 
 ## Combining data (stacking)
 
-Let's say that we have Maryland county voter registration data from three different elections in three different files. They have the same record layout and the same number of counties (plus Baltimore City). We can combine them into a single dataframe.
+Let's say that we have Maryland county voter registration data from four different elections in four different files. They have the same record layout and the same number of counties (plus Baltimore City). We can combine them into a single dataframe.
 
 Let's do what we need to import them properly. I've merged it all into one step for each of the three datasets.
 
@@ -29,15 +29,19 @@ county_voters_2018 <- read_csv("data/county_voters_2018.csv")
 county_voters_2020 <- read_csv("data/county_voters_2020.csv")
 ```
 
+```{r}
+county_voters_2022 <- read_csv("data/county_voters_2022.csv")
+```
+
 All three of these datasets have the same number of columns, all with the same names, so if we want to merge them together to compare them over time, we need to stack them together. The verb here, in R, is `bind_rows`. You tell the function what you want to combine and it does it, assuming that you've got column names in common containing identically formatted data.
 
 Since we have three dataframes, we're going to need to pass them as a list, meaning they'll be enclosed inside the `list` function.
 
 ```{r}
-county_voters_combined <- bind_rows(list(county_voters_2016, county_voters_2018, county_voters_2020))
+county_voters_combined <- bind_rows(list(county_voters_2016, county_voters_2018, county_voters_2020, county_voters_2022))
 ```
 
-And boom, like that, we have 75 rows of data together instead of three dataframes. There are plenty of uses for `bind_rows`: any regularly updated data that comes in the same format like crime reports or award recipients or player game statistics. Or election results.
+And boom, like that, we have 96 rows of data together instead of four dataframes. There are plenty of uses for `bind_rows`: any regularly updated data that comes in the same format like crime reports or award recipients or player game statistics. Or election results.
 
 ## Joining data
 
@@ -58,10 +62,10 @@ In the best-case scenario, the two tables we want to join share a common column.
 We can do this join multiple ways and get a similar result. We can put the population file on the left and the registration data on the right and use a left join to get them all together. And we use `by=` to join by the correct column. I'm going to count the rows at the end. The reason I'm doing this is important: **Rule 1 in joining data is having an idea of what you are expecting to get**. So with a left join with population on the left, I have 24 rows, so I expect to get 24 rows when I'm done.
 
 ```{r}
-maryland_population %>% left_join(county_voters_2020, by="COUNTY") %>% nrow()
+maryland_population %>% left_join(county_voters_2020, join_by("COUNTY")) %>% nrow()
 ```
 
-Remove the nrow and run it again for yourself. By default, `dplyr` will do a "natural" join, where it'll match all the matching columns in both tables. So if we take out the by, it'll use all the common columns between the tables. That may not be right in every instance but let's try it. If it works, we should get 24 rows.
+Remove the nrow and run it again for yourself. By default, `dplyr` will do a "natural" join, where it'll match all the matching columns in both tables. So if we take out the `join_by()`, it'll use all the common columns between the tables. That may not be right in every instance but let's try it. If it works, we should get 24 rows.
 
 ```{r}
 maryland_population %>% left_join(county_voters_2020)
@@ -86,7 +90,7 @@ maryland_demographics <- read_csv('data/maryland_demographics.csv')
 Again, we can use a `left_join` to make our demographic data available. This time we'll need to specify the two fields to join because they do not have identical names. We'll use `COUNTY` from our population data and `NAME` from the demographic data, and the order matters - the first column is from the dataframe you name _first_.
 
 ```{r, error=TRUE}
-maryland_population_with_voters_and_demographics <- maryland_population_with_voters %>% left_join(maryland_demographics, by=c("COUNTY"="NAME"))
+maryland_population_with_voters_and_demographics <- maryland_population_with_voters %>% left_join(maryland_demographics, join_by(COUNTY == NAME))
 ```
 
 Now we've got population data and demographic data by county. That means we can draw from both datasets in asking our questions. For example, we could see the counties with the highest 18+ Black population as a percentage of all population 18 and over and also the percentage of Democrats in that county.
@@ -95,7 +99,7 @@ We can get this by using mutate and arrange:
 
 ```{r}
 maryland_population_with_voters_and_demographics %>%
-  mutate(pct_black_18_plus = (pop_black/pop_18_over)*100, pct_dems = (DEM/Total)*100) %>%
+  mutate(pct_black_18_plus = (pop_black/pop_18_over)*100, pct_dems = (DEM/TOTAL)*100) %>%
   arrange(desc(pct_black_18_plus)) %>%
   select(COUNTY, pct_black_18_plus, pct_dems)
 ```
@@ -106,7 +110,7 @@ Let's change that to look at Asian population:
 
 ```{r}
 maryland_population_with_voters_and_demographics %>%
-  mutate(pct_asian_18_plus = (pop_asian/pop_18_over)*100, pct_dems = (DEM/Total)*100) %>%
+  mutate(pct_asian_18_plus = (pop_asian/pop_18_over)*100, pct_dems = (DEM/TOTAL)*100) %>%
   arrange(desc(pct_asian_18_plus)) %>%
   select(COUNTY, pct_asian_18_plus, pct_dems)
 ```
@@ -122,7 +126,7 @@ glimpse(maryland_zcta)
 You can see that ZCTA5N, the column representing the Zip Code Tabulation Area, is a numeric column. But should it be? Do we ever want to know the average zip code in Maryland? Zip codes and ZCTAs look like numbers but really are character columns. Let's change that so that we can be sure to join them correctly with other data where the zip codes are not numbers. We'll use `mutate`:
 
 ```{r}
-maryland_zcta <- maryland_zcta %>% mutate(across(ZCTA5N, as.character))
+maryland_zcta <- maryland_zcta %>% mutate(ZCTA5N = as.character(ZCTA5N))
 ```
 
 What's happening here is that we're telling R to take all of the values in the ZCTA5N column and make them "as.character". If we wanted to change a column to numeric, we'd do "as.numeric". When you join two dataframes, the join columns _must_ be the same datatype.

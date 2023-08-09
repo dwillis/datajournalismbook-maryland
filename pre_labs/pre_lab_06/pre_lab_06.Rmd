@@ -78,7 +78,7 @@ view(maryland_population)
 
 ```{r}
 # with nrow included to show row total
-maryland_population %>% left_join(county_voters_2022, by="COUNTY") %>% nrow()
+maryland_population %>% left_join(county_voters_2020, join_by("COUNTY")) %>% nrow()
 ```
 
 ### Task 7: Looking at Joined Data
@@ -87,10 +87,12 @@ maryland_population %>% left_join(county_voters_2022, by="COUNTY") %>% nrow()
 
 ```{r}
 # without nrow
-maryland_population %>% left_join(county_voters_2022, by="COUNTY")
+maryland_population %>% left_join(county_voters_2022, join_by("COUNTY"))
 ```
 
 ### Task 8: Assign Joined Data to New Dataframe
+
+By default, `dplyr` will do a "natural" join, where it'll match all the matching columns in both tables. So if we take out the `join_by()`, it'll use all the common columns between the tables. That may not be right in every instance but let's try it. If it works, we should get 24 rows.
 
 **Task** Create a new dataframe with population and voter data joined together. Add a description of what this code does to your reference notebook.
 
@@ -113,7 +115,7 @@ view(maryland_demographics)
 **Task** Join the demographic data to the our combined voting/population data. To do this, we need to specify the join columns since the names aren't the same in the two dataframes.
 
 ```{r}
-maryland_population_with_voters_and_demographics <- maryland_population_with_voters %>% left_join(maryland_demographics, by=c("COUNTY"="NAME"))
+maryland_population_with_voters_and_demographics <- maryland_population_with_voters %>% left_join(maryland_demographics, join_by(COUNTY == NAME))
 ```
 
 ### Task 11: Asking Demographic Questions
@@ -123,7 +125,7 @@ maryland_population_with_voters_and_demographics <- maryland_population_with_vot
 
 ```{r}
 maryland_population_with_voters_and_demographics %>%
-  mutate(pct_black_18_plus = (pop_black/pop_18_over)*100, pct_dems = (DEM/Total)*100) %>% 
+  mutate(pct_black_18_plus = (pop_black/pop_18_over)*100, pct_dems = (DEM/TOTAL)*100) %>% 
   arrange(desc(pct_black_18_plus)) %>% 
   select(COUNTY, pct_black_18_plus, pct_dems)
 ```
@@ -135,7 +137,7 @@ maryland_population_with_voters_and_demographics %>%
 
 ```{r}
 maryland_population_with_voters_and_demographics %>%
-  mutate(pct_asian_18_plus = (pop_asian/pop_18_over)*100, pct_dems = (DEM/Total)*100) %>% 
+  mutate(pct_asian_18_plus = (pop_asian/pop_18_over)*100, pct_dems = (DEM/TOTAL)*100) %>% 
   arrange(desc(pct_asian_18_plus)) %>% 
   select(COUNTY, pct_asian_18_plus, pct_dems)
 ```
