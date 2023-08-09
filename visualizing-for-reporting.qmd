@@ -13,10 +13,10 @@ Let's revisit some data we've used in the past and turn it into charts. First, l
 library(tidyverse)
 ```
 
-The dataset we'll use is voter registration data by county in Maryland from 2020 and September 2022. Let's load it.
+The dataset we'll use is 911 overdose calls from Baltimore County. Let's load it.
 
 ```{r}
-md_voters <- read_csv("data/maryland_voters_2020_2022.csv")
+baltco_911_calls <- read_csv("data/baltco_911_calls.csv")
 ```
 
 ## Bar charts
@@ -27,17 +27,18 @@ It's a chart designed to show differences between things -- the magnitude of one
 
 So if we have thing, like a county, or a state, or a group name, and then a count of that group, we can make a bar chart.
 
-So what does the chart of the top 10 maryland counties with the biggest change in registered voters from 2020 to 2022 look like? 
+So what does the chart of the top months with the most 911 overdose calls look like? 
 
-First, we'll create a dataframe of those top 10, called maryland_top_counties.
+First, we'll add a month column to our dataframe using lubridate.
 
 ```{r}
-maryland_top_counties <- md_voters %>%
-  arrange(desc(TOTAL_DIFF)) %>%
-  select(County, TOTAL_DIFF) %>% 
-  head(10)
+baltco_911_calls_by_month <- baltco_911_calls %>%
+  mutate(month = month(date, label=TRUE)) %>% 
+  group_by(month) %>% 
+  summarize(total_calls = n()) %>% 
+  arrange(desc(total_calls))
 
-maryland_top_counties
+baltco_911_calls_by_month
 ```
 
 Now let's create a bar chart using ggplot.
@@ -45,7 +46,7 @@ Now let's create a bar chart using ggplot.
 With ggplot, the first thing we'll always do is draw a blank canvas that will house our chart. We start with our dataframe name, and then (%>%) we invoke the ggplot() function to make that blank canvas.  All this does is make a gray box, the blank canvas that will hold our chart.
 
 ```{r}
-maryland_top_counties %>%
+baltco_911_calls_by_month %>%
   ggplot()
 ```
 
@@ -72,25 +73,25 @@ One quirk here with ggplot.
 After we've invoked the ggplot() function, you'll notice we're using a + symbol.  It means the same thing as  %>% -- "and then do this".  It's just a quirk of ggplot() that after you invoke the ggplot() function, you use + instead of %>%.  It makes no sense to me either, just something to live with.
 
 ```{r}
-maryland_top_counties %>%
+baltco_911_calls_by_month %>%
   ggplot() +
-  geom_bar(aes(x=County, weight=TOTAL_DIFF))
+  geom_bar(aes(x=month, weight=total_calls))
 ```
 
 This is a very basic chart.  But it's hard to derive much meaning from this chart, because the counties aren't ordered from highest to lowest by total_loans. We can fix that by using the reorder() function to do just that:
 
 ```{r}
-maryland_top_counties %>%
+baltco_911_calls_by_month %>%
   ggplot() +
-  geom_bar(aes(x=reorder(County,TOTAL_DIFF), weight=TOTAL_DIFF))
+  geom_bar(aes(x=reorder(month,total_calls), weight=total_calls))
 ```
 
 This is a little more useful. But the bottom is kind of a mess, with overlapping names.  We can fix that by flipping it from a vertical bar chart (also called a column chart) to a horizontal one. coord_flip() does that for you.
 
 ```{r}
-maryland_top_counties %>%
+baltco_911_calls_by_month %>%
   ggplot() +
-  geom_bar(aes(x=reorder(County,TOTAL_DIFF), weight=TOTAL_DIFF)) +
+  geom_bar(aes(x=reorder(month,total_calls), weight=total_calls)) +
   coord_flip()
 ```
 
@@ -103,9 +104,9 @@ But it's worth mentioning that we can pretty up these charts for publication, if
 It's kind of like applying CSS to html. Here I'm changing the theme slightly to remove the gray background with one of ggplot's built in themes, theme_minimal()
 
 ```{r}
-maryland_top_counties %>%
+baltco_911_calls_by_month %>%
   ggplot() +
-  geom_bar(aes(x=reorder(County,TOTAL_DIFF), weight=TOTAL_DIFF)) +
+  geom_bar(aes(x=reorder(month,total_calls), weight=total_calls)) +
   coord_flip() + 
   theme_minimal()
 ```
@@ -120,26 +121,25 @@ library(ggthemes)
 
 And now we'll apply the economist theme from that package with theme_economist()
 ```{r}
-maryland_top_counties %>%
+baltco_911_calls_by_month %>%
   ggplot() +
-  geom_bar(aes(x=reorder(County,TOTAL_DIFF), weight=TOTAL_DIFF)) +
+  geom_bar(aes(x=reorder(month,total_calls), weight=total_calls)) +
   coord_flip() + 
   theme_economist()
 ```
 Those axis titles are kind of a mess. Let's change "count" on the x axis to "net change" and change "reorder(County,TOTAL_DIFF)" to "county".  And while we're at it, let's add a basic title and a source as a caption. We'll use a new function, labs(), which is short for labels.
 
 ```{r}
-maryland_top_counties %>%
+baltco_911_calls_by_month %>%
   ggplot() +
-  geom_bar(aes(x=reorder(County,TOTAL_DIFF), weight=TOTAL_DIFF)) +
+  geom_bar(aes(x=reorder(month,total_calls), weight=total_calls)) +
   coord_flip() + 
   theme_economist() +
   labs(
-    title="Maryland Counties with Biggest Increases in Voters",
-    x = "net change",
-    y = "county",
-    caption = "source: Maryland State Board of Elections"
-    
+    title="More 911 Overdose Calls in Warmer Months",
+    x = "month",
+    y = "total calls",
+    caption = "source: Baltimore County"
   )
 ```
 Viola.  Not super pretty, but good enough to show an editor to help them understand the conclusions you reached with your data analysis.
@@ -150,38 +150,28 @@ Let's look at how to make another common chart type that will help you understan
 
 Line charts can show change over time. It works much the same as a bar chart, code wise, but instead of a weight, it uses a y.
 
-So, let's load some WinRed contribution data we've previously used and create a dataframe with a count of contributions for each date in our data.
 
 ```{r}
-md_winred <- read_rds("data/maryland_winred.rds")
-```
-
-Then we'll make our aggregate dataframe:
-
-```{r}
-
-md_winred_by_date <- md_winred %>%
+baltco_911_calls_by_date <- baltco_911_calls %>%
   group_by(date) %>%
   summarise(
-    total_contributions=n()
+    total_calls=n()
   )
 
-md_winred_by_date 
+baltco_911_calls_by_date
 ```
 
 And now let's make a line chart to look for patterns in this data.
 
-We'll put the date on the x axis and total contributions on the y axis.
+We'll put the date on the x axis and total calls on the y axis.
 
 ```{r}
-md_winred_by_date %>%
+baltco_911_calls_by_date %>%
   ggplot() + 
-  geom_line(aes(x=date, y=total_contributions))
-
-
+  geom_line(aes(x=date, y=total_calls))
 ```
 
-It's not super pretty, but there's a pattern here: the number of contributions fluctuates between 400 and 800 a day for most of this period, and then jumps way up at the end of June. We've learned that the end of June is the end of a reporting period, and donors respond to deadlines. 
+It's not super pretty, but there's a bit of a pattern here: the number of calls fluctuates between 5 and 20 a day for most of this period, and then jumps way up at certain points during the year. In particular there are spikes in July, early October and January.
 
 Right now, it's kind of hard to see specifics, though. When did some of those smaller spikes and troughs happen?
 
@@ -190,25 +180,22 @@ We can't really tell.  So let's modify the x axis to have one tick mark and labe
 We'll set the date_breaks to appear for every week; if we wanted every month, we'd say date_breaks = "1 month". We can set the date to appear as month abbreviated name (%b) and day (%d). 
 
 ```{r}
-md_winred_by_date %>%
+baltco_911_calls_by_date %>%
   ggplot() + 
-  geom_line(aes(x=date, y=total_contributions)) + 
+  geom_line(aes(x=date, y=total_calls)) + 
   scale_x_date(date_breaks = "1 week", date_labels = "%b %d")
-
-
 ```
 
 Those are a little hard to read, so we can turn them 45 degrees to remove the overlap using the theme() function for styling.  With "axis.text.x = element_text(angle = 45,  hjust=1)" we're saying, turn the date labels 45 degrees.
 
 ```{r}
-md_winred_by_date %>%
+baltco_911_calls_by_date %>%
   ggplot() + 
-  geom_line(aes(x=date, y=total_contributions)) + 
+  geom_line(aes(x=date, y=total_calls)) + 
   scale_x_date(date_breaks = "1 week", date_labels = "%b %d") +
   theme(
     axis.text.x = element_text(angle = 45,  hjust=1)
   )
-
 ```
 
 Again, this isn't as pretty as we could make it.  But by charting this, we can quickly see a pattern that can help guide our reporting.

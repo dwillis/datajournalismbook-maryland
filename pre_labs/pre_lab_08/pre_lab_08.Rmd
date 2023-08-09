@@ -207,13 +207,12 @@ Line charts can show change over time. It works much the same as a bar chart, co
 
 So, let's use the same Baltimore County data and generate a count of contributions for each date in our data.
 
-### Task 12: Create a dataframe of contributions by date
+### Task 12: Create a dataframe of 911 calls by date
 
 **Task** Run the following code. Explain what you see after running the code in the space below. 
 **Answer**
 
 ```{r}
-
 baltco_911_calls_by_date <- baltco_911_calls %>%
   group_by(date) %>%
   summarise(
@@ -254,8 +253,6 @@ baltco_911_calls_by_date %>%
   ggplot() + 
   geom_line(aes(x=date, y=total_calls)) + 
   scale_x_date(date_breaks = "1 week", date_labels = "%b %d")
-
-
 ```
 
 Those are a little hard to read, so we can turn them 45 degrees to remove the overlap using the theme() function for styling.  With "axis.text.x = element_text(angle = 45,  hjust=1)" we're saying, turn the date labels 45 degrees.
