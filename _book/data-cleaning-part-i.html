@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-0.9.646">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,15 +11,10 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
-ul.task-list li input[type="checkbox"] {
-  width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
-  vertical-align: middle;
-}
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -58,7 +53,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
+code span.bu { } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -71,7 +66,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.im { } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -94,7 +89,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./data-cleaning-part-ii.html" rel="next">
-<link href="./workingwithdates.html" rel="prev">
+<link href="./mutating.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -103,7 +98,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -238,12 +233,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./mutating.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Mutating data</span></a>
+  <a href="./workingwithdates.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Working with dates</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./workingwithdates.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Working with dates</span></a>
+  <a href="./mutating.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Mutating data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -273,37 +268,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./rvest.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Scraping data with Rvest</span></a>
+  <a href="./census.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Intro to APIs: The Census</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./census.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Intro to APIs: The Census</span></a>
+  <a href="./visualizing-for-reporting.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Visualizing your data for reporting</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./visualizing-for-reporting.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Visualizing your data for reporting</span></a>
+  <a href="./visualizing-for-publication.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Visualizing your data for publication</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./visualizing-for-publication.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Visualizing your data for publication</span></a>
+  <a href="./geographic-basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Geographic data basics</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./geographic-basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Geographic data basics</span></a>
+  <a href="./geographicanalysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Geographic analysis</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./geographicanalysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Geographic analysis</span></a>
+  <a href="./textanalysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">An intro to text analysis</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./textanalysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">An intro to text analysis</span></a>
+  <a href="./rvest.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Scraping data with Rvest</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -321,14 +316,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#wrong-type" id="toc-wrong-type" class="nav-link active" data-scroll-target="#wrong-type"><span class="toc-section-number">19.1</span>  Wrong Type</a></li>
-  <li><a href="#wrong-spatial-data" id="toc-wrong-spatial-data" class="nav-link" data-scroll-target="#wrong-spatial-data"><span class="toc-section-number">19.2</span>  Wrong Spatial Data</a></li>
-  <li><a href="#gaps-in-data-missing-data" id="toc-gaps-in-data-missing-data" class="nav-link" data-scroll-target="#gaps-in-data-missing-data"><span class="toc-section-number">19.3</span>  Gaps in data &amp; Missing data</a></li>
-  <li><a href="#unusual-outliers" id="toc-unusual-outliers" class="nav-link" data-scroll-target="#unusual-outliers"><span class="toc-section-number">19.4</span>  Unusual Outliers</a></li>
+  <li><a href="#wrong-type" id="toc-wrong-type" class="nav-link active" data-scroll-target="#wrong-type"> <span class="header-section-number">19.1</span> Wrong Type</a></li>
+  <li><a href="#wrong-spatial-data" id="toc-wrong-spatial-data" class="nav-link" data-scroll-target="#wrong-spatial-data"> <span class="header-section-number">19.2</span> Wrong Spatial Data</a></li>
+  <li><a href="#gaps-in-data-missing-data" id="toc-gaps-in-data-missing-data" class="nav-link" data-scroll-target="#gaps-in-data-missing-data"> <span class="header-section-number">19.3</span> Gaps in data &amp; Missing data</a></li>
+  <li><a href="#unusual-outliers" id="toc-unusual-outliers" class="nav-link" data-scroll-target="#unusual-outliers"> <span class="header-section-number">19.4</span> Unusual Outliers</a></li>
   </ul>
 </nav>
     </div>
@@ -345,7 +340,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="quarto-title-meta">
 
     
-  
     
   </div>
   
@@ -372,7 +366,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <p>Not all of these data smells are detectable in code. You may have to ask people about the data. You may have to compare it to another dataset yourself. Does the agency that uses the data produce reports from the data? Does your analysis match those reports? That will expose wrongly derived data, or wrong units, or mistakes you made with inclusion or exclusion.</p>
 <p>But with several of these data smells, we can do them first, before we do anything else.</p>
-<p>We’re going to examine several here as they apply to some <a href="https://opendata.maryland.gov/Budget/State-of-Maryland-Payments-Data-FY2008-to-FY2023/7syw-q4cy">Maryland state government payments data</a> and <a href="https://opendata.maryland.gov/Budget/State-of-Maryland-Grant-and-Loan-Data-FY2009-to-FY/absk-avps">Maryland state government grant &amp; loan data</a>.</p>
+<p>We’re going to examine several here as they apply to some <a href="https://opendata.maryland.gov/Budget/State-of-Maryland-Payments-Data-FY2008-to-FY2024/7syw-q4cy">Maryland state government payments data</a> and <a href="https://opendata.maryland.gov/Budget/State-of-Maryland-Grant-and-Loan-Data-FY2009-to-FY/absk-avps">Maryland state government grant &amp; loan data</a>.</p>
 <section id="wrong-type" class="level2" data-number="19.1">
 <h2 data-number="19.1" class="anchored" data-anchor-id="wrong-type"><span class="header-section-number">19.1</span> Wrong Type</h2>
 <p>First, let’s look at <strong>Wrong Type Of Data</strong>.</p>
@@ -388,12 +382,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>We’re also going to introduce a new argument to our function that reads in the data, read_csv(), called “guess_max”. As R reads in the csv file, it will attempt to make some calls on what “data type” to assign to each field: number, character, date, and so on. The “guess_max” argument says: look at the values in the whatever number of rows we specify before deciding which data type to assign. In this case, we’ll pick 10.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>payments <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/State_of_Maryland_Payments_Data__FY2008_to_FY2023.csv"</span>, <span class="at">guess_max=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>payments <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/State_of_Maryland_Payments_Data__FY2008_to_FY2024.csv"</span>, <span class="at">guess_max=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: One or more parsing issues, see `problems()` for details</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Rows: 322138 Columns: 8
+<pre><code>Rows: 373564 Columns: 8
 ── Column specification ────────────────────────────────────────────────────────
 Delimiter: ","
 chr (4): Agency Name, Vendor Name, Date, Category
@@ -407,28 +401,28 @@ dbl (4): Fiscal Year, Vendor Zip, Amount, Fiscal Period
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">problems</span>(payments)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 280 × 5
+<pre><code># A tibble: 350 × 5
      row   col expected actual file                                             
    &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;                                            
- 1   402     4 a double V7P    /Users/dpwillis/code/datajournalismbook-maryland…
- 2  5159     4 a double XXXXX  /Users/dpwillis/code/datajournalismbook-maryland…
- 3  5160     4 a double XXXXX  /Users/dpwillis/code/datajournalismbook-maryland…
- 4 12222     4 a double XXXXX  /Users/dpwillis/code/datajournalismbook-maryland…
- 5 13529     4 a double V5A    /Users/dpwillis/code/datajournalismbook-maryland…
- 6 13767     4 a double L5B    /Users/dpwillis/code/datajournalismbook-maryland…
- 7 14445     4 a double XXXXX  /Users/dpwillis/code/datajournalismbook-maryland…
- 8 14583     4 a double L5B    /Users/dpwillis/code/datajournalismbook-maryland…
- 9 14894     4 a double XXXXX  /Users/dpwillis/code/datajournalismbook-maryland…
-10 14898     4 a double H8R    /Users/dpwillis/code/datajournalismbook-maryland…
-# … with 270 more rows</code></pre>
+ 1   342     4 a double XXXXX  /Users/dpwillis/code/datajournalismbook-maryland…
+ 2   624     4 a double V5A    /Users/dpwillis/code/datajournalismbook-maryland…
+ 3  2643     4 a double XXXXX  /Users/dpwillis/code/datajournalismbook-maryland…
+ 4  5019     4 a double XXXXX  /Users/dpwillis/code/datajournalismbook-maryland…
+ 5  7930     4 a double XXXXX  /Users/dpwillis/code/datajournalismbook-maryland…
+ 6  7931     4 a double XXXXX  /Users/dpwillis/code/datajournalismbook-maryland…
+ 7 14866     4 a double XXXXX  /Users/dpwillis/code/datajournalismbook-maryland…
+ 8 17624     4 a double XXXXX  /Users/dpwillis/code/datajournalismbook-maryland…
+ 9 17846     4 a double XXXXX  /Users/dpwillis/code/datajournalismbook-maryland…
+10 19581     4 a double V5A    /Users/dpwillis/code/datajournalismbook-maryland…
+# ℹ 340 more rows</code></pre>
 </div>
 </div>
 <p>It produces a table of all the parsing problems. It has 280 rows, which means we have that some problems but not a huge number considering we have 322,000 rows. In almost every case here, the <code>readr</code> library has guessed that a given column was of a “double” data type – a number. It did it based on very limited information – only 10 rows. So, when it hit a value that looked like a date, or a character string, it didn’t know what to do. So it just didn’t read in that value correctly.</p>
 <p>The easy way to fix this is to set the guess_max argument higher. It will take a little longer to load, but we’ll use every single row in the data set to guess the column type – all 322,138 of them.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>payments <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/State_of_Maryland_Payments_Data__FY2008_to_FY2023.csv"</span>, <span class="at">guess_max=</span><span class="dv">322138</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>payments <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/State_of_Maryland_Payments_Data__FY2008_to_FY2024.csv"</span>, <span class="at">guess_max=</span><span class="dv">373564</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Rows: 322138 Columns: 8
+<pre><code>Rows: 373564 Columns: 8
 ── Column specification ────────────────────────────────────────────────────────
 Delimiter: ","
 chr (5): Agency Name, Vendor Name, Vendor Zip, Date, Category
@@ -442,16 +436,16 @@ dbl (3): Fiscal Year, Amount, Fiscal Period
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(payments)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Rows: 322,138
+<pre><code>Rows: 373,564
 Columns: 8
 $ `Fiscal Year`   &lt;dbl&gt; 2023, 2023, 2023, 2023, 2023, 2023, 2023, 2023, 2023, …
-$ `Agency Name`   &lt;chr&gt; "DEPT OF AGRICULTURE -  CAPITAL PROJECTS", "DEPT OF HO…
-$ `Vendor Name`   &lt;chr&gt; "DAVID T PYLE", "MITCHELL DUNDON/ A QUALITY HEATING AN…
-$ `Vendor Zip`    &lt;chr&gt; "21791", "21136", "04967", "04967", "04101", "19176", …
-$ Amount          &lt;dbl&gt; 33212.27, 42000.00, 5270614.25, 1240367.50, 621952.00,…
+$ `Agency Name`   &lt;chr&gt; "STATE DEPARTMENT OF EDUCATION", "COMPTROLLER OF MARYL…
+$ `Vendor Name`   &lt;chr&gt; "KATHIE A DUBAY", "CHONKO MICHAEL", "MICHAEL T. GUILBA…
+$ `Vendor Zip`    &lt;chr&gt; "21157", "21502", "21045", "21703", "21791", "21136", …
+$ Amount          &lt;dbl&gt; 25103.00, 40655.17, 36900.00, 42831.80, 33212.27, 700.…
 $ `Fiscal Period` &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
-$ Date            &lt;chr&gt; "01/01/2023 12:00:00 AM", "01/01/2023 12:00:00 AM", "0…
-$ Category        &lt;chr&gt; "615", "S00", "J03", "604", "M00", "E20", "M00", "M00"…</code></pre>
+$ Date            &lt;chr&gt; "01/01/2024 12:00:00 AM", "01/01/2024 12:00:00 AM", "0…
+$ Category        &lt;chr&gt; "R00", "E00", "C80", "R00", "615", "D13", "S00", "J03"…</code></pre>
 </div>
 </div>
 <p>Things that should be characters – like agency name, vendor name – are characters (chr). Things that should be numbers (dbl) – like amount and fiscal year – are numbers. We’ve seen before that sometimes dates aren’t defined as date datatypes by R - we can fix that using <code>lubridate</code>.</p>
@@ -469,20 +463,20 @@ $ Category        &lt;chr&gt; "615", "S00", "J03", "604", "M00", "E20", "M00", "
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(count))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 547 × 2
+<pre><code># A tibble: 549 × 2
    `Vendor Zip` count
    &lt;chr&gt;        &lt;int&gt;
  1 2241          2044
  2 8873           434
  3 2284           356
- 4 7921           295
+ 4 7921           296
  5 4915           197
  6 8650           195
  7 7188           194
  8 7101           191
  9 1441           133
 10 7102           112
-# … with 537 more rows</code></pre>
+# ℹ 539 more rows</code></pre>
 </div>
 </div>
 <p>So, yes, we definitely have some zip codes that are less than 5 characters long, which is not good, particularly because we don’t have any other geographical information (such as a state) that would tell us whether we’re missing a leading zero or some other character.</p>
@@ -528,7 +522,7 @@ dbl (3): Fiscal Year, Amount, Fiscal Period
  8          2012 Grant     1100
  9          2012 Loan        58
 10          2013 Grant      986
-# … with 23 more rows</code></pre>
+# ℹ 23 more rows</code></pre>
 </div>
 </div>
 <p>We can see a couple of issues here: first, there is no loan data for FY 2009. That’s mentioned in <a href="https://opendata.maryland.gov/Budget/State-of-Maryland-Grant-and-Loan-Data-FY2009-to-FY/absk-avps">the source page for the data</a>. It’s good to be aware of all gaps in data, but they don’t always represent a problem. Second, and more problematic, there are a few records where the Category is NA - that data is missing. There also are some inconsistent values - there are 50 records in FY2013 with the category of “L” (probably loans) and one in FY 2017 that is listed as “Contract”.</p>
@@ -541,20 +535,20 @@ dbl (3): Fiscal Year, Amount, Fiscal Period
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Amount)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 17,765 × 9
-   Grantor          Grantee Zip C…¹ Fisca…² Amount Descr…³ Categ…⁴ Fisca…⁵ Date 
-   &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;
- 1 Department of N… Land P… 21285      2009   60   Cather… Grant         1 06/3…
- 2 Maryland Depart… UNITED… 21031      2012   96.0 FOOD S… Grant         1 06/3…
- 3 Conservation Re… Easter… 21601      2018  186.  Rollin… Grant         1 06/3…
- 4 Maryland Depart… FAMILY… 20877      2013  304   RTTT -… Grant         1 06/3…
- 5 Maryland Depart… Washin… 21740      2017  361   Hold H… Grant         1 06/3…
- 6 Maryland Depart… THE CH… 21215-…    2012  362.  FOOD S… Grant         1 06/3…
- 7 Maryland Depart… ARCHDI… 21227      2012  379.  MARYLA… Grant         1 06/3…
- 8 Maryland Depart… HUMAN … 21158      2013  387   CASH F… Grant         1 06/3…
- 9 Department of N… The Co… 22209      2012  402.  R Crei… Grant         1 06/3…
-10 Governor's Offi… Court … 21204      2018  411.  Childr… Grant         1 06/3…
-# … with 17,755 more rows, and abbreviated variable names ¹​`Zip Code`,
-#   ²​`Fiscal Year`, ³​Description, ⁴​Category, ⁵​`Fiscal Period`</code></pre>
+   Grantor          Grantee `Zip Code` `Fiscal Year` Amount Description Category
+   &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt;              &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;   
+ 1 Department of N… Land P… 21285               2009   60   Catherine … Grant   
+ 2 Maryland Depart… UNITED… 21031               2012   96.0 FOOD SERVI… Grant   
+ 3 Conservation Re… Easter… 21601               2018  186.  Rolling Vi… Grant   
+ 4 Maryland Depart… FAMILY… 20877               2013  304   RTTT - EAR… Grant   
+ 5 Maryland Depart… Washin… 21740               2017  361   Hold Harml… Grant   
+ 6 Maryland Depart… THE CH… 21215-3211          2012  362.  FOOD SERVI… Grant   
+ 7 Maryland Depart… ARCHDI… 21227               2012  379.  MARYLAND M… Grant   
+ 8 Maryland Depart… HUMAN … 21158               2013  387   CASH FOR C… Grant   
+ 9 Department of N… The Co… 22209               2012  402.  R Creighto… Grant   
+10 Governor's Offi… Court … 21204               2018  411.  Children's… Grant   
+# ℹ 17,755 more rows
+# ℹ 2 more variables: `Fiscal Period` &lt;dbl&gt;, Date &lt;chr&gt;</code></pre>
 </div>
 </div>
 <p>There are two grants for less than $100, which might not be problematic at all, but given that just two of 17,000 are for very small amounts you might wonder if there are suggested amounts for applicants and how tiny ones get evaluated compared to very large requests. As journalists, we should be skeptical of information put in front of us and ask why or what it says about the data itself.</p>
@@ -565,24 +559,6 @@ dbl (3): Fiscal Year, Amount, Fiscal Period
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
   const icon = "";
   const anchorJS = new window.AnchorJS();
   anchorJS.options = {
@@ -604,24 +580,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
     setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -649,57 +608,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      let href = ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
     });
   }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
       });
-    }
+      return popup.innerHTML;
+    });
   }
 });
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./workingwithdates.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Working with dates</span></span>
+      <a href="./mutating.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Mutating data</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

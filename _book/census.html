@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.18">
+<meta name="generator" content="quarto-0.9.646">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Data Journalism with R and the Tidyverse - 25&nbsp; Intro to APIs: The Census</title>
+<title>Data Journalism with R and the Tidyverse - 24&nbsp; Intro to APIs: The Census</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -89,7 +89,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./visualizing-for-reporting.html" rel="next">
-<link href="./rvest.html" rel="prev">
+<link href="./merging.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -98,7 +98,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -128,7 +128,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Intro to APIs: The Census</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Intro to APIs: The Census</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -228,7 +228,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./mutating.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Mutating data</span></a>
+  <a href="./filters.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Filters and selections</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -238,7 +238,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./filters.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Filters and selections</span></a>
+  <a href="./mutating.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Mutating data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -268,37 +268,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./rvest.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Scraping data with Rvest</span></a>
+  <a href="./census.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Intro to APIs: The Census</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./census.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Intro to APIs: The Census</span></a>
+  <a href="./visualizing-for-reporting.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Visualizing your data for reporting</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./visualizing-for-reporting.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Visualizing your data for reporting</span></a>
+  <a href="./visualizing-for-publication.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Visualizing your data for publication</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./visualizing-for-publication.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Visualizing your data for publication</span></a>
+  <a href="./geographic-basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Geographic data basics</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./geographic-basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Geographic data basics</span></a>
+  <a href="./geographicanalysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Geographic analysis</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./geographicanalysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Geographic analysis</span></a>
+  <a href="./textanalysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">An intro to text analysis</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./textanalysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">An intro to text analysis</span></a>
+  <a href="./rvest.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Scraping data with Rvest</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -320,9 +320,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#the-acs" id="toc-the-acs" class="nav-link active" data-scroll-target="#the-acs"> <span class="header-section-number">25.1</span> The ACS</a></li>
-  <li><a href="#wide-results" id="toc-wide-results" class="nav-link" data-scroll-target="#wide-results"> <span class="header-section-number">25.2</span> “Wide” Results</a></li>
-  <li><a href="#sorting-results" id="toc-sorting-results" class="nav-link" data-scroll-target="#sorting-results"> <span class="header-section-number">25.3</span> Sorting Results</a></li>
+  <li><a href="#the-acs" id="toc-the-acs" class="nav-link active" data-scroll-target="#the-acs"> <span class="header-section-number">24.1</span> The ACS</a></li>
+  <li><a href="#wide-results" id="toc-wide-results" class="nav-link" data-scroll-target="#wide-results"> <span class="header-section-number">24.2</span> “Wide” Results</a></li>
+  <li><a href="#sorting-results" id="toc-sorting-results" class="nav-link" data-scroll-target="#sorting-results"> <span class="header-section-number">24.3</span> Sorting Results</a></li>
+  <li><a href="#combining-with-other-data" id="toc-combining-with-other-data" class="nav-link" data-scroll-target="#combining-with-other-data"> <span class="header-section-number">24.4</span> Combining with Other Data</a></li>
   </ul>
 </nav>
     </div>
@@ -331,7 +332,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Intro to APIs: The Census</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Intro to APIs: The Census</span></h1>
 </div>
 
 
@@ -379,7 +380,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  8 H003001 Total                                OCCUPANCY STATUS
  9 H003002 Total!!Occupied                      OCCUPANCY STATUS
 10 H003003 Total!!Vacant                        OCCUPANCY STATUS
-# … with 8,949 more rows</code></pre>
+# ℹ 8,949 more rows</code></pre>
 </div>
 </div>
 <p>Note: There are thousands of variables in SF1. That’s not a typo. Open it in your environment by double clicking. As you scroll down, you’ll get an idea of what you’ve got to choose from.</p>
@@ -402,7 +403,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  8 H005001 Total                                       URBAN AND RURAL [7]      
  9 H005002 Total!!Urban                                URBAN AND RURAL [7]      
 10 H005003 Total!!Urban!!Inside urbanized areas        URBAN AND RURAL [7]      
-# … with 16,510 more rows</code></pre>
+# ℹ 16,510 more rows</code></pre>
 </div>
 </div>
 <p>Yes. That’s more than 16,000 variables to choose from. I told you. Astonishing.</p>
@@ -435,8 +436,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>And just like that: Nevada.</p>
 <p>You may be asking: hey, wasn’t there a 2020 Census? Where’s that data? The answer is that it’s coming, slowly - the Census Bureau has a <a href="https://www.census.gov/programs-surveys/popest/about/schedule.html">schedule of releases</a>.</p>
-<section id="the-acs" class="level2" data-number="25.1">
-<h2 data-number="25.1" class="anchored" data-anchor-id="the-acs"><span class="header-section-number">25.1</span> The ACS</h2>
+<section id="the-acs" class="level2" data-number="24.1">
+<h2 data-number="24.1" class="anchored" data-anchor-id="the-acs"><span class="header-section-number">24.1</span> The ACS</h2>
 <p>In 2010, the Census Bureau replaced SF3 with the American Community Survey. The Good News is that the data would be updated on a rolling basis. The bad news is that it’s more complicated because it’s more like survey data with a large sample. That means there’s margins of error and confidence intervals to worry about. By default, using <code>get_acs</code> fetches data from the 5-year estimates (currently 2016-2020), but you can specify 1-year estimates for jurisdictions with at least 65,000 people (many counties and cities).</p>
 <p>Here’s an example using the 5-year ACS estimates:</p>
 <p>What is Maryland’s richest county?</p>
@@ -490,7 +491,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">""</span>,</span>
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"ACS estimate (bars represent margin of error)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="census_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+<p><img src="census_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>As you can see, some of the error bars are quite wide. Some are narrow. But if the bars overlap, it means the difference between the two counties is within the margin of error, and the differences aren’t statistically significant. So is the difference between Calvert and Montgomery significant? Nope. Is the difference between Howard and everyone else significant? Yes it is.</p>
@@ -526,20 +527,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(change)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 24 × 9
-   GEOID NAME             estim…¹ estim…² min2010 max2010 min2020 max2020 change
-   &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
- 1 24011 Caroline County…   58799   59042   56740   60858   54827   63257  0.413
- 2 24039 Somerset County…   42443   44980   39092   45794   40432   49528  5.98 
- 3 24041 Talbot County, …   63017   73102   60081   65953   69071   77133 16.0  
- 4 24017 Charles County,…   88825  103678   87268   90382  102024  105332 16.7  
- 5 24019 Dorchester Coun…   45151   52799   43470   46832   49020   56578 16.9  
- 6 24047 Worcester Count…   55487   65396   52749   58225   61540   69252 17.9  
- 7 24045 Wicomico County…   50752   60366   49313   52191   57929   62803 18.9  
- 8 24035 Queen Anne's Co…   81096   96467   78068   84124   91682  101252 19.0  
- 9 24023 Garrett County,…   45760   54542   43729   47791   51055   58029 19.2  
-10 24031 Montgomery Coun…   93373  111812   92535   94211  110451  113173 19.7  
-# … with 14 more rows, and abbreviated variable names ¹​estimate2010,
-#   ²​estimate2020</code></pre>
+   GEOID NAME   estimate2010 estimate2020 min2010 max2010 min2020 max2020 change
+   &lt;chr&gt; &lt;chr&gt;         &lt;dbl&gt;        &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+ 1 24011 Carol…        58799        59042   56740   60858   54827   63257  0.413
+ 2 24039 Somer…        42443        44980   39092   45794   40432   49528  5.98 
+ 3 24041 Talbo…        63017        73102   60081   65953   69071   77133 16.0  
+ 4 24017 Charl…        88825       103678   87268   90382  102024  105332 16.7  
+ 5 24019 Dorch…        45151        52799   43470   46832   49020   56578 16.9  
+ 6 24047 Worce…        55487        65396   52749   58225   61540   69252 17.9  
+ 7 24045 Wicom…        50752        60366   49313   52191   57929   62803 18.9  
+ 8 24035 Queen…        81096        96467   78068   84124   91682  101252 19.0  
+ 9 24023 Garre…        45760        54542   43729   47791   51055   58029 19.2  
+10 24031 Montg…        93373       111812   92535   94211  110451  113173 19.7  
+# ℹ 14 more rows</code></pre>
 </div>
 </div>
 <p>So according to this, Somerset and Caroline counties had the smallest change between 2010 and 2020, while all other jurisdictions saw double-digit percentage increases.</p>
@@ -551,12 +551,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>And then view <code>v20</code> to see what kinds of variables are available via the API.</p>
 </section>
-<section id="wide-results" class="level2" data-number="25.2">
-<h2 data-number="25.2" class="anchored" data-anchor-id="wide-results"><span class="header-section-number">25.2</span> “Wide” Results</h2>
+<section id="wide-results" class="level2" data-number="24.2">
+<h2 data-number="24.2" class="anchored" data-anchor-id="wide-results"><span class="header-section-number">24.2</span> “Wide” Results</h2>
 <p>Although one of the chief strengths of tidycensus is that it offers a, well, tidy display of Census data, it also has the ability to view multiple variables spread across columns. This can be useful for creating percentages and comparing multiple variables.</p>
 </section>
-<section id="sorting-results" class="level2" data-number="25.3">
-<h2 data-number="25.3" class="anchored" data-anchor-id="sorting-results"><span class="header-section-number">25.3</span> Sorting Results</h2>
+<section id="sorting-results" class="level2" data-number="24.3">
+<h2 data-number="24.3" class="anchored" data-anchor-id="sorting-results"><span class="header-section-number">24.3</span> Sorting Results</h2>
 <p>You’ll notice that we’ve used <code>arrange</code> to sort the results of tidycensus functions, although that’s done after we create a new variable to hold the data. There’s another way to use <code>arrange</code> that you should know about, one that you can use for exploratory analysis. An example using median household income from 2020:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>md20 <span class="ot">&lt;-</span> <span class="fu">get_acs</span>(<span class="at">geography =</span> <span class="st">"county"</span>,</span>
@@ -581,10 +581,58 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  8 24035 Queen Anne's County, Maryland medincome    96467  4785
  9 24037 St. Mary's County, Maryland   medincome    95864  3872
 10 24025 Harford County, Maryland      medincome    94003  2398
-# … with 14 more rows</code></pre>
+# ℹ 14 more rows</code></pre>
 </div>
 </div>
 <p>In this case we don’t save the sorted results to a variable, we can just see the output in the console.</p>
+</section>
+<section id="combining-with-other-data" class="level2" data-number="24.4">
+<h2 data-number="24.4" class="anchored" data-anchor-id="combining-with-other-data"><span class="header-section-number">24.4</span> Combining with Other Data</h2>
+<p>Combining Census data with other types of data really unlocks its power for journalism. In this case, we’ll use some 2019-20 data from Maryland high schools, including the number of graduates and the number of students who enrolled in college the next fall semester, plus the percentage. We also have the zip code of the high school, which will enable us to bring in Census data. Let’s load the CSV file and make sure the zip code is a character column, because that’s what we’ll need to join.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>md_high_schools <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/md_high_schools.csv"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">zip =</span> <span class="fu">as.character</span>(zip))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 201 Columns: 7
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (3): cohort_year, local_school_system, school
+dbl (4): zip, high_school_graduates, enrollment, percent_of_high_school_grad...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
+<p>The Census Bureau has Zip Code Tabulation Areas - they are mostly identical to what we know as zip codes, with some small differences. In most cases we can use them interchangeably. Let’s get ZCTA household income data from the ACS using tidycensus for each zip code in <code>md_high_schools</code>. Run the following codeblock to retrieve household income data for all Maryland ZCTAs first, then join them to <code>md_high_schools</code> using the GEOID column. We’ll also create min and max values and drop any rows where we don’t have income estimates. What’s one question we could ask of this data now that we have enrollment percentages and household income for the high school’s zip code? What might make the answer harder to interpret?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>md_zipcodes <span class="ot">&lt;-</span> <span class="fu">get_acs</span>(<span class="at">geography=</span><span class="st">"zcta"</span>, <span class="at">variables =</span> <span class="st">"B19013_001"</span>, <span class="at">state=</span><span class="st">'MD'</span>, <span class="at">year=</span><span class="dv">2019</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Getting data from the 2015-2019 5-year ACS</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>md_high_schools_with_acs <span class="ot">&lt;-</span> md_high_schools <span class="sc">%&gt;%</span> <span class="fu">left_join</span>(md_zipcodes, <span class="at">by=</span><span class="fu">c</span>(<span class="st">'zip'</span><span class="ot">=</span><span class="st">'GEOID'</span>))</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>md_high_schools_with_acs <span class="ot">&lt;-</span> md_high_schools_with_acs <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">min=</span>(estimate<span class="sc">-</span>moe), <span class="at">max=</span>(estimate<span class="sc">+</span>moe)) <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now let’s look at the average household income for high schools that have 60% or more graduates immediately enrolling in college, and then look at those with less than 40%. What do you see here?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>md_high_schools_with_acs <span class="sc">%&gt;%</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(percent_of_high_school_graduates_enrolled <span class="sc">&gt;=</span> <span class="dv">60</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_income =</span> <span class="fu">mean</span>(estimate), <span class="at">count =</span><span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  avg_income count
+       &lt;dbl&gt; &lt;int&gt;
+1    111448.    50</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>md_high_schools_with_acs <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(percent_of_high_school_graduates_enrolled <span class="sc">&lt;=</span> <span class="dv">40</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_income =</span> <span class="fu">mean</span>(estimate), <span class="at">count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  avg_income count
+       &lt;dbl&gt; &lt;int&gt;
+1     69252.    76</code></pre>
+</div>
+</div>
 
 
 </section>
@@ -592,21 +640,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    toggleBodyColorMode(window.document.querySelector("link#quarto-bootstrap"));
-  }
-  toggleBodyColorPrimary();  
   const icon = "";
   const anchorJS = new window.AnchorJS();
   anchorJS.options = {
@@ -686,13 +719,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./rvest.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Scraping data with Rvest</span></span>
+      <a href="./merging.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Combining and joining</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./visualizing-for-reporting.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Visualizing your data for reporting</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Visualizing your data for reporting</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

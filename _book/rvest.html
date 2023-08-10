@@ -2,24 +2,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-0.9.646">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Data Journalism with R and the Tidyverse - 24&nbsp; Scraping data with Rvest</title>
+<title>Data Journalism with R and the Tidyverse - 30&nbsp; Scraping data with Rvest</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
-ul.task-list li input[type="checkbox"] {
-  width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
-  vertical-align: middle;
-}
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -58,7 +53,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
+code span.bu { } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -71,7 +66,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.im { } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -93,8 +88,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./census.html" rel="next">
-<link href="./merging.html" rel="prev">
+<link href="./basicstats.html" rel="next">
+<link href="./textanalysis.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -103,7 +98,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -133,7 +128,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Scraping data with Rvest</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Scraping data with Rvest</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -238,12 +233,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./mutating.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Mutating data</span></a>
+  <a href="./workingwithdates.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Working with dates</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./workingwithdates.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Working with dates</span></a>
+  <a href="./mutating.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Mutating data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -273,37 +268,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./rvest.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Scraping data with Rvest</span></a>
+  <a href="./census.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Intro to APIs: The Census</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./census.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Intro to APIs: The Census</span></a>
+  <a href="./visualizing-for-reporting.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Visualizing your data for reporting</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./visualizing-for-reporting.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Visualizing your data for reporting</span></a>
+  <a href="./visualizing-for-publication.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Visualizing your data for publication</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./visualizing-for-publication.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Visualizing your data for publication</span></a>
+  <a href="./geographic-basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Geographic data basics</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./geographic-basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Geographic data basics</span></a>
+  <a href="./geographicanalysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Geographic analysis</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./geographicanalysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Geographic analysis</span></a>
+  <a href="./textanalysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">An intro to text analysis</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./textanalysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">An intro to text analysis</span></a>
+  <a href="./rvest.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Scraping data with Rvest</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -328,7 +323,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Scraping data with Rvest</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Scraping data with Rvest</span></h1>
 </div>
 
 
@@ -336,7 +331,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="quarto-title-meta">
 
     
-  
     
   </div>
   
@@ -356,13 +350,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>For this example, we’re going to work on loading a simple table of data from the Maryland State Board of Elections. This is a table of unofficial county-level election results for the Attorney General’s race from the November general election.</p>
-<p>Let’s suppose we can’t find a table like that for download, but we do see a version on the SBOE website at this URL: <a href="https://elections.maryland.gov/elections/2022/general_results/gen_detail_results_2022_3_1.html">https://elections.maryland.gov/elections/2022/general_results/gen_detail_results_2022_3_1.html</a>.</p>
+<p>For this example, we’re going to work on loading a simple table of press releases from the Maryland State Courts.</p>
+<p>Let’s suppose we can’t find a table like that for download, but we do see a version on the website at this URL: <a href="https://www.courts.state.md.us/media/news">https://www.courts.state.md.us/media/news</a>.</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="images/rvest1.png" class="img-fluid" width="196"></p>
+<p><img src="images/rvest1.png" class="img-fluid" width="1103"></p>
 </div>
 </div>
 <p>We could get this table into R with the following manual steps: highlighting the text, copying it into Excel, saving it as a csv, and reading it into R. Or, we could write a few lines of webscraping code to have R do that for us!</p>
@@ -376,15 +371,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ol>
 <p>So, to scrape, the first thing we need to do is start with the URL. Let’s store it as an object called ag_url.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ag_url <span class="ot">&lt;-</span> <span class="st">"https://elections.maryland.gov/elections/2022/general_results/gen_detail_results_2022_3_1.html"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>courts_url <span class="ot">&lt;-</span> <span class="st">"https://www.courts.state.md.us/media/news"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>When we go to the web page, we can see a nicely-designed page that contains our information.</p>
 <p>But what we really care about, for our purposes, is the html code that creates that page.</p>
-<p>In our web browser, if we right-click anywhere on the page and select “view source” from the popup menu, we can see the source code. Or you can just copy this into Google Chrome: view-source:https://elections.maryland.gov/elections/2022/general_results/gen_detail_results_2022_3_1.html.</p>
+<p>In our web browser, if we right-click anywhere on the page and select “view source” from the popup menu, we can see the source code. Or you can just copy this into Google Chrome: view-source:https://www.courts.state.md.us/media/news.</p>
 <p>Here’s a picture of what some of the source code looks like.</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="images/rvest2.png" class="img-fluid" width="304"></p>
+<p><img src="images/rvest2.png" class="img-fluid" width="1062"></p>
 </div>
 </div>
 <p>We’ll use those HTML tags – things like <code>&lt;table&gt;</code> and <code>&lt;tr&gt;</code> – to grab the info we need.</p>
@@ -392,16 +387,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Let’s write a bit of code to tell R to go to the URL for the page and ingest all of that HTML code. In the code below, we’re starting with our URL and using the read_html() function from rvest to ingest all of the page html, storing it as an object called results.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in the html</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> ag_url <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> courts_url <span class="sc">%&gt;%</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>()</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># display the html below</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{html_document}
-&lt;html lang="en"&gt;
+&lt;html lang="en" dir="ltr" prefix="content: http://purl.org/rss/1.0/modules/content/  dc: http://purl.org/dc/terms/  foaf: http://xmlns.com/foaf/0.1/  og: http://ogp.me/ns#  rdfs: http://www.w3.org/2000/01/rdf-schema#  schema: http://schema.org/  sioc: http://rdfs.org/sioc/ns#  sioct: http://rdfs.org/sioc/types#  skos: http://www.w3.org/2004/02/skos/core#  xsd: http://www.w3.org/2001/XMLSchema# "&gt;
 [1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...
-[2] &lt;body&gt;\n      &lt;div class="container"&gt;\n      &lt;div class="skipNav"&gt;\n      ...</code></pre>
+[2] &lt;body class="path-media no-sidebars"&gt;\n        &lt;a href="#main-content" cl ...</code></pre>
 </div>
 </div>
 <p>If you’re running this code in R Studio, in our environment window at right, you’ll see results as a “list of 2”.</p>
@@ -414,17 +409,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Now, our task is to just pull out the section of the html that contains the information we need.</p>
 <p>But which part do we need from that mess of html code? To figure that out, we can go back to the page in a web browser like chrome, and use built in developer tools to “inspect” the html code underlying the page.</p>
-<p>On the page, find the data we want to grab – “Vote for 1” - and right click on the word “Jurisdiction” in the column header of the table. That will bring up a dropdown menu. Select “Inspect”, which will pop up a window called the “element inspector” that shows us where different elements on the page are located, what html tags created those elements, and other info.</p>
+<p>On the page, find the data we want to grab and right click on the word “Date” in the column header of the table. That will bring up a dropdown menu. Select “Inspect”, which will pop up a window called the “element inspector” that shows us where different elements on the page are located, what html tags created those elements, and other info.</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="images/rvest4.png" class="img-fluid" width="212"></p>
+<p><img src="images/rvest4.png" class="img-fluid" width="470"></p>
 </div>
 </div>
-<p>The entire table that we want of results is actually contained inside an html <code>&lt;table&gt;</code>. It has a <code>&lt;tbody&gt;</code> that contains one row <code>&lt;tr&gt;</code> per county.</p>
+<p>The table that we want is actually contained inside an html <code>&lt;table&gt;</code>. It has a <code>&lt;tbody&gt;</code> that contains one row <code>&lt;tr&gt;</code> per release.</p>
 <p>Because it’s inside of a table, and not some other kind of element (like a <code>&lt;div&gt;</code>), rvest has a special function for easily extracting and converting html tables, called html_table(). This function extracts all the html tables on the page, but this page only has one so we’re good.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in the html and extract all the tables</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> ag_url <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> courts_url <span class="sc">%&gt;%</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>()</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
@@ -433,30 +428,196 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
-# A tibble: 25 × 4
-   Jurisdiction     Michael Anthony Peroutka\r\n\r\n\r\nRepubl…¹ Antho…² Other…³
-   &lt;chr&gt;            &lt;chr&gt;                                        &lt;chr&gt;   &lt;chr&gt;  
- 1 Allegany         14,382                                       6,994   16     
- 2 Anne Arundel     91,718                                       121,096 433    
- 3 Baltimore City   14,594                                       128,282 288    
- 4 Baltimore County 100,480                                      170,858 467    
- 5 Calvert          20,275                                       16,647  41     
- 6 Caroline         7,128                                        3,475   13     
- 7 Carroll          44,195                                       26,928  112    
- 8 Cecil            20,750                                       11,844  35     
- 9 Charles          16,042                                       37,945  55     
-10 Dorchester       6,615                                        4,784   16     
-# … with 15 more rows, and abbreviated variable names
-#   ¹​`Michael Anthony Peroutka\r\n\r\n\r\nRepublican`,
-#   ²​`Anthony G. Brown\r\n\r\n\r\nDemocratic`, ³​`Other Write-Ins`</code></pre>
+# A tibble: 19 × 2
+   Date              `News Release/News Item`                                   
+   &lt;chr&gt;             &lt;chr&gt;                                                      
+ 1 July 5, 2023      Media Advisory: Jury selection, trial to begin for State o…
+ 2 July 5, 2023      Posthumous bar admission ceremony for Edward Garrison Drap…
+ 3 June 15, 2023     Judge Yolanda L. Curtin named administrative judge for the…
+ 4 May 30, 2023      Media Advisory: Circuit Court for Anne Arundel County host…
+ 5 May 22, 2023      Seven Baltimore City Public Schools students awarded $20,0…
+ 6 May 15, 2023      Media Advisory: Eighth annual Courting Art Baltimore conte…
+ 7 May 10, 2023      Judge Dennis M. Robinson, Jr. named Baltimore County admin…
+ 8 April 25, 2023    Chief Justice Matthew J. Fader appoints Judy Rupp state co…
+ 9 April 12, 2023    Retired Chief Judge Mary Ellen Barbera receives 2023 Speak…
+10 April 11, 2023    Media Advisory: District Court in Anne Arundel County host…
+11 April 11, 2023    Media Advisory: Judge Brenda A. Sexton named administrativ…
+12 March 23, 2023    Media Advisory: Supreme Court of Maryland hosts Mock Trial…
+13 March 16, 2023    Retired Judge Charlotte Cooksey enshrined in  Maryland Wom…
+14 March 10, 2023    Media Advisory: District Court in Baltimore City relocates…
+15 February 27, 2023 Media Advisory: Baltimore City judge to preside over Balti…
+16 February 15, 2023 Media Advisory: Mental health awareness added to Schools i…
+17 January 17, 2023  Judge Donna M. Schaeffer named Anne Arundel County adminis…
+18 January 13, 2023  Media Advisory: Appellate Court of Maryland holds oral arg…
+19 January 12, 2023  Statement on recent judicial appointments                  
+
+[[2]]
+# A tibble: 49 × 2
+   Date              `News Release/News Item`                                   
+   &lt;chr&gt;             &lt;chr&gt;                                                      
+ 1 December 20, 2022 Media Advisory: Supreme Court of Maryland to hold open mee…
+ 2 December 14, 2022 Voter-approved constitutional change renames high courts t…
+ 3 December 7, 2022  Student winners of the Maryland Judiciary's 17th Annual Co…
+ 4 December 7, 2022  Retired Baltimore Ravens Wide Receiver Jermaine Lewis cele…
+ 5 December 6, 2022  Media Advisory: Judge DaNeeka Varner Cotton named administ…
+ 6 December 2, 2022  Media Advisory: Winners to be announced for Maryland Judic…
+ 7 November 23, 2022 Maryland Judiciary reminds the public to stay vigilant of …
+ 8 November 22, 2022 Media Advisory: Baltimore City District Court Re-Entry Pro…
+ 9 November 17, 2022 New La Plata Court Help Center opens in Charles County     
+10 November 16, 2022 Media Advisory: Circuit courts in Maryland host in-person …
+# ℹ 39 more rows
+
+[[3]]
+# A tibble: 46 × 2
+   Date              `News Release/News Item`                                   
+   &lt;chr&gt;             &lt;chr&gt;                                                      
+ 1 December 27, 2021 Maryland Judiciary reverts operations to Phase III in resp…
+ 2 December 22, 2021 Small fire at the Circuit Court for Talbot County causes t…
+ 3 December 15, 2021 Media Advisory: District Court in Anne Arundel County will…
+ 4 December 10, 2021 New Rockville District Court Help Center is already making…
+ 5 December 9, 2021  Chief Judge Joseph M. Getty congratulates student winners …
+ 6 December 8, 2021  Media Advisory: Grand opening celebration of the District …
+ 7 December 8, 2021  Media Advisory: Winners announced for Maryland Judiciary’s…
+ 8 November 17, 2021 Media Advisory: For a second year, circuit courts in Maryl…
+ 9 November 15, 2021 Media Advisory: Baltimore City Veterans Treatment Court ce…
+10 November 1, 2021  Maryland lawyers donate 1.03 million hours of legal servic…
+# ℹ 36 more rows
+
+[[4]]
+# A tibble: 67 × 2
+   Date              `News Release/News Item`                                   
+   &lt;chr&gt;             &lt;chr&gt;                                                      
+ 1 December 22, 2020 The Maryland Judiciary extends Phase II operations through…
+ 2 December 21, 2020 Maryland courts, court offices, and administrative offices…
+ 3 November 24, 2020 Maryland Judiciary restricts operations to Phase II in res…
+ 4 November 18, 2020 Media Advisory: Circuit courts in Maryland prepare for vir…
+ 5 November 16, 2020 Media Advisory: Circuit Court for Montgomery County to hon…
+ 6 November 13, 2020 Judge Ruth A. Jakubowski named circuit and county administ…
+ 7 November 13, 2020 Judge Sherri D. Koch named District Administrative Judge f…
+ 8 November 12, 2020 Maryland Judiciary restricts operations to Phase III in re…
+ 9 November 5, 2020  Somerset County Circuit Court holds its first Adult Recove…
+10 November 5, 2020  Baltimore County Family Recovery Support Program celebrate…
+# ℹ 57 more rows
+
+[[5]]
+# A tibble: 53 × 2
+   Date              `News Release/News Item`                                   
+   &lt;chr&gt;             &lt;chr&gt;                                                      
+ 1 December 20, 2019 Maryland courts, court offices, and administrative offices…
+ 2 December 11, 2019 Circuit Court for Washington County reduces trial jury ser…
+ 3 December 6, 2019  Maryland Judiciary hosts young winners of 14th Annual Conf…
+ 4 December 5, 2019  Media Advisory: District Court to hold Schools in the Cour…
+ 5 December 4, 2019  Media Advisory: Baltimore City District Court Adult Drug T…
+ 6 December 2, 2019  Media Advisory: Anne Arundel County District Court to hono…
+ 7 December 2, 2019  Media Advisory: Winners announced for Maryland Judiciary’s…
+ 8 November 18, 2019 Towson District Courthouse scheduled to move to new Catons…
+ 9 November 18, 2019 Media Advisory: Circuit courts in Maryland celebrate adopt…
+10 November 13, 2019 Media Advisory: Maryland’s highest court to welcome studen…
+# ℹ 43 more rows
+
+[[6]]
+# A tibble: 82 × 2
+   Date              `News Release/News Item`                                   
+   &lt;chr&gt;             &lt;chr&gt;                                                      
+ 1 December 26, 2018 New court rules refine court processes regarding guardians…
+ 2 December 20, 2018 Courts, court offices, and court administrative offices wi…
+ 3 December 18, 2018 New Maryland Rules shift pro bono and IOLTA reporting for …
+ 4 December 14, 2018 Scheduled website maintenance                              
+ 5 December 12, 2018 Media Advisory: Anne Arundel County District Court to hono…
+ 6 December 11, 2018 Maryland lawyers donate 1.16 million hours of legal servic…
+ 7 December 10, 2018 Media Advisory: Maryland Judiciary hosts participants from…
+ 8 December 4, 2018  Suzanne C. Johnson named clerk of the Maryland Court of Ap…
+ 9 December 3, 2018  Media Advisory: Courts, court offices, and administrative …
+10 November 28, 2018 Media Advisory: District Court to hold Schools in the Cour…
+# ℹ 72 more rows
+
+[[7]]
+# A tibble: 77 × 2
+   Date              `News Release/News Item`                                   
+   &lt;chr&gt;             &lt;chr&gt;                                                      
+ 1 December 21, 2017 Judiciary Honors Students for Promoting Peace Through Artw…
+ 2 December 21, 2017 New court rules regarding guardianships of vulnerable Mary…
+ 3 December 15, 2017 Baltimore City District Court Honors Re-Entry Project Grad…
+ 4 December 14, 2017 Court of Appeals Hosts Youth Conference                    
+ 5 December 8, 2017  Phase II of construction on Robert C. Murphy Courts of App…
+ 6 December 5, 2017  Judicial Data Center Outage - Thursday, December 7, 2017   
+ 7 December 5, 2017  Court of Appeals Hosts United States Naval Academy Midship…
+ 8 November 30, 2017 Pretrial Pilot Program to Launch in Baltimore County       
+ 9 November 29, 2017 Maryland Judiciary Hosts Oratorical Contest for Youths fro…
+10 November 28, 2017 Media Advisory: Maryland Judiciary Hosts Students Who Help…
+# ℹ 67 more rows
+
+[[8]]
+# A tibble: 59 × 2
+   Date              `News Release/News Item`                                   
+   &lt;chr&gt;             &lt;chr&gt;                                                      
+ 1 December 16, 2016 Judges Mentor Students in Civics                           
+ 2 December 15, 2016 Judiciary Honors Young Artists for Promoting Peace         
+ 3 December 12, 2016 Maryland Judiciary Expands MDEC and Electronic Filing to L…
+ 4 December 9, 2016  Media Advisory: &nbsp;Maryland’s Chief Judge Congratulates Youn…
+ 5 December 8, 2016  Marilyn Bentley Named Clerk of Baltimore City Circuit Court
+ 6 December 8, 2016  Judges to Mentor Washington County Students on Civics      
+ 7 December 8, 2016  Judges Mentor Students on Civics                           
+ 8 December 1, 2016  New Email Scam Targets Attorneys                           
+ 9 November 23, 2016 Media Advisory: Judges to Mentor Montgomery County Student…
+10 November 21, 2016 Judge Brett W. Wilson Named First Judicial Circuit Adminis…
+# ℹ 49 more rows
+
+[[9]]
+# A tibble: 64 × 2
+   Date              `News Release/News Item`                                   
+   &lt;chr&gt;             &lt;chr&gt;                                                      
+ 1 December 28, 2015 Media Advisory:Pre-Trial Proceedings Begin for State of Ma…
+ 2 December 22, 2015 Media Advisory: New Trial Date Scheduled for State of Mary…
+ 3 December 21, 2015 Chief Judge Honors Young Artists for Peace                 
+ 4 December 15, 2015 New Rules Concerning Briefs Filed in Maryland’s Appellate …
+ 5 December 9, 2015  New Mobile App Improves Access to Justice                  
+ 6 December 1, 2015  Media Advisory:Jury Selection Continues and Trial Begins f…
+ 7 November 25, 2015 Media Advisory: Judges Bring Civics to Carroll County Stud…
+ 8 November 23, 2015 Jury Selection for State of Maryland v. William Porter on …
+ 9 November 20, 2015 Petition for Expungement of Records (CC-DC-CR-072) - Revis…
+10 November 19, 2015 Media Advisory:Pre-Trial Motions Hearing for State of Mary…
+# ℹ 54 more rows
+
+[[10]]
+# A tibble: 50 × 2
+   Date              `News Release/News Item`                                   
+   &lt;chr&gt;             &lt;chr&gt;                                                      
+ 1 December 23, 2014 Judge Charles J. Peters to Head Baltimore Circuit Court’s …
+ 2 December 9, 2014  Baltimore City District Court Celebrates Newest Drug Treat…
+ 3 December 5, 2014  Media Advisory:District Court of  Maryland’s Towson Courth…
+ 4 November 25, 2014 Judiciary Warns  Public to Beware of “Court” Scams         
+ 5 November 24, 2014 Judges Help Bring Civics to Charles County High School Stu…
+ 6 November 14, 2014 Young Artists Honored for Peace-making Efforts             
+ 7 November 12, 2014 Media Advisory: Maryland Judiciary Hosts Youths from DJS F…
+ 8 November 10, 2014 Media Advisory: Judiciary Holds Reception to Honor Young A…
+ 9 November 7, 2014  Media Advisory: Anne Arundel County Circuit Court Address …
+10 November 7, 2014  Media Advisory: Circuit Courts in Maryland Celebrate “Happ…
+# ℹ 40 more rows
+
+[[11]]
+# A tibble: 26 × 2
+   Date              `News Release/News Item`                                   
+   &lt;chr&gt;             &lt;chr&gt;                                                      
+ 1 December 30, 2013 Media Advisory: Judiciary Warns of False “Court Case” Emai…
+ 2 December 27, 2013 Judge Althea M. Handy Heads Civil Docket for Baltimore Cit…
+ 3 December 17, 2013 Media Advisory: Judiciary Helps Bring Civics to Baltimore …
+ 4 December 12, 2013 Harford County Courts Visited by Maryland’s Chief Judge    
+ 5 December 11, 2013 Cecil County Courts Welcome Maryland’s Chief  Judge        
+ 6 December 4, 2013  Maryland’s New Chief Judge Visits Charles County Courts    
+ 7 December 4, 2013  Maryland’s New Chief Judge Visits Prince George’s County D…
+ 8 December 2, 2013  State Task Force Begins Study of Civil Right to Counsel fo…
+ 9 November 18, 2013 Media Advisory: Maryland Judiciary Hosts Youths from DJS F…
+10 November 18, 2013 Media Advisory: Circuit Courts in Maryland Celebrate Natio…
+# ℹ 16 more rows</code></pre>
 </div>
 </div>
-<p>In the environment window at right, look at results Note that it’s now a “list of 1”.</p>
-<p>This gets a little complicated, but what you’re seeing here is a nested list that contains one data frame – also called tibbles – one for each table that exists on the web page we scraped.</p>
-<p>So, all we need to do now is to store that single dataframe as an object. We can do that with this code, which says “keep only the first dataframe from our nested list.”</p>
+<p>In the environment window at right, look at results Note that it’s now a “list of 11”.</p>
+<p>This gets a little complicated, but what you’re seeing here is a nested list that contains one data frame – also called tibbles – one for each table that exists on the web page we scraped. There are tables for each year on the page, so we have 11 years’ worth of press releases.</p>
+<p>Let’s say we are interested in 2023, so all we need to do now is to store that first dataframe as an object. We can do that with this code, which says “keep only the first dataframe from our nested list.”</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in all html from table, store all tables on page as nested list of dataframes.</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> ag_url <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> courts_url <span class="sc">%&gt;%</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>()</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
@@ -468,30 +629,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 25 × 4
-   Jurisdiction     Michael Anthony Peroutka\r\n\r\n\r\nRepubl…¹ Antho…² Other…³
-   &lt;chr&gt;            &lt;chr&gt;                                        &lt;chr&gt;   &lt;chr&gt;  
- 1 Allegany         14,382                                       6,994   16     
- 2 Anne Arundel     91,718                                       121,096 433    
- 3 Baltimore City   14,594                                       128,282 288    
- 4 Baltimore County 100,480                                      170,858 467    
- 5 Calvert          20,275                                       16,647  41     
- 6 Caroline         7,128                                        3,475   13     
- 7 Carroll          44,195                                       26,928  112    
- 8 Cecil            20,750                                       11,844  35     
- 9 Charles          16,042                                       37,945  55     
-10 Dorchester       6,615                                        4,784   16     
-# … with 15 more rows, and abbreviated variable names
-#   ¹​`Michael Anthony Peroutka\r\n\r\n\r\nRepublican`,
-#   ²​`Anthony G. Brown\r\n\r\n\r\nDemocratic`, ³​`Other Write-Ins`</code></pre>
+<pre><code># A tibble: 19 × 2
+   Date              `News Release/News Item`                                   
+   &lt;chr&gt;             &lt;chr&gt;                                                      
+ 1 July 5, 2023      Media Advisory: Jury selection, trial to begin for State o…
+ 2 July 5, 2023      Posthumous bar admission ceremony for Edward Garrison Drap…
+ 3 June 15, 2023     Judge Yolanda L. Curtin named administrative judge for the…
+ 4 May 30, 2023      Media Advisory: Circuit Court for Anne Arundel County host…
+ 5 May 22, 2023      Seven Baltimore City Public Schools students awarded $20,0…
+ 6 May 15, 2023      Media Advisory: Eighth annual Courting Art Baltimore conte…
+ 7 May 10, 2023      Judge Dennis M. Robinson, Jr. named Baltimore County admin…
+ 8 April 25, 2023    Chief Justice Matthew J. Fader appoints Judy Rupp state co…
+ 9 April 12, 2023    Retired Chief Judge Mary Ellen Barbera receives 2023 Speak…
+10 April 11, 2023    Media Advisory: District Court in Anne Arundel County host…
+11 April 11, 2023    Media Advisory: Judge Brenda A. Sexton named administrativ…
+12 March 23, 2023    Media Advisory: Supreme Court of Maryland hosts Mock Trial…
+13 March 16, 2023    Retired Judge Charlotte Cooksey enshrined in  Maryland Wom…
+14 March 10, 2023    Media Advisory: District Court in Baltimore City relocates…
+15 February 27, 2023 Media Advisory: Baltimore City judge to preside over Balti…
+16 February 15, 2023 Media Advisory: Mental health awareness added to Schools i…
+17 January 17, 2023  Judge Donna M. Schaeffer named Anne Arundel County adminis…
+18 January 13, 2023  Media Advisory: Appellate Court of Maryland holds oral arg…
+19 January 12, 2023  Statement on recent judicial appointments                  </code></pre>
 </div>
 </div>
 <p>We now have a proper dataframe, albeit with some lengthy column headers.</p>
-<p>From here, we can do a little cleaning. First we’ll use clean_names() to lower the column names. Then use rename() to replace the candidate column names with simpler versions. We can just use the column positions instead of writing out the full names, which is nice.</p>
-<p>Then let’s use slice() to remove the last row – row number 25 – which contains totals and percentages that we don’t need. Finally, we’ll make sure the vote tallies are numbers using mutate and <code>gsub()</code>, which we use to replace all the commas with nothing.</p>
+<p>From here, we can do a little cleaning. First we’ll use clean_names() to lower the column names. Then use rename() to replace the title column with a simpler version and properly format the date.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in all html from table, get the HTML table.</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> ag_url <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> courts_url <span class="sc">%&gt;%</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>()</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
@@ -499,56 +665,255 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> results[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span></span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">peroutka =</span> <span class="dv">2</span>, <span class="at">brown =</span> <span class="dv">3</span>, <span class="at">write_ins =</span> <span class="dv">4</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="sc">-</span><span class="dv">25</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">peroutka =</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">","</span>,<span class="st">""</span>, peroutka))) <span class="sc">%&gt;%</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">brown =</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">","</span>,<span class="st">""</span>, brown))) <span class="sc">%&gt;%</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">write_ins =</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">","</span>,<span class="st">""</span>, write_ins)))</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co"># show the dataframe</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">title =</span> news_release_news_item) <span class="sc">%&gt;%</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">mdy</span>(date))</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># show the dataframe</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 24 × 4
-   jurisdiction     peroutka  brown write_ins
-   &lt;chr&gt;               &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;
- 1 Allegany            14382   6994        16
- 2 Anne Arundel        91718 121096       433
- 3 Baltimore City      14594 128282       288
- 4 Baltimore County   100480 170858       467
- 5 Calvert             20275  16647        41
- 6 Caroline             7128   3475        13
- 7 Carroll             44195  26928       112
- 8 Cecil               20750  11844        35
- 9 Charles             16042  37945        55
-10 Dorchester           6615   4784        16
-# … with 14 more rows</code></pre>
+<pre><code># A tibble: 19 × 2
+   date       title                                                             
+   &lt;date&gt;     &lt;chr&gt;                                                             
+ 1 2023-07-05 Media Advisory: Jury selection, trial to begin for State of Maryl…
+ 2 2023-07-05 Posthumous bar admission ceremony for Edward Garrison Draper      
+ 3 2023-06-15 Judge Yolanda L. Curtin named administrative judge for the third …
+ 4 2023-05-30 Media Advisory: Circuit Court for Anne Arundel County hosts recep…
+ 5 2023-05-22 Seven Baltimore City Public Schools students awarded $20,000 in s…
+ 6 2023-05-15 Media Advisory: Eighth annual Courting Art Baltimore contest to a…
+ 7 2023-05-10 Judge Dennis M. Robinson, Jr. named Baltimore County administrati…
+ 8 2023-04-25 Chief Justice Matthew J. Fader appoints Judy Rupp state court adm…
+ 9 2023-04-12 Retired Chief Judge Mary Ellen Barbera receives 2023 Speaker’s Me…
+10 2023-04-11 Media Advisory: District Court in Anne Arundel County hosts Schoo…
+11 2023-04-11 Media Advisory: Judge Brenda A. Sexton named administrative judge…
+12 2023-03-23 Media Advisory: Supreme Court of Maryland hosts Mock Trial State …
+13 2023-03-16 Retired Judge Charlotte Cooksey enshrined in  Maryland Women’s Ha…
+14 2023-03-10 Media Advisory: District Court in Baltimore City relocates commis…
+15 2023-02-27 Media Advisory: Baltimore City judge to preside over Baltimore Ci…
+16 2023-02-15 Media Advisory: Mental health awareness added to Schools in the C…
+17 2023-01-17 Judge Donna M. Schaeffer named Anne Arundel County administrative…
+18 2023-01-13 Media Advisory: Appellate Court of Maryland holds oral argument f…
+19 2023-01-12 Statement on recent judicial appointments                         </code></pre>
 </div>
 </div>
-<p>And there we go. We now have a nice tidy dataframe of Maryland attorney general election results that we could ask some questions of.</p>
+<p>And there we go. We now have a nice tidy dataframe of Maryland state court press releases. We could combine all 11 dataframes if we wanted to have the whole set.</p>
+<p>What about HTML that doesn’t have a table? Well, that’s where things get a bit more complicated, and rely on your ability to read HTML and identify particular elements of it.</p>
+<p>Let’s consider the list of press releases from the little-known but fascinating Office of the State Prosecutor: https://osp.maryland.gov/press-releases/. Let’s save that URL as a variable as we did above:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>osp_url <span class="ot">&lt;-</span> <span class="st">"https://osp.maryland.gov/press-releases/"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The next step is similar to before, too, except this time we’re not going to call <code>html_table()</code> because there are no tables here that we want. In order to find what we want, we’ll need to right-click on the first release date and choose “Inspect”.</p>
+<p>One reason that we use HTML elements like ul and li is to help organize the code and make it easier to maintain. But it also helps with scraping, because we can zero in on the elements we want. Let’s start by reading it in:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>osp_results <span class="ot">&lt;-</span> osp_url <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>()</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># show the result</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>osp_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{html_document}
+&lt;html lang="en-US"&gt;
+[1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...
+[2] &lt;body&gt;&lt;div class="container"&gt;\n        &lt;div class="skipNav"&gt;\n            ...</code></pre>
+</div>
+</div>
+<p>Once again we get a list of two as our result. In this case, we don’t want to isolate the first item in our list. Instead, we want to try to locate all of the <code>li</code> tags inside this HTML. Since the <code>li</code> tag is an HTML element, we use the function <code>html_elements()</code> to get them. If we only wanted a single element, we’d use <code>html_element()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>osp_results <span class="sc">%&gt;%</span> <span class="fu">html_elements</span>(<span class="st">'li'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{xml_nodeset (122)}
+ [1] &lt;li&gt;\n&lt;a href="https://www.facebook.com/OSPMD/" class="sm-facebook" titl ...
+ [2] &lt;li&gt;\n&lt;a href="https://twitter.com/#!/@OSP_MD" class="sm-twitter" title= ...
+ [3] &lt;li&gt;\n&lt;a href="https://www.instagram.com/osp_md/" class="sm-instagram2"  ...
+ [4] &lt;li&gt;&lt;a href="https://www.linkedin.com/company/office-of-the-maryland-sta ...
+ [5] &lt;li id="menu-item-565" class="menu-item menu-item-type-custom menu-item- ...
+ [6] &lt;li id="menu-item-561" class="menu-item menu-item-type-custom menu-item- ...
+ [7] &lt;li id="menu-item-1954" class="menu-item menu-item-type-post_type menu-i ...
+ [8] &lt;li id="menu-item-150" class="menu-item menu-item-type-custom menu-item- ...
+ [9] &lt;li id="menu-item-1919" class="menu-item menu-item-type-post_type menu-i ...
+[10] &lt;li id="menu-item-1382" class="menu-item menu-item-type-post_type menu-i ...
+[11] &lt;li id="menu-item-564" class="menu-item menu-item-type-post_type menu-it ...
+[12] &lt;li id="menu-item-1363" class="menu-item menu-item-type-custom menu-item ...
+[13] &lt;li id="menu-item-566" class="menu-item menu-item-type-custom menu-item- ...
+[14] &lt;li id="menu-item-1378" class="menu-item menu-item-type-custom menu-item ...
+[15] &lt;li id="menu-item-1379" class="menu-item menu-item-type-custom menu-item ...
+[16] &lt;li id="menu-item-1380" class="menu-item menu-item-type-custom menu-item ...
+[17] &lt;li class="listing-item"&gt;&lt;a class="title" href="https://osp.maryland.gov ...
+[18] &lt;li class="listing-item"&gt;&lt;a class="title" href="https://osp.maryland.gov ...
+[19] &lt;li class="listing-item"&gt;&lt;a class="title" href="https://osp.maryland.gov ...
+[20] &lt;li class="listing-item"&gt;&lt;a class="title" href="https://osp.maryland.gov ...
+...</code></pre>
+</div>
+</div>
+Good news and bad news here: we have all of the
+<li>
+tags, but we have lots of them, and it’s hard to see if we have the right ones. Let’s see what we’re dealing with and just look at the text <em>inside</em> the
+</li><li>
+<p>tags. To do that, we add <code>html_text()</code> to the end of the last code block:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>osp_results <span class="sc">%&gt;%</span> <span class="fu">html_elements</span>(<span class="st">'li'</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] "Facebook "                                                                                                                                                                                                                                           
+  [2] "Twitter "                                                                                                                                                                                                                                            
+  [3] "Instagram  "                                                                                                                                                                                                                                         
+  [4] "LinkedIn"                                                                                                                                                                                                                                            
+  [5] "Home"                                                                                                                                                                                                                                                
+  [6] "Leadership"                                                                                                                                                                                                                                          
+  [7] "FILE A COMPLAINT"                                                                                                                                                                                                                                    
+  [8] "Press Releases"                                                                                                                                                                                                                                      
+  [9] "Social Media"                                                                                                                                                                                                                                        
+ [10] "Careers"                                                                                                                                                                                                                                             
+ [11] "Contact Us"                                                                                                                                                                                                                                          
+ [12] "OSP Annual Reports"                                                                                                                                                                                                                                  
+ [13] "Maryland Judiciary Case Search"                                                                                                                                                                                                                      
+ [14] "State Board of Elections"                                                                                                                                                                                                                            
+ [15] "State Ethics Commission"                                                                                                                                                                                                                             
+ [16] "Attorney Grievance Commission"                                                                                                                                                                                                                       
+ [17] "July 31, 2023: Treasurer for Political Committees “Friends of Cathy Bevins” and the “Baltimore County Victory Slate” Sentenced to Six Months Incarceration"                                                                                          
+ [18] "May 25, 2023: Treasurer for Political Committees “Friends of Cathy Bevins” and the “Baltimore County Victory Slate” Pleads Guilty to Felony Theft Scheme and Perjury"                                                                                
+ [19] "April 18, 2023: Former Baltimore City State’s Attorney Sentenced to Two Years in Federal Prison for Unlawfully Obtaining Phone Records"                                                                                                              
+ [20] "April 13, 2023: Calvert County Sheriff’s Deputy Pleads Guilty To Misconduct In Office"                                                                                                                                                               
+ [21] "February 16, 2023: Treasurer to Political Committees “Friends of Cathy Bevins” and the “Baltimore County Victory Slate” Charged with Multiple Counts Of Felony Theft Scheme, Embezzlement, and Perjury"                                              
+ [22] "January 13, 2023: Former Maryland State Delegate Richard K. Impallaria Pleads Guilty to Misconduct in Office for Misusing State Funds"                                                                                                               
+ [23] "January 9, 2023: Calvert County Sheriff’s Deputy Charged with Misconduct in Office for Engaging in Sexual Relations with a Person Requesting Assistance"                                                                                             
+ [24] "January 4, 2023: Former Annapolis Police Department Officer Pleads Guilty to Misconduct in Office"                                                                                                                                                   
+ [25] "December 9, 2022: Former Baltimore City Assistant State’s Attorney Pleads Guilty to Federal Charges For Unlawfully Obtaining Phone Records"                                                                                                          
+ [26] "September 30, 2022: Former Baltimore City Assistant State’s Attorney Facing Federal Charges for Unlawfully Obtaining Phone Records"                                                                                                                  
+ [27] "September 29, 2022: Treasurer of Political Committee “Team 30 Slate” Pleads Guilty to Theft"                                                                                                                                                         
+ [28] "July 27, 2022: Delegate Richard Impallaria charged with Felony Theft and related crimes for schemes related to misuse of state funds"                                                                                                                
+ [29] "May 4, 2022: Treasurer of Political Committee “Team 30 Slate” Charged with Theft of Campaign Funds"                                                                                                                                                  
+ [30] "April 18, 2022: Andrew Bradshaw, Former Mayor of Cambridge, MD, Pleads Guilty to Five Counts of Distributing Revenge Porn"                                                                                                                           
+ [31] "November 30, 2021: Former Baltimore City Homicide Prosecutor Indicted on 88 Charges, including Stalking, Extortion, and Misconduct in Office"                                                                                                        
+ [32] "November 23, 2021:  Fairmount Heights Police Officer Charged with Kidnapping, Perjury and Misconduct in Office"                                                                                                                                      
+ [33] "November 15, 2021: Mayor of Cambridge Charged with violating Maryland’s Revenge Porn Statute"                                                                                                                                                        
+ [34] "October 26, 2021: Non-Profit CEO Sentenced to Two Years in Federal Prison after Pleading Guilty to Wire Fraud in Connection with the Misuse of Federal Funds Intended For The Treatment of Survivors of Domestic Violence and Sexual Assault"        
+ [35] "October 5, 2021: Former Executive Director Of Maryland Environmental Service Facing Federal And State Charges For Allegedly Fraudulently Obtaining More Than $276,731 From His Employer, And State Felony Violations Of The Maryland Wiretap Statute"
+ [36] "September 23, 2021: Two Additional Baltimore Correctional Employees Plead Guilty, Making a Total of Eight Correctional Employees Convicted of Charges Related to Theft of over $400,000 Dollars of State Funds."                                     
+ [37] "August 20, 2021: Ivan Gonzalez, Former Baltimore Police Officer and Candidate for Mayor of Baltimore City, Pleads Guilty to Perjury"                                                                                                                 
+ [38] "August 11, 2021: Baltimore Correctional Officer Pleads Guilty to Charges of Felony Theft and Misconduct in Office"                                                                                                                                   
+ [39] "August 9, 2021: Edward M. Estes, former Mayor of the City of Glenarden, Pleads Guilty to Misconduct in Office"                                                                                                                                       
+ [40] "July 30, 2021:  Lora Walters, former Deputy Director of the Cecil County Board of Elections, Pleads Guilty to Misconduct in Office"                                                                                                                  
+ [41] "July 29, 2021: Baltimore Correctional Officers Plead Guilty to Charges of Felony Theft and Misconduct in Office"                                                                                                                                     
+ [42] "July 26, 2021: Baltimore City Employee Pleads Guilty to Perjury"                                                                                                                                                                                     
+ [43] "July 9, 2021: Correctional Officer at Metropolitan Transition Center in Baltimore Pleads Guilty to Charges of Felony Theft and Misconduct in Office"                                                                                                 
+ [44] "June 10, 2021:  Five Correctional Officers charged with Felony Theft and Misconduct in Office"                                                                                                                                                       
+ [45] "June 4, 2021:  Lora Walters, former Deputy Director of the Cecil County Board of Elections, charged with Misconduct in Office, Perjury, and other offenses."                                                                                         
+ [46] "March 29, 2021: Ivan Gonzalez, Baltimore Police Officer and Candidate for Mayor of Baltimore City, charged with Perjury and other crimes related to his 2020 Mayoral Campaign"                                                                       
+ [47] "March 11, 2021: New Bank Fraud and Aggravated Identity Theft Charges Added to Non-Profit CEO’S Previous Federal Indictment Charging Her with Wire Fraud, Bank Fraud, and Aggravated Identity Theft"                                                  
+ [48] "January 15, 2021: Correctional Officers and State Employee Charged with Theft and Bribery"                                                                                                                                                           
+ [49] "January 13, 2021: Baltimore City Employee Charged with Perjury"                                                                                                                                                                                      
+ [50] "November 17, 2020: Edward M. Estes, Mayor of Glen Arden, Maryland, Charged with Violating the Maryland Wiretap Statute and Misconduct in Office"                                                                                                     
+ [51] "June 19, 2020: Former Baltimore Mayor Catherine Pugh Pleads Guilty To Perjury"                                                                                                                                                                       
+ [52] "March 17, 2020: Level II – Flexible Operations of the Pandemic Flu and Other Infectious Diseases Attendance and Leave Policy"                                                                                                                        
+ [53] "February 13, 2020: Devan Martin,  OSP Case #20-5785"                                                                                                                                                                                                 
+ [54] "January 17, 2020: Greensboro Police Chief Pleads Guilty to Misconduct in Office"                                                                                                                                                                     
+ [55] "January 6, 2020: Charles Blomquist and Sarah David Named Deputy State Prosecutors"                                                                                                                                                                   
+ [56] "December 18, 2019: Ex-Baltimore Mayor Catherine Pugh Charged with Perjury"                                                                                                                                                                           
+ [57] "December 10, 2019: City of District Heights Mayor Sentenced for Misconduct in Office"                                                                                                                                                                
+ [58] "December 5, 2019: Former Baltimore City School Business Manager Pleads Guilty to Theft of School Funds"                                                                                                                                              
+ [59] "November 25, 2019: Charlton T. Howard III Sworn in as State Prosecutor"                                                                                                                                                                              
+ [60] "November 20, 2019: City of District Heights Mayor Convicted of Misconduct in Office"                                                                                                                                                                 
+ [61] "November 19, 2019: Maryland State Police Sergeant Charged with Misconduct in Office"                                                                                                                                                                 
+ [62] "November 14, 2019: Greensboro Police Chief Charged with Misconduct in Office"                                                                                                                                                                        
+ [63] "November 7, 2019: Former Baltimore City School Business Manager Charged with Theft of School Funds"                                                                                                                                                  
+ [64] "October 30, 2019: Candidate for Sheriff in Baltimore City Pleads Guilty to Campaign Violations"                                                                                                                                                      
+ [65] "Meeting Minutes for the 09/24/19 Meeting of the State Prosecutor Selection and Disabilities Commission.&nbsp;"                                                                                                                                            
+ [66] "Meeting Minutes for the 09/17/19 Meeting of the State Prosecutor Selection and Disabilities Commission"                                                                                                                                              
+ [67] "Notice of Meeting of State Prosecutor Selection and Disabilities Commission"                                                                                                                                                                         
+ [68] "Meeting Minutes for the 08/21/19 Meeting of the State Prosecutor Selection and Disabilities Commission"                                                                                                                                              
+ [69] "Notice of Meeting of State Prosecutor Selection and Disabilities Commission"                                                                                                                                                                         
+ [70] "State Prosecutor Selection and Disabilities Commission Receives 18 Total Applications for State Prosecutor Vacancy; 2 Withdraw"                                                                                                                      
+ [71] "September 9, 2019: Candidate for Sheriff of Baltimore City Charged with Campaign Violations"                                                                                                                                                         
+ [72] "Notice of Meeting of State Prosecutor Selection and Disabilities Commission"                                                                                                                                                                         
+ [73] "State Prosecutor Selection and Disabilities Commission Receives 18 Applications for State Prosecutor Vacancy"                                                                                                                                        
+ [74] "August 15, 2019: Notice of Meeting of State Prosecutor Selection and Disabilities  Commission"                                                                                                                                                       
+ [75] "July 9, 2019: Former Pocomoke City Police Chief Sentenced for Misconduct in Office Conviction"                                                                                                                                                       
+ [76] "July 9, 2019: Kelvin Sewell, Sentencing Memorandum"                                                                                                                                                                                                  
+ [77] "June 7, 2019: City of District Heights Mayor Charged with Misconduct in Office"                                                                                                                                                                      
+ [78] "June 7, 2019: Criminal Information, Eddie Martin"                                                                                                                                                                                                    
+ [79] "April 3, 2019: Circuit Court for Anne Arundel County Issues Memorandum Opinion in State of MD v. John Leopold"                                                                                                                                       
+ [80] "April 2, 2019: Baltimore Area Tax Preparer Sentenced For Felony Theft And Willfully Filing A False Tax Return"                                                                                                                                       
+ [81] "February 1, 2019:Baltimore Area Tax Preparer And Former Maryland Department Of Human Services Employee Pleads Guilty To Felony Theft Scheme And Willfully Filing False Income Tax Returns."                                                          
+ [82] "February 1, 2019: Statement of Facts, Floyd Briscoe Wright"                                                                                                                                                                                          
+ [83] "January 22, 2019: State Prosecutor Announces Retirement"                                                                                                                                                                                             
+ [84] "January 14, 2019: Eighteen of Eighteen Defendants Plead Guilty to their roles in a Corruption and Bribery Conspiracy"                                                                                                                                
+ [85] "November 16, 2018: Former Baltimore County Attorney Pleads Guilty to Felony Theft from Clients"                                                                                                                                                      
+ [86] "November 16, 2018: Statement of Facts for Roger Harris"                                                                                                                                                                                              
+ [87] "October 1, 2018: Baltimore Area Tax Preparer Indicted for Felony Theft, Willfully Filing False Taxes and Other Related Charges"                                                                                                                      
+ [88] "October 1, 2018: Floyd Wright Indictment"                                                                                                                                                                                                            
+ [89] "September 14, 2018: Former Correctional Officer Jailed in Corruption and Bribery Conspiracy"                                                                                                                                                         
+ [90] "July 12, 2018: Nine Defendants Plead Guilty to Corruption and Bribery Conspiracy"                                                                                                                                                                    
+ [91] "May 15, 2018: Kelly Madigan Named Deputy State Prosecutor"                                                                                                                                                                                           
+ [92] "April 20, 2018: Shaun Dallas Dance Sentenced"                                                                                                                                                                                                        
+ [93] "April 19, 2018: Former Attorney Charged with Felony Theft from Clients"                                                                                                                                                                              
+ [94] "April 6, 2018: Former Register of Wills for Allegany County Pleads Guilty to Misconduct In Office"                                                                                                                                                   
+ [95] "April 6, 2018: Rebecca Drew, Statement of Facts in Support of Guilty Plea"                                                                                                                                                                           
+ [96] "March 8, 2018: Shaun Dallas Dance, Statement of Facts in Support of Guilty Plea"                                                                                                                                                                     
+ [97] "March 1, 2018: Deputy State Prosecutor Retires After 33 Years"                                                                                                                                                                                       
+ [98] "February 2, 2018: Former Baltimore City School Principal Incarcerated and Ordered to Pay Restitution of $58,689.34 for Thefts from School System"                                                                                                    
+ [99] "December 5, 2017: Statement of Facts for Leslie Lewis, Indictment #117075031"                                                                                                                                                                        
+[100] "December 5, 2017: Statement of Facts for Leslie Lewis, Indictment #117075030"                                                                                                                                                                        
+[101] "February 2, 2018: Erica Holland, Former Account Clerk for the Town of Snow Hill, Incarcerated for Theft Scheme"                                                                                                                                      
+[102] "January 23, 2018: Shaun Dallas Dance, Former Superintendent of the Baltimore County Public Schools, Charged With Multiple Counts of Perjury"                                                                                                         
+[103] "January 23, 2018: Indictment of Shaun Dallas Dance"                                                                                                                                                                                                  
+[104] "January 11, 2018: Correctional Officers Among 18 Indicted in Prison Corruption Investigation"                                                                                                                                                        
+[105] "December 22, 2017: Daniel E. Gosnell, Lieutenant with the Aberdeen Police Department, Pleads Guilty to Misconduct in Office and Possession of a Controlled Dangerous Substance"                                                                      
+[106] "December 22, 2017: Daniel E. Gosnell, Statement of Facts in Support of Guilty Plea"                                                                                                                                                                  
+[107] "December 5, 2017: Leslie Lewis, Former Baltimore Community High School Principal, Pleads Guilty To Two Counts Of Felony Theft"                                                                                                                       
+[108] "November 8, 2017: Daniel E. Gosnell, Lieutenant With The Aberdeen Police Department, Charged With Misconduct In Office And Possession Of A Controlled Dangerous Substance"                                                                           
+[109] "November 8, 2017: Daniel E. Gosnell, Criminal Information"                                                                                                                                                                                           
+[110] "November 7, 2017: Former Employee of Historic Inns of Annapolis Pleads Guilty to Felony Theft of State Delegate’s Campaign Funds and Identity Theft"                                                                                                 
+[111] "November 7, 2017: Nicole Smith, Statement of Facts in Support of Guilty Plea"                                                                                                                                                                        
+[112] "September 26, 2017: Erica Holland, Former Account Clerk for Town of Snow Hill, Charged With Felony Theft"                                                                                                                                            
+[113] "September 26, 2017: Indictment of Erica Holland"                                                                                                                                                                                                     
+[114] "July 20, 2017: Rebecca Drew, Register Of Wills For Allegany County, Charged With Misconduct In Office, Two Counts Of Felony Theft And Misappropriation"                                                                                              
+[115] "July 20, 2017: Indictment of Rebecca Drew"                                                                                                                                                                                                           
+[116] "July 12, 2017: Town Mayor Sentenced to Nine (9) years for Felony Theft, Misconduct in Office and Forgery"                                                                                                                                            
+[117] "Contact Us"                                                                                                                                                                                                                                          
+[118] "Report Fraud"                                                                                                                                                                                                                                        
+[119] "Facebook "                                                                                                                                                                                                                                           
+[120] "Twitter "                                                                                                                                                                                                                                            
+[121] "Instagram  "                                                                                                                                                                                                                                         
+[122] "LinkedIn"                                                                                                                                                                                                                                            </code></pre>
+</div>
+</div>
+<p>Ok, so now we can see the press releases. But they are surrounded by a bunch of things we don’t want, and this <em>still</em> isn’t a dataframe. Let’s solve the second problem first with the <code>as_tibble()</code> function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>releases <span class="ot">&lt;-</span> osp_results <span class="sc">%&gt;%</span> <span class="fu">html_elements</span>(<span class="st">'li'</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>() <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+Now we’re getting closer. The press releases have a specific HTML class tied to the
+</li><li>
+<p>tag - in this case “listing-item”. We can isolate those:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>releases <span class="ot">&lt;-</span> osp_results <span class="sc">%&gt;%</span> <span class="fu">html_elements</span>(<span class="st">'li.listing-item'</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>() <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ok, this is <em>better</em>, but it’s still not great. We have at least two issues:</p>
+<ol type="1">
+<li>The column is called <code>value</code></li>
+<li>The column has two kinds of information in it: a date and the title.</li>
+</ol>
+<p>Let’s solve both of those using the <code>separate()</code> function, which does what you think it does and gives us a chance to rename the columns:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>releases <span class="ot">&lt;-</span> osp_results <span class="sc">%&gt;%</span> <span class="fu">html_elements</span>(<span class="st">'li.listing-item'</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>() <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> <span class="fu">separate</span>(value, <span class="fu">c</span>(<span class="st">'date'</span>, <span class="st">'title'</span>), <span class="at">sep=</span><span class="st">":"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Expected 2 pieces. Missing pieces filled with `NA` in 8 rows [49, 50, 51, 52,
+53, 54, 56, 57].</code></pre>
+</div>
+</div>
+<p>That worked, but it also exposed a couple of things, as that Warning message indicates: not all of the rows had a colon in them and the <code>title</code> column has a leading space. Let’s fix both of those - we’ll drop the rows where the title is NA and convert the dates into actual dates.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>releases <span class="ot">&lt;-</span> osp_results <span class="sc">%&gt;%</span> <span class="fu">html_elements</span>(<span class="st">'li.listing-item'</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>() <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> <span class="fu">separate</span>(value, <span class="fu">c</span>(<span class="st">'date'</span>, <span class="st">'title'</span>), <span class="at">sep=</span><span class="st">":"</span>) <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>(title) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">title =</span> <span class="fu">str_squish</span>(title), <span class="at">date =</span> <span class="fu">mdy</span>(date))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Expected 2 pieces. Missing pieces filled with `NA` in 8 rows [49, 50, 51, 52,
+53, 54, 56, 57].</code></pre>
+</div>
+</div>
+<p>And now you have the data.</p>
 
 
 
-</main> <!-- /main -->
+</li></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
   const icon = "";
   const anchorJS = new window.AnchorJS();
   anchorJS.options = {
@@ -570,24 +935,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
     setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -615,62 +963,43 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      let href = ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
     });
   }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
       });
-    }
+      return popup.innerHTML;
+    });
   }
 });
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./merging.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Combining and joining</span></span>
+      <a href="./textanalysis.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">An intro to text analysis</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./census.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Intro to APIs: The Census</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./basicstats.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Basic Stats: Linear Regression and The T-Test</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
