@@ -64,7 +64,7 @@ It produces a table of all the parsing problems. It has 280 rows, which means we
 The easy way to fix this is to set the guess_max argument higher. It will take a little longer to load, but we'll use every single row in the data set to guess the column type -- all 322,138 of them.
 
 ```{r}
-payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2024", guess_max=373564)
+payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2024.csv", guess_max=373564)
 ```
 
 No parsing errors this time! You can see what the columns are using the `glimpse` function:
