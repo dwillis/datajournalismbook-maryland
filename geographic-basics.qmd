@@ -129,7 +129,7 @@ View(foreclosure_zip_march_2023)
 Now we can join the zip codes to the foreclosure data.
 
 ```{r}
-zip_codes_with_foreclosures <- md_zips %>% left_join(foreclosure_zip_march_2023, join_by(ZIPCODE1=zip))
+zip_codes_with_foreclosures <- md_zips %>% left_join(foreclosure_zip_march_2023, join_by(ZIPCODE1==zip))
 ```
 
 Now we can use color to distinguish zip codes from each other. Let's use the number of foreclosure notices to start with:

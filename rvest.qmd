@@ -24,6 +24,7 @@ We'll load these packages first:
 #| output: false
 library(rvest)
 library(tidyverse)
+library(lubridate)
 library(janitor)
 ```
 

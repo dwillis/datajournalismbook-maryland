@@ -6,11 +6,12 @@ To do it well is a course on its own. And not every story needs a feat of progra
 
 Good news: one of the best libraries for visualizing data is in the tidyverse and it's pretty simple to make simple charts quickly with just a little bit of code. It's called [ggplot2](https://ggplot2.tidyverse.org/).
 
-Let's revisit some data we've used in the past and turn it into charts. First, let's load libraries. When we load the tidyverse, we get ggplot2.
+Let's revisit some data we've used in the past and turn it into charts. First, let's load libraries. When we load the tidyverse, we get ggplot2, and we'll need lubridate, too.
 
 ```{r}
 #| output: false
 library(tidyverse)
+library(lubridate)
 ```
 
 The dataset we'll use is 911 overdose calls from Baltimore County. Let's load it.

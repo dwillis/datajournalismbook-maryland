@@ -2,13 +2,14 @@
 
 In the previous chapter, we looked at election precincts in Prince George's County to show a bit of a pattern regarding concentration of the precincts with the most and 0 eligible voters. Let's go little further and look at voters statewide.
 
-First, let's load the libraries we'll need. We're also going to load tidycensus and set an API key for tidycensus.
+First, let's load the libraries we'll need, including tigris. We're also going to load tidycensus and set an API key for tidycensus.
 
 ```{r}
 #| output: false
 library(tidyverse)
 library(sf)
 library(janitor)
+library(tigris)
 library(tidycensus)
 census_api_key("549950d36c22ff16455fe196bbbd01d63cfbe6cf")
 
@@ -68,7 +69,7 @@ md_county_population <- md_county_population %>%
 md_county_population
 ```
 
-Now we can join them.  
+Now we can join them.
 
 ```{r}
 md_pop_with_foreclosures <- md_county_population %>%
@@ -90,7 +91,16 @@ md_pop_with_foreclosures
 
 Let's take a look at the result of this table. The variances in the rates aren't huge, but there are some clear differences: Charles County and Prince George's County have higher rates, followed by Baltimore City and some more rural counties.
 
-Okay, now let's visualize.  We're going to build a choropleth map, with the color of each county -- the fill -- set according to the number of notices per 1K population on a color gradient.  
+First, let's use the counties() function from tigris to pull down a shapefile of all U.S. counties and grab the ones for Maryland.
+
+```{r}
+
+md_counties <- counties() %>%
+  filter(STATEFP == "24")
+
+```
+
+Okay, now let's visualize.  We're going to build a choropleth map, with the color of each county -- the fill -- set according to the number of notices per 1K population on a color gradient.
 
 ```{r}
 county_centroids <- st_centroid(md_counties)
