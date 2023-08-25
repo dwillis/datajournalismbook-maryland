@@ -360,7 +360,7 @@ Now that you have seen how to use mutate, filtering and dates, give me three que
 
 **Answer**
 
-1. 
+1.  
 
 2.  
 
