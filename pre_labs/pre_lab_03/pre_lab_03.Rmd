@@ -36,7 +36,7 @@ library(tidyverse)
 **Task** Load some [Maryland state government payments data](https://opendata.maryland.gov/Budget/State-of-Maryland-Payments-Data-FY2008-to-FY2024/7syw-q4cy) by running the following code. We'll use the guess_max() function as an argument to use the first 10 rows to set the data type. What does the first line of the red Warning message that prints out when you load the data say? What happens when you follow its instructions? Answer below. **Answer**
 
 ```{r}
-payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2024", guess_max=10)
+payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2024.csv", guess_max=10)
 ```
 
 ### Task 3: Reload data
@@ -49,8 +49,7 @@ payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2024.csv
 
 ### Task 4: Examine the data with glimpse
 
-**Task** Run the following codeblock to glimpse the data. What data type is the "Vendor Name" field? What data type is the "Amount" field? What data type is the "Date" column? Answer below. 
-**Answer**
+**Task** Run the following codeblock to glimpse the data. What data type is the "Vendor Name" field? What data type is the "Amount" field? What data type is the "Date" column? Answer below. **Answer**
 
 ```{r}
 glimpse(payments)
@@ -64,8 +63,7 @@ The second smell we can find in code is **wrong spatial data**. Spatial data mea
 
 We can check to see if any of the zip codes are less than five characters by using [a function called `str_length`](https://stringr.tidyverse.org/reference/str_length.html) inside a filter.
 
-**Task** Run the following codeblock to group by the vendor's zip code and show any that are less than five characters in length. How many zip codes do not have five characters? What do you think is happening with this data? 
-**Answer**
+**Task** Run the following codeblock to group by the vendor's zip code and show any that are less than five characters in length. How many zip codes do not have five characters? What do you think is happening with this data? **Answer**
 
 ```{r}
 payments |>
@@ -104,8 +102,7 @@ Any time you are going to focus on a column for analysis, you should check for u
 
 ### Task 8: Find outliers
 
-**Task** Run the following code to arrange the grants & loan data so that the smallest amount is first. Describe what you see. 
-**Answer**
+**Task** Run the following code to arrange the grants & loan data so that the smallest amount is first. Describe what you see. **Answer**
 
 ```{r}
 md_grants_loans |> 

@@ -11,15 +11,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Chapter 26
 
-Visualizing data is becoming a much greater part of journalism. Large news organizations are creating graphics desks that create complex visuals with data to inform the public about important events. 
+Visualizing data is becoming a much greater part of journalism. Large news organizations are creating graphics desks that create complex visuals with data to inform the public about important events.
 
-To do it well is a course on its own. And not every story needs a feat of programming and art. Sometimes, you can help yourself and your story by just creating a quick chart, which helps you see patterns in the data that wouldn't otherwise surface. 
+To do it well is a course on its own. And not every story needs a feat of programming and art. Sometimes, you can help yourself and your story by just creating a quick chart, which helps you see patterns in the data that wouldn't otherwise surface.
 
 Good news: one of the best libraries for visualizing data is in the tidyverse and it's pretty simple to make simple charts quickly with just a little bit of code. It's called [ggplot2](https://ggplot2.tidyverse.org/).
 
 Let's revisit some data we've used in the past and turn it into charts. First, let's load libraries. When we load the tidyverse, we get ggplot2.
 
 ### Task 1: Load packages
+
 **Task** Run the following code to load packages.
 
 ```{r}
@@ -30,8 +31,8 @@ library(lubridate)
 The dataset we'll use is 911 overdose calls from Baltimore County. Let's load it.
 
 ### Task 2: Load data
-**Task** Run the following code to load the data. In the space below, indicate how many rows and columns it has.
-**Answer**
+
+**Task** Run the following code to load the data. In the space below, indicate how many rows and columns it has. **Answer**
 
 ```{r}
 baltco_911_calls <- read_csv("data/baltco_911_calls.csv")
@@ -39,19 +40,19 @@ baltco_911_calls <- read_csv("data/baltco_911_calls.csv")
 
 ## Bar charts
 
-The first kind of chart we'll create is a simple bar chart. 
+The first kind of chart we'll create is a simple bar chart.
 
-It's a chart designed to show differences between things -- the magnitude of one thing, compared to the next thing, and the next, and the next. 
+It's a chart designed to show differences between things -- the magnitude of one thing, compared to the next thing, and the next, and the next.
 
 So if we have thing, like a county, or a month, or a day of the week, and then a count of that group, we can make a bar chart.
 
-So what does the chart of the top months with the most 911 overdose calls look like? 
+So what does the chart of the top months with the most 911 overdose calls look like?
 
 First, we'll add a month column to our dataframe using lubridate.
 
 ### Task 3: Add a month column to our 911 calls dataframe using lubridate and calculate the number of calls for each month
-**Task** Run the following code to add a month column to our dataframe using lubridate and count the number of calls for each month. In the space below, explain what each step of the code below is doing in English. Note the "label=TRUE" part in the mutate statement.
-**Answer**
+
+**Task** Run the following code to add a month column to our dataframe using lubridate and count the number of calls for each month. In the space below, explain what each step of the code below is doing in English. Note the "label=TRUE" part in the mutate statement. **Answer**
 
 ```{r}
 baltco_911_calls_by_month <- baltco_911_calls |>
@@ -63,44 +64,44 @@ baltco_911_calls_by_month <- baltco_911_calls |>
 baltco_911_calls_by_month
 ```
 
-Now let's create a bar chart using ggplot. 
+Now let's create a bar chart using ggplot.
 
-With ggplot, the first thing we'll always do is draw a blank canvas that will contain our chart. We start with our dataframe name, and then (|>) we invoke the ggplot() function to make that blank canvas.  All this does is make a gray box, the blank canvas that will hold our chart. 
+With ggplot, the first thing we'll always do is draw a blank canvas that will contain our chart. We start with our dataframe name, and then (\|\>) we invoke the ggplot() function to make that blank canvas. All this does is make a gray box, the blank canvas that will hold our chart.
 
 ### Task 4: Create an empty ggplot container
-**Task** Run the following code. Explain what you see after running the code in the space below.
-**Answer**
+
+**Task** Run the following code. Explain what you see after running the code in the space below. **Answer**
 
 ```{r}
 baltco_911_calls_by_month |>
   ggplot()
 ```
 
-Next we need to tell ggplot what kind of chart to make. 
+Next we need to tell ggplot what kind of chart to make.
 
-In ggplot, we work with two key concepts called geometries (abbreviated frequently as geom) and aesthetics (abbreviated as aes). 
+In ggplot, we work with two key concepts called geometries (abbreviated frequently as geom) and aesthetics (abbreviated as aes).
 
-Geometries are the shape that the data will take; think of line charts, bar charts, scatterplots, histograms, pie charts and other common graphics forms.  
+Geometries are the shape that the data will take; think of line charts, bar charts, scatterplots, histograms, pie charts and other common graphics forms.
 
-Aesthetics help ggplot know what component of our data to visualize -- why we'll visualize values from one column instead of another. 
+Aesthetics help ggplot know what component of our data to visualize -- why we'll visualize values from one column instead of another.
 
-In a bar chart, we first pass in the data to the geometry, then set the aesthetic. 
+In a bar chart, we first pass in the data to the geometry, then set the aesthetic.
 
-In the codeblock below, we've added a new function, geom_bar().  
+In the codeblock below, we've added a new function, geom_bar().
 
-Using geom_bar() -- as opposed to geom_line() -- says we're making a bar chart.  
+Using geom_bar() -- as opposed to geom_line() -- says we're making a bar chart.
 
-Inside of that function, the aesthetic, aes, says which columns to use in drawing the chart. 
+Inside of that function, the aesthetic, aes, says which columns to use in drawing the chart.
 
-We're setting the values on the x axis (horizontal) to be the abbreviation of the month. We set weight to total calls, and it uses that value to "weight" or set the height of each bar. 
+We're setting the values on the x axis (horizontal) to be the abbreviation of the month. We set weight to total calls, and it uses that value to "weight" or set the height of each bar.
 
-One quirk here with ggplot.  
+One quirk here with ggplot.
 
-After we've invoked the ggplot() function, you'll notice we're using a + symbol.  It means the same thing as  |> -- "and then do this".  It's just a quirk of ggplot() that after you invoke the ggplot() function, you use + instead of |>.  It makes no sense to me either, just something to live with. 
+After we've invoked the ggplot() function, you'll notice we're using a + symbol. It means the same thing as \|\> -- "and then do this". It's just a quirk of ggplot() that after you invoke the ggplot() function, you use + instead of \|\>. It makes no sense to me either, just something to live with.
 
 ### Task 5: Run the following code
-**Task** Run the following code. Explain what you see after running the code in the space below.
-**Answer**
+
+**Task** Run the following code. Explain what you see after running the code in the space below. **Answer**
 
 ```{r}
 baltco_911_calls_by_month |>
@@ -108,11 +109,11 @@ baltco_911_calls_by_month |>
   geom_bar(aes(x=month, weight=total_calls))
 ```
 
-This is a very basic chart.  But it's hard to derive much meaning from this chart, because the months aren't ordered from highest to lowest by total_calls We can fix that by using the reorder() function to do just that:
+This is a very basic chart. But it's hard to derive much meaning from this chart, because the months aren't ordered from highest to lowest by total_calls We can fix that by using the reorder() function to do just that:
 
 ### Task 6: Run the following code
-**Task** Run the following code. Explain what you see after running the code in the space below. What has changed from the last codeblock?
-**Answer**
+
+**Task** Run the following code. Explain what you see after running the code in the space below. What has changed from the last codeblock? **Answer**
 
 ```{r}
 baltco_911_calls_by_month |>
@@ -120,11 +121,11 @@ baltco_911_calls_by_month |>
   geom_bar(aes(x=reorder(month,total_calls), weight=total_calls))
 ```
 
-This is a little more useful. But the bottom is kind of a mess, with overlapping names.  We can fix that by flipping it from a vertical bar chart (also called a column chart) to a horizontal one. coord_flip() does that for you.
+This is a little more useful. But the bottom is kind of a mess, with overlapping names. We can fix that by flipping it from a vertical bar chart (also called a column chart) to a horizontal one. coord_flip() does that for you.
 
 ### Task 7: Run the following code
-**Task** Run the following code. Explain what you see after running the code in the space below. What has changed from the last codeblock?
-**Answer**
+
+**Task** Run the following code. Explain what you see after running the code in the space below. What has changed from the last codeblock? **Answer**
 
 ```{r}
 baltco_911_calls_by_month |>
@@ -133,17 +134,17 @@ baltco_911_calls_by_month |>
   coord_flip()
 ```
 
-Is this art? No. Does it quickly tell you something meaningful?  It does. 
+Is this art? No. Does it quickly tell you something meaningful? It does.
 
-We're mainly going to use these charts to help us in reporting, so style isn't that important.  
+We're mainly going to use these charts to help us in reporting, so style isn't that important.
 
-But it's worth mentioning that we can pretty up these charts for publication, if we wanted to, with some more code. To style the chart, we can change or even modify the "theme", a kind of skin that makes the chart look better. 
+But it's worth mentioning that we can pretty up these charts for publication, if we wanted to, with some more code. To style the chart, we can change or even modify the "theme", a kind of skin that makes the chart look better.
 
 It's kind of like applying CSS to html. Here I'm changing the theme slightly to remove the gray background with one of ggplot's built in themes, theme_minimal().
 
 ### Task 8: Run the following code
-**Task** Run the following code. Explain what you see after running the code in the space below. What has changed from the last codeblock?
-**Answer**
+
+**Task** Run the following code. Explain what you see after running the code in the space below. What has changed from the last codeblock? **Answer**
 
 ```{r}
 baltco_911_calls_by_month |>
@@ -153,12 +154,13 @@ baltco_911_calls_by_month |>
   theme_minimal()
 ```
 
-The ggplot universe is pretty big, and lots of people have made and released cool themes for you to use.  Want to make your graphics look kind of like [The Economist's](https://www.economist.com/) graphics?  There's a theme for that.  
+The ggplot universe is pretty big, and lots of people have made and released cool themes for you to use. Want to make your graphics look kind of like [The Economist's](https://www.economist.com/) graphics? There's a theme for that.
 
 First, you have to install and load a package that contains lots of extra themes, called [ggthemes](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/).
 
 ### Task 9: Run the following code
-**Task** Run the following code. 
+
+**Task** Run the following code.
 
 ```{r}
 install.packages('ggthemes')
@@ -168,8 +170,9 @@ library(ggthemes)
 And now we'll apply the economist theme from that package with theme_economist()
 
 ### Task 10: Run the following code
-**Task** Run the following code. Explain what you see after running the code in the space below. What has changed from the last version of the chart?
-**Answer**
+
+**Task** Run the following code. Explain what you see after running the code in the space below. What has changed from the last version of the chart? **Answer**
+
 ```{r}
 baltco_911_calls_by_month |>
   ggplot() +
@@ -177,11 +180,12 @@ baltco_911_calls_by_month |>
   coord_flip() + 
   theme_economist()
 ```
-Those axis titles are kind of a mess. Let's change "count" on the x axis to "total calls" and change "reorder(month,total_calls)" to "month".  And while we're at it, let's add a basic title and a source as a caption. We'll use a new function, labs(), which is short for labels.
+
+Those axis titles are kind of a mess. Let's change "count" on the x axis to "total calls" and change "reorder(month,total_calls)" to "month". And while we're at it, let's add a basic title and a source as a caption. We'll use a new function, labs(), which is short for labels.
 
 ### Task 11: Run the following code
-**Task** Run the following code. Explain what you see after running the code in the space below. What has changed from the last codeblock?
-**Answer**
+
+**Task** Run the following code. Explain what you see after running the code in the space below. What has changed from the last codeblock? **Answer**
 
 ```{r}
 baltco_911_calls_by_month |>
@@ -197,11 +201,12 @@ baltco_911_calls_by_month |>
     
   )
 ```
-Viola.  Not super pretty, but good enough to show an editor to help them understand the conclusions you reached with your data analysis. 
+
+Viola. Not super pretty, but good enough to show an editor to help them understand the conclusions you reached with your data analysis.
 
 ## Line charts
 
-Let's look at how to make another common chart type that will help you understand patterns in your data. 
+Let's look at how to make another common chart type that will help you understand patterns in your data.
 
 Line charts can show change over time. It works much the same as a bar chart, code wise, but instead of a weight, it uses a y.
 
@@ -209,8 +214,7 @@ So, let's use the same Baltimore County data and generate a count of contributio
 
 ### Task 12: Create a dataframe of 911 calls by date
 
-**Task** Run the following code. Explain what you see after running the code in the space below. 
-**Answer**
+**Task** Run the following code. Explain what you see after running the code in the space below. **Answer**
 
 ```{r}
 baltco_911_calls_by_date <- baltco_911_calls |>
@@ -222,13 +226,13 @@ baltco_911_calls_by_date <- baltco_911_calls |>
 baltco_911_calls_by_date 
 ```
 
-And now let's make a line chart to look for patterns in this data.  
+And now let's make a line chart to look for patterns in this data.
 
-We'll put the date on the x axis and total contributions on the y axis. 
+We'll put the date on the x axis and total contributions on the y axis.
 
 ### Task 13: Run the following code
-**Task** Run the following code. Explain what you see after running the code in the space below. 
-**Answer**
+
+**Task** Run the following code. Explain what you see after running the code in the space below. **Answer**
 
 ```{r}
 baltco_911_calls_by_date |>
@@ -240,13 +244,13 @@ It's not super pretty, but there's a bit of a pattern here: the number of calls 
 
 Right now, it's kind of hard to see specifics, though. When did some of those smaller spikes and troughs happen?
 
-We can't really tell.  So let's modify the x axis to have one tick mark and label per month. We can do that with a function called scale_x_date(). 
+We can't really tell. So let's modify the x axis to have one tick mark and label per month. We can do that with a function called scale_x\_date().
 
-We'll set the date_breaks to appear for every week; if we wanted every month, we'd say date_breaks = "1 month". We can set the date to appear as month abbreviated name (%b) and day (%d). 
+We'll set the date_breaks to appear for every week; if we wanted every month, we'd say date_breaks = "1 month". We can set the date to appear as month abbreviated name (%b) and day (%d).
 
 ### Task 14: Run the following code
-**Task** Run the following code. Explain what you see after running the code in the space below. 
-**Answer**
+
+**Task** Run the following code. Explain what you see after running the code in the space below. **Answer**
 
 ```{r}
 baltco_911_calls_by_date |>
@@ -255,11 +259,12 @@ baltco_911_calls_by_date |>
   scale_x_date(date_breaks = "1 week", date_labels = "%b %d")
 ```
 
-Those are a little hard to read, so we can turn them 45 degrees to remove the overlap using the theme() function for styling.  With "axis.text.x = element_text(angle = 45,  hjust=1)" we're saying, turn the date labels 45 degrees.
+Those are a little hard to read, so we can turn them 45 degrees to remove the overlap using the theme() function for styling. With "axis.text.x = element_text(angle = 45, hjust=1)" we're saying, turn the date labels 45 degrees.
 
 ### Task 15: Run the following code
-**Task** Run the following code. Explain what you see after running the code in the space below. 
-**Answer**
+
+**Task** Run the following code. Explain what you see after running the code in the space below. **Answer**
+
 ```{r}
 baltco_911_calls_by_date |>
   ggplot() + 
@@ -270,6 +275,6 @@ baltco_911_calls_by_date |>
   )
 ```
 
-Again, this isn't as pretty as we could make it.  But by charting this, we can quickly see some outliers that could guide our reporting. 
+Again, this isn't as pretty as we could make it. But by charting this, we can quickly see some outliers that could guide our reporting.
 
 We're just scratching the surface of what ggplot can do, and chart types. There's so much more you can do, so many other chart types you can make. But the basics we've shown here will get you started.

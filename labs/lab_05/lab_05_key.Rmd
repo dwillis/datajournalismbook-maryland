@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## You will need
 
-- Tabula
+-   Tabula
 
 ## Load libraries and establish settings
 
@@ -31,7 +31,7 @@ We'll be working with the [911 overdose calls from Baltimore County](https://dri
 
 ## Extract Data from PDF Using Tabula
 
-Start Tabula, then go to http://127.0.0.1:8080/ in your browser. Click the "Browse" button and find the PDF file and click "open", and then click the "Import button" in Tabula. This will take a few seconds or longer.
+Start Tabula, then go to <http://127.0.0.1:8080/> in your browser. Click the "Browse" button and find the PDF file and click "open", and then click the "Import button" in Tabula. This will take a few seconds or longer.
 
 This PDF has a single table spread over multiple pages to extract. We're going to make a single dataframe from this table, exporting it to a CSV file that you will load into R. In Tabula, highlight the table and click the "Preview & Export Extracted Data" button. You may want to play with including or excluding the column headers - YOU SHOULD HAVE FIVE COLUMNS OF DATA.
 
@@ -55,7 +55,7 @@ baltco_911_overdose_calls <- baltco_911_overdose_calls |>
 
 Q1. Write code to generate the number of calls that occurred on each date. Which date in 2022 had the most overdose calls, and how many? Look at the total number of rows in your result and explore the range of dates - based on your result, do you believe there are any days with no overdose calls at all? Explain why or why not.
 
-A1. July 14 and October 4 both had 23 overdose calls. This dataset has 366 records, ranging from Feb. 6, 2022 to Feb. 6, 2023, which suggests that there were no days during that period with zero overdose calls. 
+A1. July 14 and October 4 both had 23 overdose calls. This dataset has 366 records, ranging from Feb. 6, 2022 to Feb. 6, 2023, which suggests that there were no days during that period with zero overdose calls.
 
 ```{r}
 baltco_911_overdose_calls |> 
@@ -93,4 +93,4 @@ baltco_911_overdose_calls |>
 
 Q4. What's the best story idea or question you've seen as a result of the work you've done in this lab?
 
-A4. 
+A4.

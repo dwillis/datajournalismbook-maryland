@@ -39,12 +39,13 @@ A1:
 ```{r}
 ```
 
-Q2: Using that `pg_schools` dataframe, write code to calculate the total amount of payments to the Prince George's County School system for each fiscal year. Which fiscal year had the largest total amount? What do you notice about the years listed?
+Q2: Using that `pg_schools` dataframe, write code to calculate the total amount of payments to the Prince George's County School system for each fiscal year. Which fiscal year had the largest total amount? What do you notice about the years listed, and what questions do you have about that data?
 
 A2:
 
 ```{r}
 ```
+
 Q3. You're interested in examining the vendors paid for capital projects at the University of Maryland. Search the payments data to find those payments, then write code to produce a list of each vendor and the total amount it received. Look carefully at that list - what cleaning will it require to ensure that you have only one row per vendor and zip code? Provide at least three examples of vendor names that are similar and should be combined into one. Describe how you might clean that data so that any nearly identical vendors would look identical - what would you change and how?
 
 A3.

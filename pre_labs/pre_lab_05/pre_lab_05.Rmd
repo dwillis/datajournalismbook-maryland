@@ -30,7 +30,7 @@ Tabula works best when tables in PDFs are clearly defined and have nicely-format
 
 ### Task 1: Download and Install Tabula
 
-**Task**: [Download and install Tabula](https://tabula.technology/). Tabula works much the same way as Open Refine does -- it works in the browser by spinning up a small webserver in your computer. Start it as you would any other desktop application, then go to http://127.0.0.1:8080/ in your browser.
+**Task**: [Download and install Tabula](https://tabula.technology/). Tabula works much the same way as Open Refine does -- it works in the browser by spinning up a small webserver in your computer. Start it as you would any other desktop application, then go to <http://127.0.0.1:8080/> in your browser.
 
 When Tabula opens, you click browse to find the PDF on your computer somewhere, and then click import. After it imports, click autodetect tables. You'll see red boxes appear around what Tabula believes are the tables. You'll see it does a pretty good job at this.
 
@@ -97,8 +97,7 @@ You can now export that extracted table to a CSV file using the "Export" button.
 
 ### Task 5: Export the CSV file
 
-**Task** Export the CSV file to your pre_lab_05 folder and read it into R by running the following codeblock. What problems do you see with the data? 
-**Answer**
+**Task** Export the CSV file to your pre_lab_05 folder and read it into R by running the following codeblock. What problems do you see with the data? **Answer**
 
 ```{r}
 fentanyl_deaths <- read_csv("tabula-Annual_2020_Drug_Intox_Report.csv") |> clean_names()
@@ -112,8 +111,7 @@ The good news is that we have data we don't have to retype. The bad news is, we 
 
 ### Task 6: Load the data without headers
 
-**Task** Load the data without headers by running the codeblock below. What problems remain? 
-**Answer**
+**Task** Load the data without headers by running the codeblock below. What problems remain? **Answer**
 
 ```{r}
 fentanyl_deaths <- read_csv("tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) |> clean_names()
@@ -121,12 +119,11 @@ fentanyl_deaths <- read_csv("tabula-Annual_2020_Drug_Intox_Report.csv", col_name
 fentanyl_deaths
 ```
 
-Ok, now we have all the data. But we need actual headers. Let's add those using `rename()`, keeping in mind that the new name comes _first_.
+Ok, now we have all the data. But we need actual headers. Let's add those using `rename()`, keeping in mind that the new name comes *first*.
 
 ### Task 7: Change the headers to real names
 
-**Task** Run the codeblock below. What else do we need to do?
-**Answer**
+**Task** Run the codeblock below. What else do we need to do? **Answer**
 
 ```{r}
 fentanyl_deaths <- read_csv("tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) |> 
@@ -152,11 +149,12 @@ fentanyl_deaths <- read_csv("tabula-Annual_2020_Drug_Intox_Report.csv", col_name
 
 fentanyl_deaths
 ```
+
 There are a few important things to explain here:
 
-1. Because we're replacing a literal period (.), we need to make sure that R knows that. Hence the '\\.' Why? Because '.' is a valid expression meaning "any character", so if we didn't have the backslashes the above code would make the entire column blank (try it!)
-2. The `str_squish` function cleans up any excess spaces, at the beginning, middle or end of a character column. If we then use filter, we can do so with confidence.
-3. I put "deaths_" in front of each yearly column because R likes it when columns don't begin with a number. You can have a column called `2011`, but you literally have to use the backticks (`2011`) to refer to it in code.
+1.  Because we're replacing a literal period (.), we need to make sure that R knows that. Hence the '\\.' Why? Because '.' is a valid expression meaning "any character", so if we didn't have the backslashes the above code would make the entire column blank (try it!)
+2.  The `str_squish` function cleans up any excess spaces, at the beginning, middle or end of a character column. If we then use filter, we can do so with confidence.
+3.  I put "deaths\_" in front of each yearly column because R likes it when columns don't begin with a number. You can have a column called `2011`, but you literally have to use the backticks (`2011`) to refer to it in code.
 
 All things considered, that was pretty easy. Many - most? - electronic PDFs aren't so easy to parse. Sometimes you'll need to open the exported CSV file and clean things up before importing into R. Other times you'll be able to do that cleaning in R itself.
 

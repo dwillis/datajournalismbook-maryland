@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Points to hit
 
-1.  Review of third lab questions/problems.
+1.  Review of previous lab questions/problems.
 2.  Demonstration of combining and merging
 
 ## Chapter 23
@@ -31,8 +31,7 @@ library(lubridate)
 
 Let's say that we have Maryland county voter registration data from four different elections in three different files. They have a similar layout and the same number of counties (plus Baltimore City).
 
-**Task** Load the four CSV population estimate files. Do they have the same column structure? 
-**Answer**
+**Task** Load the four CSV population estimate files. Do they have the same column structure? **Answer**
 
 ```{r}
 county_voters_2016 <- read_csv("data/county_voters_2016.csv")
@@ -53,8 +52,7 @@ View(county_voters_combined)
 
 ### Task 4: Asking a question
 
-**Task** Run the following code to filter on Frederick County's registration data and look at the results. What stands out to you about the changes in party registration over time?
-**Answer** 
+**Task** Run the following code to filter on Frederick County's registration data and look at the results. What stands out to you about the changes in party registration over time? **Answer**
 
 ```{r}
 county_voters_combined |> filter(COUNTY == 'Frederick')
@@ -64,7 +62,7 @@ county_voters_combined |> filter(COUNTY == 'Frederick')
 
 ### Task 5: Loading population data
 
-**Task** Load the Maryland 2020 county population data 
+**Task** Load the Maryland 2020 county population data
 
 ```{r}
 maryland_population <- read_csv('data/maryland_population_2020.csv')
@@ -73,8 +71,7 @@ view(maryland_population)
 
 ### Task 6: Join population and voter data
 
-**Task** Run the following code to join Maryland population data and the 2022 voter registration data together using the common column county as the key. How many rows are there now? How many *should* there be? 
-**Answer**
+**Task** Run the following code to join Maryland population data and the 2022 voter registration data together using the common column county as the key. How many rows are there now? How many *should* there be? **Answer**
 
 ```{r}
 # with nrow included to show row total
@@ -102,8 +99,7 @@ maryland_population_with_voters <- maryland_population |> left_join(county_voter
 
 ### Task 9: Add the Demographic Data
 
-**Task** Load the Maryland demographic data and examine it. What kind of information does it contain?
-**Answer** 
+**Task** Load the Maryland demographic data and examine it. What kind of information does it contain? **Answer**
 
 ```{r}
 maryland_demographics <- read_csv('data/maryland_demographics.csv')
@@ -120,24 +116,22 @@ maryland_population_with_voters_and_demographics <- maryland_population_with_vot
 
 ### Task 11: Asking Demographic Questions
 
-**Task** Using mutate, let's find the county with the highest 18+ Black population as a percentage of all population 18 and over and also the percentage of Democrats in that county. Put your answers below. 
-**Answer**
+**Task** Using mutate, let's find the county with the highest 18+ Black population as a percentage of all population 18 and over and also the percentage of Democrats in that county. Put your answers below. **Answer**
 
 ```{r}
 maryland_population_with_voters_and_demographics |>
-  mutate(pct_black_18_plus = (pop_black/pop_18_over)*100, pct_dems = (DEM/TOTAL)*100) |> 
+  mutate(pct_black_18_plus = (pop_black/pop_18_over)*100, pct_dems = (DEM/Total)*100) |> 
   arrange(desc(pct_black_18_plus)) |> 
   select(COUNTY, pct_black_18_plus, pct_dems)
 ```
 
 ### Task 12: Asking Demographic Questions
 
-**Task** Now let's find the county with the highest 18+ Asian population as a percentage of all population 18 and over and also the percentage of Democrats in that county. How do these results compare to the previous task? Put your answers below. 
-**Answer**
+**Task** Now let's find the county with the highest 18+ Asian population as a percentage of all population 18 and over and also the percentage of Democrats in that county. How do these results compare to the previous task? Put your answers below. **Answer**
 
 ```{r}
 maryland_population_with_voters_and_demographics |>
-  mutate(pct_asian_18_plus = (pop_asian/pop_18_over)*100, pct_dems = (DEM/TOTAL)*100) |> 
+  mutate(pct_asian_18_plus = (pop_asian/pop_18_over)*100, pct_dems = (DEM/Total)*100) |> 
   arrange(desc(pct_asian_18_plus)) |> 
   select(COUNTY, pct_asian_18_plus, pct_dems)
 ```
@@ -146,8 +140,7 @@ maryland_population_with_voters_and_demographics |>
 
 Sometimes joins look like they should work but don't. Often this is due to the two columns you're joining on having different data types: joining a <chr> column to a <dbl> column, for example. Let's walk through an example of that using some demographic data by zip code.
 
-**Task** Run the following code to load the Zip Code Tabulation Area data for Maryland. What's the datatype of the ZCTA5N column? 
-**Answer**
+**Task** Run the following code to load the Zip Code Tabulation Area data for Maryland. What's the datatype of the ZCTA5N column? **Answer**
 
 ```{r}
 maryland_zcta <- read_csv('data/maryland_zcta.csv')
@@ -156,8 +149,7 @@ glimpse(maryland_zcta)
 
 The column we're interested in, ZCTA5N, is a <dbl> column - it's a number. We want it to be a <chr> column - text.
 
-**Task** Run the following code to change the datatype of ZCTA5N from numeric to character. What's the datatype of ZCTA5N? 
-**Answer**
+**Task** Run the following code to change the datatype of ZCTA5N from numeric to character. What's the datatype of ZCTA5N? **Answer**
 
 ```{r}
 maryland_zcta <- maryland_zcta |> mutate(ZCTA5N = as.character(ZCTA5N))

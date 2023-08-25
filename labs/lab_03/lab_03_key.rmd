@@ -28,7 +28,7 @@ Load the two datasets we worked with in the pre_lab: the Maryland payments to ve
 
 ```{r}
 # Load in the Maryland state agency payments data, making sure that it correctly sets the datatypes using all of the rows
-md_payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2023.csv", guess_max=322138) |> clean_names
+md_payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2024.csv", guess_max=373564) |> clean_names()
 
 # Load in the Maryland grants and loan data
 md_grants_loans <- read_csv("data/State_of_Maryland_Grant_and_Loan_Data__FY2009_to_FY2022.csv") |> clean_names()
@@ -72,7 +72,7 @@ md_payments |>
 
 Q4: You want to understand how much state grant money went to stem cell research projects each fiscal year. Search the data to find grants that fit that description. Once you find which columns contain the information you want, your code should standardize the data needed to find just the grants for stem cell research in a single filter. Then create a total amount of money for each fiscal year. Write a sentence summarizing how stem cell research funding has changed over time.
 
-A4: Starting from a relatively large amount in 2009, stem cell research grants mostly have fallen off since. In 2020, the amount was $7.1 million.
+A4: Starting from a relatively large amount in 2009, stem cell research grants mostly have fallen off since. In 2020, the amount was \$7.1 million.
 
 ```{r}
 md_grants_loans |> 

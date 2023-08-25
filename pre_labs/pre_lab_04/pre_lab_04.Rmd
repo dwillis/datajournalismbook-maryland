@@ -69,8 +69,7 @@ md_grant_loans |>
 
 ### Task 5: Use refinr to clean the grantee_clean field.
 
-**Task** Run the following code to make a copy of the Grantee field called grantee_clean, then use the `key_collision_merge` function from refinr to attempt to standardize similar values. Store it as a new object called cleaned_md_grant_loans Click the black arrow on the table to examine the Grantee and grantee_clean columns. Looking at the results on the first 3 pages only (first 30 rows), name two changes the refinr package made, by comparing Grantee to grantee_clean.
-**Answer**
+**Task** Run the following code to make a copy of the Grantee field called grantee_clean, then use the `key_collision_merge` function from refinr to attempt to standardize similar values. Store it as a new object called cleaned_md_grant_loans Click the black arrow on the table to examine the Grantee and grantee_clean columns. Looking at the results on the first 3 pages only (first 30 rows), name two changes the refinr package made, by comparing Grantee to grantee_clean. **Answer**
 
 ```{r}
 cleaned_md_grant_loans <- md_grant_loans |>
@@ -97,8 +96,7 @@ cleaned_md_grant_loans |>
 
 ### Task 7: Use a different refinr method to clean the city_clean field.
 
-**Task** Run the following code to use the n_gram_merge() function to clean the data, then group by grantee_clean and Grantee to examine recipients that start with W. Look at the differences. Does the changes it made vary substantially from the previous use of key_collision_merge? 
-**Answer**
+**Task** Run the following code to use the n_gram_merge() function to clean the data, then group by grantee_clean and Grantee to examine recipients that start with W. Look at the differences. Does the changes it made vary substantially from the previous use of key_collision_merge? **Answer**
 
 ```{r}
 cleaned_md_grant_loans <- md_grant_loans |>
@@ -120,4 +118,4 @@ cleaned_md_grant_loans |>
 
 ### Task 8: Follow the directions in the textbook to use Open Refine
 
-**Task** Follow the directions in the textbook to upload the Maryland grants & loans CSV to Open Refine (https://thescoop.org/data_journalism_book/open-refine.html#manually-cleaning-data-with-open-refine). Follow the instructions to clean as many recipients as the Open Refine clustering tool can identify. In class, I will come around to look at the Open Refine project you created to do this. When you are finished, export from OpenRefine the cleaned CSV file and put it in the data folder in this pre_lab.
+**Task** Follow the directions in the textbook to upload the Maryland grants & loans CSV to Open Refine (<https://thescoop.org/data_journalism_book/open-refine.html#manually-cleaning-data-with-open-refine>). Follow the instructions to clean as many recipients as the Open Refine clustering tool can identify. In class, I will come around to look at the Open Refine project you created to do this. When you are finished, export from OpenRefine the cleaned CSV file and put it in the data folder in this pre_lab.
