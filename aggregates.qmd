@@ -102,7 +102,11 @@ To do that by hand, we'd have to take each of the 60,672 individual rows (or obs
 
 `dplyr` has a group by function in it that does just this. A massive amount of data analysis involves grouping like things together and then doing simple things like counting them, or averaging them together. So it's a good place to start.
 
-So to do this, we'll take our dataset and we'll introduce a new operator: `|>`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." The keyboard shortcut for this is cmd-shift-m on the Mac and ctrl-shift-m on Windows. Don't like that character? R now has a new one that does the same thing: `|>`.
+So to do this, we'll take our dataset and we'll introduce a new operator: `|>`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." This is called the "pipe operator" and it's a huge part of writing R statements. So much so that there's a keyboard shortcut for this: cmd-shift-m on the Mac and ctrl-shift-m on Windows. In order to enable this shortcut, you'll need to set an option under Tools -> Global Options. Make sure you check the box labeled "Use native pipe operator" and then click "Apply", like so: 
+
+![](images/rstudio_pipe_operator.png){width="100%"}
+
+Don't like that character? R also has one that does the same thing: `%>%`. They both work.
 
 We're going to establish a pattern that will come up again and again throughout this book: `data |> function`. In English: take your data set and then do this specific action to it.
 
