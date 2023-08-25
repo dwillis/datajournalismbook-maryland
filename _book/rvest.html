@@ -387,7 +387,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Let’s write a bit of code to tell R to go to the URL for the page and ingest all of that HTML code. In the code below, we’re starting with our URL and using the read_html() function from rvest to ingest all of the page html, storing it as an object called results.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in the html</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> courts_url <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> courts_url <span class="sc">|&gt;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>()</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># display the html below</span></span>
@@ -419,8 +419,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Because it’s inside of a table, and not some other kind of element (like a <code>&lt;div&gt;</code>), rvest has a special function for easily extracting and converting html tables, called html_table(). This function extracts all the html tables on the page, but this page only has one so we’re good.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in the html and extract all the tables</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> courts_url <span class="sc">%&gt;%</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> courts_url <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">|&gt;</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>()</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># show the dataframe</span></span>
@@ -428,28 +428,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
-# A tibble: 19 × 2
+# A tibble: 20 × 2
    Date              `News Release/News Item`                                   
    &lt;chr&gt;             &lt;chr&gt;                                                      
- 1 July 5, 2023      Media Advisory: Jury selection, trial to begin for State o…
- 2 July 5, 2023      Posthumous bar admission ceremony for Edward Garrison Drap…
- 3 June 15, 2023     Judge Yolanda L. Curtin named administrative judge for the…
- 4 May 30, 2023      Media Advisory: Circuit Court for Anne Arundel County host…
- 5 May 22, 2023      Seven Baltimore City Public Schools students awarded $20,0…
- 6 May 15, 2023      Media Advisory: Eighth annual Courting Art Baltimore conte…
- 7 May 10, 2023      Judge Dennis M. Robinson, Jr. named Baltimore County admin…
- 8 April 25, 2023    Chief Justice Matthew J. Fader appoints Judy Rupp state co…
- 9 April 12, 2023    Retired Chief Judge Mary Ellen Barbera receives 2023 Speak…
-10 April 11, 2023    Media Advisory: District Court in Anne Arundel County host…
-11 April 11, 2023    Media Advisory: Judge Brenda A. Sexton named administrativ…
-12 March 23, 2023    Media Advisory: Supreme Court of Maryland hosts Mock Trial…
-13 March 16, 2023    Retired Judge Charlotte Cooksey enshrined in  Maryland Wom…
-14 March 10, 2023    Media Advisory: District Court in Baltimore City relocates…
-15 February 27, 2023 Media Advisory: Baltimore City judge to preside over Balti…
-16 February 15, 2023 Media Advisory: Mental health awareness added to Schools i…
-17 January 17, 2023  Judge Donna M. Schaeffer named Anne Arundel County adminis…
-18 January 13, 2023  Media Advisory: Appellate Court of Maryland holds oral arg…
-19 January 12, 2023  Statement on recent judicial appointments                  
+ 1 August 17, 2023   Judge Richard “Ricky” Sandy named Frederick County Adminis…
+ 2 July 5, 2023      Media Advisory: Jury selection, trial to begin for State o…
+ 3 July 5, 2023      Posthumous bar admission ceremony for Edward Garrison Drap…
+ 4 June 15, 2023     Judge Yolanda L. Curtin named administrative judge for the…
+ 5 May 30, 2023      Media Advisory: Circuit Court for Anne Arundel County host…
+ 6 May 22, 2023      Seven Baltimore City Public Schools students awarded $20,0…
+ 7 May 15, 2023      Media Advisory: Eighth annual Courting Art Baltimore conte…
+ 8 May 10, 2023      Judge Dennis M. Robinson, Jr. named Baltimore County admin…
+ 9 April 25, 2023    Chief Justice Matthew J. Fader appoints Judy Rupp state co…
+10 April 12, 2023    Retired Chief Judge Mary Ellen Barbera receives 2023 Speak…
+11 April 11, 2023    Media Advisory: District Court in Anne Arundel County host…
+12 April 11, 2023    Media Advisory: Judge Brenda A. Sexton named administrativ…
+13 March 23, 2023    Media Advisory: Supreme Court of Maryland hosts Mock Trial…
+14 March 16, 2023    Retired Judge Charlotte Cooksey enshrined in  Maryland Wom…
+15 March 10, 2023    Media Advisory: District Court in Baltimore City relocates…
+16 February 27, 2023 Media Advisory: Baltimore City judge to preside over Balti…
+17 February 15, 2023 Media Advisory: Mental health awareness added to Schools i…
+18 January 17, 2023  Judge Donna M. Schaeffer named Anne Arundel County adminis…
+19 January 13, 2023  Media Advisory: Appellate Court of Maryland holds oral arg…
+20 January 12, 2023  Statement on recent judicial appointments                  
 
 [[2]]
 # A tibble: 49 × 2
@@ -535,13 +536,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 # A tibble: 77 × 2
    Date              `News Release/News Item`                                   
    &lt;chr&gt;             &lt;chr&gt;                                                      
- 1 December 21, 2017 Judiciary Honors Students for Promoting Peace Through Artw…
- 2 December 21, 2017 New court rules regarding guardianships of vulnerable Mary…
+ 1 December 21, 2017 New court rules regarding guardianships of vulnerable Mary…
+ 2 December 21, 2017 Judiciary Honors Students for Promoting Peace Through Artw…
  3 December 15, 2017 Baltimore City District Court Honors Re-Entry Project Grad…
  4 December 14, 2017 Court of Appeals Hosts Youth Conference                    
  5 December 8, 2017  Phase II of construction on Robert C. Murphy Courts of App…
- 6 December 5, 2017  Judicial Data Center Outage - Thursday, December 7, 2017   
- 7 December 5, 2017  Court of Appeals Hosts United States Naval Academy Midship…
+ 6 December 5, 2017  Court of Appeals Hosts United States Naval Academy Midship…
+ 7 December 5, 2017  Judicial Data Center Outage - Thursday, December 7, 2017   
  8 November 30, 2017 Pretrial Pilot Program to Launch in Baltimore County       
  9 November 29, 2017 Maryland Judiciary Hosts Oratorical Contest for Youths fro…
 10 November 28, 2017 Media Advisory: Maryland Judiciary Hosts Students Who Help…
@@ -604,11 +605,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  3 December 17, 2013 Media Advisory: Judiciary Helps Bring Civics to Baltimore …
  4 December 12, 2013 Harford County Courts Visited by Maryland’s Chief Judge    
  5 December 11, 2013 Cecil County Courts Welcome Maryland’s Chief  Judge        
- 6 December 4, 2013  Maryland’s New Chief Judge Visits Charles County Courts    
- 7 December 4, 2013  Maryland’s New Chief Judge Visits Prince George’s County D…
+ 6 December 4, 2013  Maryland’s New Chief Judge Visits Prince George’s County D…
+ 7 December 4, 2013  Maryland’s New Chief Judge Visits Charles County Courts    
  8 December 2, 2013  State Task Force Begins Study of Civil Right to Counsel fo…
- 9 November 18, 2013 Media Advisory: Maryland Judiciary Hosts Youths from DJS F…
-10 November 18, 2013 Media Advisory: Circuit Courts in Maryland Celebrate Natio…
+ 9 November 18, 2013 Media Advisory: Circuit Courts in Maryland Celebrate Natio…
+10 November 18, 2013 Media Advisory: Maryland Judiciary Hosts Youths from DJS F…
 # ℹ 16 more rows</code></pre>
 </div>
 </div>
@@ -617,8 +618,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Let’s say we are interested in 2023, so all we need to do now is to store that first dataframe as an object. We can do that with this code, which says “keep only the first dataframe from our nested list.”</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in all html from table, store all tables on page as nested list of dataframes.</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> courts_url <span class="sc">%&gt;%</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> courts_url <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">|&gt;</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>()</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Just keep the first dataframe in our list</span></span>
@@ -629,70 +630,72 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 19 × 2
+<pre><code># A tibble: 20 × 2
    Date              `News Release/News Item`                                   
    &lt;chr&gt;             &lt;chr&gt;                                                      
- 1 July 5, 2023      Media Advisory: Jury selection, trial to begin for State o…
- 2 July 5, 2023      Posthumous bar admission ceremony for Edward Garrison Drap…
- 3 June 15, 2023     Judge Yolanda L. Curtin named administrative judge for the…
- 4 May 30, 2023      Media Advisory: Circuit Court for Anne Arundel County host…
- 5 May 22, 2023      Seven Baltimore City Public Schools students awarded $20,0…
- 6 May 15, 2023      Media Advisory: Eighth annual Courting Art Baltimore conte…
- 7 May 10, 2023      Judge Dennis M. Robinson, Jr. named Baltimore County admin…
- 8 April 25, 2023    Chief Justice Matthew J. Fader appoints Judy Rupp state co…
- 9 April 12, 2023    Retired Chief Judge Mary Ellen Barbera receives 2023 Speak…
-10 April 11, 2023    Media Advisory: District Court in Anne Arundel County host…
-11 April 11, 2023    Media Advisory: Judge Brenda A. Sexton named administrativ…
-12 March 23, 2023    Media Advisory: Supreme Court of Maryland hosts Mock Trial…
-13 March 16, 2023    Retired Judge Charlotte Cooksey enshrined in  Maryland Wom…
-14 March 10, 2023    Media Advisory: District Court in Baltimore City relocates…
-15 February 27, 2023 Media Advisory: Baltimore City judge to preside over Balti…
-16 February 15, 2023 Media Advisory: Mental health awareness added to Schools i…
-17 January 17, 2023  Judge Donna M. Schaeffer named Anne Arundel County adminis…
-18 January 13, 2023  Media Advisory: Appellate Court of Maryland holds oral arg…
-19 January 12, 2023  Statement on recent judicial appointments                  </code></pre>
+ 1 August 17, 2023   Judge Richard “Ricky” Sandy named Frederick County Adminis…
+ 2 July 5, 2023      Media Advisory: Jury selection, trial to begin for State o…
+ 3 July 5, 2023      Posthumous bar admission ceremony for Edward Garrison Drap…
+ 4 June 15, 2023     Judge Yolanda L. Curtin named administrative judge for the…
+ 5 May 30, 2023      Media Advisory: Circuit Court for Anne Arundel County host…
+ 6 May 22, 2023      Seven Baltimore City Public Schools students awarded $20,0…
+ 7 May 15, 2023      Media Advisory: Eighth annual Courting Art Baltimore conte…
+ 8 May 10, 2023      Judge Dennis M. Robinson, Jr. named Baltimore County admin…
+ 9 April 25, 2023    Chief Justice Matthew J. Fader appoints Judy Rupp state co…
+10 April 12, 2023    Retired Chief Judge Mary Ellen Barbera receives 2023 Speak…
+11 April 11, 2023    Media Advisory: District Court in Anne Arundel County host…
+12 April 11, 2023    Media Advisory: Judge Brenda A. Sexton named administrativ…
+13 March 23, 2023    Media Advisory: Supreme Court of Maryland hosts Mock Trial…
+14 March 16, 2023    Retired Judge Charlotte Cooksey enshrined in  Maryland Wom…
+15 March 10, 2023    Media Advisory: District Court in Baltimore City relocates…
+16 February 27, 2023 Media Advisory: Baltimore City judge to preside over Balti…
+17 February 15, 2023 Media Advisory: Mental health awareness added to Schools i…
+18 January 17, 2023  Judge Donna M. Schaeffer named Anne Arundel County adminis…
+19 January 13, 2023  Media Advisory: Appellate Court of Maryland holds oral arg…
+20 January 12, 2023  Statement on recent judicial appointments                  </code></pre>
 </div>
 </div>
 <p>We now have a proper dataframe, albeit with some lengthy column headers.</p>
 <p>From here, we can do a little cleaning. First we’ll use clean_names() to lower the column names. Then use rename() to replace the title column with a simpler version and properly format the date.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in all html from table, get the HTML table.</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> courts_url <span class="sc">%&gt;%</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> courts_url <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">|&gt;</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>()</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardize column headers, remove last row</span></span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> results[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">title =</span> news_release_news_item) <span class="sc">%&gt;%</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> results[[<span class="dv">1</span>]] <span class="sc">|&gt;</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">title =</span> news_release_news_item) <span class="sc">|&gt;</span></span>
 <span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">mdy</span>(date))</span>
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># show the dataframe</span></span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 19 × 2
+<pre><code># A tibble: 20 × 2
    date       title                                                             
    &lt;date&gt;     &lt;chr&gt;                                                             
- 1 2023-07-05 Media Advisory: Jury selection, trial to begin for State of Maryl…
- 2 2023-07-05 Posthumous bar admission ceremony for Edward Garrison Draper      
- 3 2023-06-15 Judge Yolanda L. Curtin named administrative judge for the third …
- 4 2023-05-30 Media Advisory: Circuit Court for Anne Arundel County hosts recep…
- 5 2023-05-22 Seven Baltimore City Public Schools students awarded $20,000 in s…
- 6 2023-05-15 Media Advisory: Eighth annual Courting Art Baltimore contest to a…
- 7 2023-05-10 Judge Dennis M. Robinson, Jr. named Baltimore County administrati…
- 8 2023-04-25 Chief Justice Matthew J. Fader appoints Judy Rupp state court adm…
- 9 2023-04-12 Retired Chief Judge Mary Ellen Barbera receives 2023 Speaker’s Me…
-10 2023-04-11 Media Advisory: District Court in Anne Arundel County hosts Schoo…
-11 2023-04-11 Media Advisory: Judge Brenda A. Sexton named administrative judge…
-12 2023-03-23 Media Advisory: Supreme Court of Maryland hosts Mock Trial State …
-13 2023-03-16 Retired Judge Charlotte Cooksey enshrined in  Maryland Women’s Ha…
-14 2023-03-10 Media Advisory: District Court in Baltimore City relocates commis…
-15 2023-02-27 Media Advisory: Baltimore City judge to preside over Baltimore Ci…
-16 2023-02-15 Media Advisory: Mental health awareness added to Schools in the C…
-17 2023-01-17 Judge Donna M. Schaeffer named Anne Arundel County administrative…
-18 2023-01-13 Media Advisory: Appellate Court of Maryland holds oral argument f…
-19 2023-01-12 Statement on recent judicial appointments                         </code></pre>
+ 1 2023-08-17 Judge Richard “Ricky” Sandy named Frederick County Administrative…
+ 2 2023-07-05 Media Advisory: Jury selection, trial to begin for State of Maryl…
+ 3 2023-07-05 Posthumous bar admission ceremony for Edward Garrison Draper      
+ 4 2023-06-15 Judge Yolanda L. Curtin named administrative judge for the third …
+ 5 2023-05-30 Media Advisory: Circuit Court for Anne Arundel County hosts recep…
+ 6 2023-05-22 Seven Baltimore City Public Schools students awarded $20,000 in s…
+ 7 2023-05-15 Media Advisory: Eighth annual Courting Art Baltimore contest to a…
+ 8 2023-05-10 Judge Dennis M. Robinson, Jr. named Baltimore County administrati…
+ 9 2023-04-25 Chief Justice Matthew J. Fader appoints Judy Rupp state court adm…
+10 2023-04-12 Retired Chief Judge Mary Ellen Barbera receives 2023 Speaker’s Me…
+11 2023-04-11 Media Advisory: District Court in Anne Arundel County hosts Schoo…
+12 2023-04-11 Media Advisory: Judge Brenda A. Sexton named administrative judge…
+13 2023-03-23 Media Advisory: Supreme Court of Maryland hosts Mock Trial State …
+14 2023-03-16 Retired Judge Charlotte Cooksey enshrined in  Maryland Women’s Ha…
+15 2023-03-10 Media Advisory: District Court in Baltimore City relocates commis…
+16 2023-02-27 Media Advisory: Baltimore City judge to preside over Baltimore Ci…
+17 2023-02-15 Media Advisory: Mental health awareness added to Schools in the C…
+18 2023-01-17 Judge Donna M. Schaeffer named Anne Arundel County administrative…
+19 2023-01-13 Media Advisory: Appellate Court of Maryland holds oral argument f…
+20 2023-01-12 Statement on recent judicial appointments                         </code></pre>
 </div>
 </div>
 <p>And there we go. We now have a nice tidy dataframe of Maryland state court press releases. We could combine all 11 dataframes if we wanted to have the whole set.</p>
@@ -704,7 +707,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The next step is similar to before, too, except this time we’re not going to call <code>html_table()</code> because there are no tables here that we want. In order to find what we want, we’ll need to right-click on the first release date and choose “Inspect”.</p>
 <p>One reason that we use HTML elements like ul and li is to help organize the code and make it easier to maintain. But it also helps with scraping, because we can zero in on the elements we want. Let’s start by reading it in:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>osp_results <span class="ot">&lt;-</span> osp_url <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>osp_results <span class="ot">&lt;-</span> osp_url <span class="sc">|&gt;</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>()</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># show the result</span></span>
@@ -718,7 +721,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Once again we get a list of two as our result. In this case, we don’t want to isolate the first item in our list. Instead, we want to try to locate all of the <code>li</code> tags inside this HTML. Since the <code>li</code> tag is an HTML element, we use the function <code>html_elements()</code> to get them. If we only wanted a single element, we’d use <code>html_element()</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>osp_results <span class="sc">%&gt;%</span> <span class="fu">html_elements</span>(<span class="st">'li'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>osp_results <span class="sc">|&gt;</span> <span class="fu">html_elements</span>(<span class="st">'li'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{xml_nodeset (122)}
  [1] &lt;li&gt;\n&lt;a href="https://www.facebook.com/OSPMD/" class="sm-facebook" titl ...
@@ -750,7 +753,7 @@ tags, but we have lots of them, and it’s hard to see if we have the right ones
 </li><li>
 <p>tags. To do that, we add <code>html_text()</code> to the end of the last code block:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>osp_results <span class="sc">%&gt;%</span> <span class="fu">html_elements</span>(<span class="st">'li'</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>osp_results <span class="sc">|&gt;</span> <span class="fu">html_elements</span>(<span class="st">'li'</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  [1] "Facebook "                                                                                                                                                                                                                                           
   [2] "Twitter "                                                                                                                                                                                                                                            
@@ -768,106 +771,106 @@ tags, but we have lots of them, and it’s hard to see if we have the right ones
  [14] "State Board of Elections"                                                                                                                                                                                                                            
  [15] "State Ethics Commission"                                                                                                                                                                                                                             
  [16] "Attorney Grievance Commission"                                                                                                                                                                                                                       
- [17] "July 31, 2023: Treasurer for Political Committees “Friends of Cathy Bevins” and the “Baltimore County Victory Slate” Sentenced to Six Months Incarceration"                                                                                          
- [18] "May 25, 2023: Treasurer for Political Committees “Friends of Cathy Bevins” and the “Baltimore County Victory Slate” Pleads Guilty to Felony Theft Scheme and Perjury"                                                                                
- [19] "April 18, 2023: Former Baltimore City State’s Attorney Sentenced to Two Years in Federal Prison for Unlawfully Obtaining Phone Records"                                                                                                              
- [20] "April 13, 2023: Calvert County Sheriff’s Deputy Pleads Guilty To Misconduct In Office"                                                                                                                                                               
- [21] "February 16, 2023: Treasurer to Political Committees “Friends of Cathy Bevins” and the “Baltimore County Victory Slate” Charged with Multiple Counts Of Felony Theft Scheme, Embezzlement, and Perjury"                                              
- [22] "January 13, 2023: Former Maryland State Delegate Richard K. Impallaria Pleads Guilty to Misconduct in Office for Misusing State Funds"                                                                                                               
- [23] "January 9, 2023: Calvert County Sheriff’s Deputy Charged with Misconduct in Office for Engaging in Sexual Relations with a Person Requesting Assistance"                                                                                             
- [24] "January 4, 2023: Former Annapolis Police Department Officer Pleads Guilty to Misconduct in Office"                                                                                                                                                   
- [25] "December 9, 2022: Former Baltimore City Assistant State’s Attorney Pleads Guilty to Federal Charges For Unlawfully Obtaining Phone Records"                                                                                                          
- [26] "September 30, 2022: Former Baltimore City Assistant State’s Attorney Facing Federal Charges for Unlawfully Obtaining Phone Records"                                                                                                                  
- [27] "September 29, 2022: Treasurer of Political Committee “Team 30 Slate” Pleads Guilty to Theft"                                                                                                                                                         
- [28] "July 27, 2022: Delegate Richard Impallaria charged with Felony Theft and related crimes for schemes related to misuse of state funds"                                                                                                                
- [29] "May 4, 2022: Treasurer of Political Committee “Team 30 Slate” Charged with Theft of Campaign Funds"                                                                                                                                                  
- [30] "April 18, 2022: Andrew Bradshaw, Former Mayor of Cambridge, MD, Pleads Guilty to Five Counts of Distributing Revenge Porn"                                                                                                                           
- [31] "November 30, 2021: Former Baltimore City Homicide Prosecutor Indicted on 88 Charges, including Stalking, Extortion, and Misconduct in Office"                                                                                                        
- [32] "November 23, 2021:  Fairmount Heights Police Officer Charged with Kidnapping, Perjury and Misconduct in Office"                                                                                                                                      
- [33] "November 15, 2021: Mayor of Cambridge Charged with violating Maryland’s Revenge Porn Statute"                                                                                                                                                        
- [34] "October 26, 2021: Non-Profit CEO Sentenced to Two Years in Federal Prison after Pleading Guilty to Wire Fraud in Connection with the Misuse of Federal Funds Intended For The Treatment of Survivors of Domestic Violence and Sexual Assault"        
- [35] "October 5, 2021: Former Executive Director Of Maryland Environmental Service Facing Federal And State Charges For Allegedly Fraudulently Obtaining More Than $276,731 From His Employer, And State Felony Violations Of The Maryland Wiretap Statute"
- [36] "September 23, 2021: Two Additional Baltimore Correctional Employees Plead Guilty, Making a Total of Eight Correctional Employees Convicted of Charges Related to Theft of over $400,000 Dollars of State Funds."                                     
- [37] "August 20, 2021: Ivan Gonzalez, Former Baltimore Police Officer and Candidate for Mayor of Baltimore City, Pleads Guilty to Perjury"                                                                                                                 
- [38] "August 11, 2021: Baltimore Correctional Officer Pleads Guilty to Charges of Felony Theft and Misconduct in Office"                                                                                                                                   
- [39] "August 9, 2021: Edward M. Estes, former Mayor of the City of Glenarden, Pleads Guilty to Misconduct in Office"                                                                                                                                       
- [40] "July 30, 2021:  Lora Walters, former Deputy Director of the Cecil County Board of Elections, Pleads Guilty to Misconduct in Office"                                                                                                                  
- [41] "July 29, 2021: Baltimore Correctional Officers Plead Guilty to Charges of Felony Theft and Misconduct in Office"                                                                                                                                     
- [42] "July 26, 2021: Baltimore City Employee Pleads Guilty to Perjury"                                                                                                                                                                                     
- [43] "July 9, 2021: Correctional Officer at Metropolitan Transition Center in Baltimore Pleads Guilty to Charges of Felony Theft and Misconduct in Office"                                                                                                 
- [44] "June 10, 2021:  Five Correctional Officers charged with Felony Theft and Misconduct in Office"                                                                                                                                                       
- [45] "June 4, 2021:  Lora Walters, former Deputy Director of the Cecil County Board of Elections, charged with Misconduct in Office, Perjury, and other offenses."                                                                                         
- [46] "March 29, 2021: Ivan Gonzalez, Baltimore Police Officer and Candidate for Mayor of Baltimore City, charged with Perjury and other crimes related to his 2020 Mayoral Campaign"                                                                       
- [47] "March 11, 2021: New Bank Fraud and Aggravated Identity Theft Charges Added to Non-Profit CEO’S Previous Federal Indictment Charging Her with Wire Fraud, Bank Fraud, and Aggravated Identity Theft"                                                  
- [48] "January 15, 2021: Correctional Officers and State Employee Charged with Theft and Bribery"                                                                                                                                                           
- [49] "January 13, 2021: Baltimore City Employee Charged with Perjury"                                                                                                                                                                                      
- [50] "November 17, 2020: Edward M. Estes, Mayor of Glen Arden, Maryland, Charged with Violating the Maryland Wiretap Statute and Misconduct in Office"                                                                                                     
- [51] "June 19, 2020: Former Baltimore Mayor Catherine Pugh Pleads Guilty To Perjury"                                                                                                                                                                       
- [52] "March 17, 2020: Level II – Flexible Operations of the Pandemic Flu and Other Infectious Diseases Attendance and Leave Policy"                                                                                                                        
- [53] "February 13, 2020: Devan Martin,  OSP Case #20-5785"                                                                                                                                                                                                 
- [54] "January 17, 2020: Greensboro Police Chief Pleads Guilty to Misconduct in Office"                                                                                                                                                                     
- [55] "January 6, 2020: Charles Blomquist and Sarah David Named Deputy State Prosecutors"                                                                                                                                                                   
- [56] "December 18, 2019: Ex-Baltimore Mayor Catherine Pugh Charged with Perjury"                                                                                                                                                                           
- [57] "December 10, 2019: City of District Heights Mayor Sentenced for Misconduct in Office"                                                                                                                                                                
- [58] "December 5, 2019: Former Baltimore City School Business Manager Pleads Guilty to Theft of School Funds"                                                                                                                                              
- [59] "November 25, 2019: Charlton T. Howard III Sworn in as State Prosecutor"                                                                                                                                                                              
- [60] "November 20, 2019: City of District Heights Mayor Convicted of Misconduct in Office"                                                                                                                                                                 
- [61] "November 19, 2019: Maryland State Police Sergeant Charged with Misconduct in Office"                                                                                                                                                                 
- [62] "November 14, 2019: Greensboro Police Chief Charged with Misconduct in Office"                                                                                                                                                                        
- [63] "November 7, 2019: Former Baltimore City School Business Manager Charged with Theft of School Funds"                                                                                                                                                  
- [64] "October 30, 2019: Candidate for Sheriff in Baltimore City Pleads Guilty to Campaign Violations"                                                                                                                                                      
- [65] "Meeting Minutes for the 09/24/19 Meeting of the State Prosecutor Selection and Disabilities Commission.&nbsp;"                                                                                                                                            
- [66] "Meeting Minutes for the 09/17/19 Meeting of the State Prosecutor Selection and Disabilities Commission"                                                                                                                                              
- [67] "Notice of Meeting of State Prosecutor Selection and Disabilities Commission"                                                                                                                                                                         
- [68] "Meeting Minutes for the 08/21/19 Meeting of the State Prosecutor Selection and Disabilities Commission"                                                                                                                                              
- [69] "Notice of Meeting of State Prosecutor Selection and Disabilities Commission"                                                                                                                                                                         
- [70] "State Prosecutor Selection and Disabilities Commission Receives 18 Total Applications for State Prosecutor Vacancy; 2 Withdraw"                                                                                                                      
- [71] "September 9, 2019: Candidate for Sheriff of Baltimore City Charged with Campaign Violations"                                                                                                                                                         
- [72] "Notice of Meeting of State Prosecutor Selection and Disabilities Commission"                                                                                                                                                                         
- [73] "State Prosecutor Selection and Disabilities Commission Receives 18 Applications for State Prosecutor Vacancy"                                                                                                                                        
- [74] "August 15, 2019: Notice of Meeting of State Prosecutor Selection and Disabilities  Commission"                                                                                                                                                       
- [75] "July 9, 2019: Former Pocomoke City Police Chief Sentenced for Misconduct in Office Conviction"                                                                                                                                                       
- [76] "July 9, 2019: Kelvin Sewell, Sentencing Memorandum"                                                                                                                                                                                                  
- [77] "June 7, 2019: City of District Heights Mayor Charged with Misconduct in Office"                                                                                                                                                                      
- [78] "June 7, 2019: Criminal Information, Eddie Martin"                                                                                                                                                                                                    
- [79] "April 3, 2019: Circuit Court for Anne Arundel County Issues Memorandum Opinion in State of MD v. John Leopold"                                                                                                                                       
- [80] "April 2, 2019: Baltimore Area Tax Preparer Sentenced For Felony Theft And Willfully Filing A False Tax Return"                                                                                                                                       
- [81] "February 1, 2019:Baltimore Area Tax Preparer And Former Maryland Department Of Human Services Employee Pleads Guilty To Felony Theft Scheme And Willfully Filing False Income Tax Returns."                                                          
- [82] "February 1, 2019: Statement of Facts, Floyd Briscoe Wright"                                                                                                                                                                                          
- [83] "January 22, 2019: State Prosecutor Announces Retirement"                                                                                                                                                                                             
- [84] "January 14, 2019: Eighteen of Eighteen Defendants Plead Guilty to their roles in a Corruption and Bribery Conspiracy"                                                                                                                                
- [85] "November 16, 2018: Former Baltimore County Attorney Pleads Guilty to Felony Theft from Clients"                                                                                                                                                      
- [86] "November 16, 2018: Statement of Facts for Roger Harris"                                                                                                                                                                                              
- [87] "October 1, 2018: Baltimore Area Tax Preparer Indicted for Felony Theft, Willfully Filing False Taxes and Other Related Charges"                                                                                                                      
- [88] "October 1, 2018: Floyd Wright Indictment"                                                                                                                                                                                                            
- [89] "September 14, 2018: Former Correctional Officer Jailed in Corruption and Bribery Conspiracy"                                                                                                                                                         
- [90] "July 12, 2018: Nine Defendants Plead Guilty to Corruption and Bribery Conspiracy"                                                                                                                                                                    
- [91] "May 15, 2018: Kelly Madigan Named Deputy State Prosecutor"                                                                                                                                                                                           
- [92] "April 20, 2018: Shaun Dallas Dance Sentenced"                                                                                                                                                                                                        
- [93] "April 19, 2018: Former Attorney Charged with Felony Theft from Clients"                                                                                                                                                                              
- [94] "April 6, 2018: Former Register of Wills for Allegany County Pleads Guilty to Misconduct In Office"                                                                                                                                                   
- [95] "April 6, 2018: Rebecca Drew, Statement of Facts in Support of Guilty Plea"                                                                                                                                                                           
- [96] "March 8, 2018: Shaun Dallas Dance, Statement of Facts in Support of Guilty Plea"                                                                                                                                                                     
- [97] "March 1, 2018: Deputy State Prosecutor Retires After 33 Years"                                                                                                                                                                                       
- [98] "February 2, 2018: Former Baltimore City School Principal Incarcerated and Ordered to Pay Restitution of $58,689.34 for Thefts from School System"                                                                                                    
- [99] "December 5, 2017: Statement of Facts for Leslie Lewis, Indictment #117075031"                                                                                                                                                                        
-[100] "December 5, 2017: Statement of Facts for Leslie Lewis, Indictment #117075030"                                                                                                                                                                        
-[101] "February 2, 2018: Erica Holland, Former Account Clerk for the Town of Snow Hill, Incarcerated for Theft Scheme"                                                                                                                                      
-[102] "January 23, 2018: Shaun Dallas Dance, Former Superintendent of the Baltimore County Public Schools, Charged With Multiple Counts of Perjury"                                                                                                         
-[103] "January 23, 2018: Indictment of Shaun Dallas Dance"                                                                                                                                                                                                  
-[104] "January 11, 2018: Correctional Officers Among 18 Indicted in Prison Corruption Investigation"                                                                                                                                                        
-[105] "December 22, 2017: Daniel E. Gosnell, Lieutenant with the Aberdeen Police Department, Pleads Guilty to Misconduct in Office and Possession of a Controlled Dangerous Substance"                                                                      
-[106] "December 22, 2017: Daniel E. Gosnell, Statement of Facts in Support of Guilty Plea"                                                                                                                                                                  
-[107] "December 5, 2017: Leslie Lewis, Former Baltimore Community High School Principal, Pleads Guilty To Two Counts Of Felony Theft"                                                                                                                       
-[108] "November 8, 2017: Daniel E. Gosnell, Lieutenant With The Aberdeen Police Department, Charged With Misconduct In Office And Possession Of A Controlled Dangerous Substance"                                                                           
-[109] "November 8, 2017: Daniel E. Gosnell, Criminal Information"                                                                                                                                                                                           
-[110] "November 7, 2017: Former Employee of Historic Inns of Annapolis Pleads Guilty to Felony Theft of State Delegate’s Campaign Funds and Identity Theft"                                                                                                 
-[111] "November 7, 2017: Nicole Smith, Statement of Facts in Support of Guilty Plea"                                                                                                                                                                        
-[112] "September 26, 2017: Erica Holland, Former Account Clerk for Town of Snow Hill, Charged With Felony Theft"                                                                                                                                            
-[113] "September 26, 2017: Indictment of Erica Holland"                                                                                                                                                                                                     
-[114] "July 20, 2017: Rebecca Drew, Register Of Wills For Allegany County, Charged With Misconduct In Office, Two Counts Of Felony Theft And Misappropriation"                                                                                              
-[115] "July 20, 2017: Indictment of Rebecca Drew"                                                                                                                                                                                                           
-[116] "July 12, 2017: Town Mayor Sentenced to Nine (9) years for Felony Theft, Misconduct in Office and Forgery"                                                                                                                                            
+ [17] "August 23, 2023: Cecil County Sheriff’s Office Deputy Charged with Misconduct in Office, Witness Retaliation, Revenge Porn, and Related Offenses"                                                                                                    
+ [18] "July 31, 2023: Treasurer for Political Committees “Friends of Cathy Bevins” and the “Baltimore County Victory Slate” Sentenced to Six Months Incarceration"                                                                                          
+ [19] "May 25, 2023: Treasurer for Political Committees “Friends of Cathy Bevins” and the “Baltimore County Victory Slate” Pleads Guilty to Felony Theft Scheme and Perjury"                                                                                
+ [20] "April 18, 2023: Former Baltimore City State’s Attorney Sentenced to Two Years in Federal Prison for Unlawfully Obtaining Phone Records"                                                                                                              
+ [21] "April 13, 2023: Calvert County Sheriff’s Deputy Pleads Guilty To Misconduct In Office"                                                                                                                                                               
+ [22] "February 16, 2023: Treasurer to Political Committees “Friends of Cathy Bevins” and the “Baltimore County Victory Slate” Charged with Multiple Counts Of Felony Theft Scheme, Embezzlement, and Perjury"                                              
+ [23] "January 13, 2023: Former Maryland State Delegate Richard K. Impallaria Pleads Guilty to Misconduct in Office for Misusing State Funds"                                                                                                               
+ [24] "January 9, 2023: Calvert County Sheriff’s Deputy Charged with Misconduct in Office for Engaging in Sexual Relations with a Person Requesting Assistance"                                                                                             
+ [25] "January 4, 2023: Former Annapolis Police Department Officer Pleads Guilty to Misconduct in Office"                                                                                                                                                   
+ [26] "December 9, 2022: Former Baltimore City Assistant State’s Attorney Pleads Guilty to Federal Charges For Unlawfully Obtaining Phone Records"                                                                                                          
+ [27] "September 30, 2022: Former Baltimore City Assistant State’s Attorney Facing Federal Charges for Unlawfully Obtaining Phone Records"                                                                                                                  
+ [28] "September 29, 2022: Treasurer of Political Committee “Team 30 Slate” Pleads Guilty to Theft"                                                                                                                                                         
+ [29] "July 27, 2022: Delegate Richard Impallaria charged with Felony Theft and related crimes for schemes related to misuse of state funds"                                                                                                                
+ [30] "May 4, 2022: Treasurer of Political Committee “Team 30 Slate” Charged with Theft of Campaign Funds"                                                                                                                                                  
+ [31] "April 18, 2022: Andrew Bradshaw, Former Mayor of Cambridge, MD, Pleads Guilty to Five Counts of Distributing Revenge Porn"                                                                                                                           
+ [32] "November 30, 2021: Former Baltimore City Homicide Prosecutor Indicted on 88 Charges, including Stalking, Extortion, and Misconduct in Office"                                                                                                        
+ [33] "November 23, 2021:  Fairmount Heights Police Officer Charged with Kidnapping, Perjury and Misconduct in Office"                                                                                                                                      
+ [34] "November 15, 2021: Mayor of Cambridge Charged with violating Maryland’s Revenge Porn Statute"                                                                                                                                                        
+ [35] "October 26, 2021: Non-Profit CEO Sentenced to Two Years in Federal Prison after Pleading Guilty to Wire Fraud in Connection with the Misuse of Federal Funds Intended For The Treatment of Survivors of Domestic Violence and Sexual Assault"        
+ [36] "October 5, 2021: Former Executive Director Of Maryland Environmental Service Facing Federal And State Charges For Allegedly Fraudulently Obtaining More Than $276,731 From His Employer, And State Felony Violations Of The Maryland Wiretap Statute"
+ [37] "September 23, 2021: Two Additional Baltimore Correctional Employees Plead Guilty, Making a Total of Eight Correctional Employees Convicted of Charges Related to Theft of over $400,000 Dollars of State Funds."                                     
+ [38] "August 20, 2021: Ivan Gonzalez, Former Baltimore Police Officer and Candidate for Mayor of Baltimore City, Pleads Guilty to Perjury"                                                                                                                 
+ [39] "August 11, 2021: Baltimore Correctional Officer Pleads Guilty to Charges of Felony Theft and Misconduct in Office"                                                                                                                                   
+ [40] "August 9, 2021: Edward M. Estes, former Mayor of the City of Glenarden, Pleads Guilty to Misconduct in Office"                                                                                                                                       
+ [41] "July 30, 2021:  Lora Walters, former Deputy Director of the Cecil County Board of Elections, Pleads Guilty to Misconduct in Office"                                                                                                                  
+ [42] "July 29, 2021: Baltimore Correctional Officers Plead Guilty to Charges of Felony Theft and Misconduct in Office"                                                                                                                                     
+ [43] "July 26, 2021: Baltimore City Employee Pleads Guilty to Perjury"                                                                                                                                                                                     
+ [44] "July 9, 2021: Correctional Officer at Metropolitan Transition Center in Baltimore Pleads Guilty to Charges of Felony Theft and Misconduct in Office"                                                                                                 
+ [45] "June 10, 2021:  Five Correctional Officers charged with Felony Theft and Misconduct in Office"                                                                                                                                                       
+ [46] "June 4, 2021:  Lora Walters, former Deputy Director of the Cecil County Board of Elections, charged with Misconduct in Office, Perjury, and other offenses."                                                                                         
+ [47] "March 29, 2021: Ivan Gonzalez, Baltimore Police Officer and Candidate for Mayor of Baltimore City, charged with Perjury and other crimes related to his 2020 Mayoral Campaign"                                                                       
+ [48] "March 11, 2021: New Bank Fraud and Aggravated Identity Theft Charges Added to Non-Profit CEO’S Previous Federal Indictment Charging Her with Wire Fraud, Bank Fraud, and Aggravated Identity Theft"                                                  
+ [49] "January 15, 2021: Correctional Officers and State Employee Charged with Theft and Bribery"                                                                                                                                                           
+ [50] "January 13, 2021: Baltimore City Employee Charged with Perjury"                                                                                                                                                                                      
+ [51] "November 17, 2020: Edward M. Estes, Mayor of Glen Arden, Maryland, Charged with Violating the Maryland Wiretap Statute and Misconduct in Office"                                                                                                     
+ [52] "June 19, 2020: Former Baltimore Mayor Catherine Pugh Pleads Guilty To Perjury"                                                                                                                                                                       
+ [53] "March 17, 2020: Level II – Flexible Operations of the Pandemic Flu and Other Infectious Diseases Attendance and Leave Policy"                                                                                                                        
+ [54] "February 13, 2020: Devan Martin,  OSP Case #20-5785"                                                                                                                                                                                                 
+ [55] "January 17, 2020: Greensboro Police Chief Pleads Guilty to Misconduct in Office"                                                                                                                                                                     
+ [56] "January 6, 2020: Charles Blomquist and Sarah David Named Deputy State Prosecutors"                                                                                                                                                                   
+ [57] "December 18, 2019: Ex-Baltimore Mayor Catherine Pugh Charged with Perjury"                                                                                                                                                                           
+ [58] "December 10, 2019: City of District Heights Mayor Sentenced for Misconduct in Office"                                                                                                                                                                
+ [59] "December 5, 2019: Former Baltimore City School Business Manager Pleads Guilty to Theft of School Funds"                                                                                                                                              
+ [60] "November 25, 2019: Charlton T. Howard III Sworn in as State Prosecutor"                                                                                                                                                                              
+ [61] "November 20, 2019: City of District Heights Mayor Convicted of Misconduct in Office"                                                                                                                                                                 
+ [62] "November 19, 2019: Maryland State Police Sergeant Charged with Misconduct in Office"                                                                                                                                                                 
+ [63] "November 14, 2019: Greensboro Police Chief Charged with Misconduct in Office"                                                                                                                                                                        
+ [64] "November 7, 2019: Former Baltimore City School Business Manager Charged with Theft of School Funds"                                                                                                                                                  
+ [65] "October 30, 2019: Candidate for Sheriff in Baltimore City Pleads Guilty to Campaign Violations"                                                                                                                                                      
+ [66] "Meeting Minutes for the 09/24/19 Meeting of the State Prosecutor Selection and Disabilities Commission.&nbsp;"                                                                                                                                            
+ [67] "Meeting Minutes for the 09/17/19 Meeting of the State Prosecutor Selection and Disabilities Commission"                                                                                                                                              
+ [68] "Notice of Meeting of State Prosecutor Selection and Disabilities Commission"                                                                                                                                                                         
+ [69] "Meeting Minutes for the 08/21/19 Meeting of the State Prosecutor Selection and Disabilities Commission"                                                                                                                                              
+ [70] "Notice of Meeting of State Prosecutor Selection and Disabilities Commission"                                                                                                                                                                         
+ [71] "State Prosecutor Selection and Disabilities Commission Receives 18 Total Applications for State Prosecutor Vacancy; 2 Withdraw"                                                                                                                      
+ [72] "September 9, 2019: Candidate for Sheriff of Baltimore City Charged with Campaign Violations"                                                                                                                                                         
+ [73] "Notice of Meeting of State Prosecutor Selection and Disabilities Commission"                                                                                                                                                                         
+ [74] "State Prosecutor Selection and Disabilities Commission Receives 18 Applications for State Prosecutor Vacancy"                                                                                                                                        
+ [75] "August 15, 2019: Notice of Meeting of State Prosecutor Selection and Disabilities  Commission"                                                                                                                                                       
+ [76] "July 9, 2019: Former Pocomoke City Police Chief Sentenced for Misconduct in Office Conviction"                                                                                                                                                       
+ [77] "July 9, 2019: Kelvin Sewell, Sentencing Memorandum"                                                                                                                                                                                                  
+ [78] "June 7, 2019: City of District Heights Mayor Charged with Misconduct in Office"                                                                                                                                                                      
+ [79] "June 7, 2019: Criminal Information, Eddie Martin"                                                                                                                                                                                                    
+ [80] "April 3, 2019: Circuit Court for Anne Arundel County Issues Memorandum Opinion in State of MD v. John Leopold"                                                                                                                                       
+ [81] "April 2, 2019: Baltimore Area Tax Preparer Sentenced For Felony Theft And Willfully Filing A False Tax Return"                                                                                                                                       
+ [82] "February 1, 2019:Baltimore Area Tax Preparer And Former Maryland Department Of Human Services Employee Pleads Guilty To Felony Theft Scheme And Willfully Filing False Income Tax Returns."                                                          
+ [83] "February 1, 2019: Statement of Facts, Floyd Briscoe Wright"                                                                                                                                                                                          
+ [84] "January 22, 2019: State Prosecutor Announces Retirement"                                                                                                                                                                                             
+ [85] "January 14, 2019: Eighteen of Eighteen Defendants Plead Guilty to their roles in a Corruption and Bribery Conspiracy"                                                                                                                                
+ [86] "November 16, 2018: Former Baltimore County Attorney Pleads Guilty to Felony Theft from Clients"                                                                                                                                                      
+ [87] "November 16, 2018: Statement of Facts for Roger Harris"                                                                                                                                                                                              
+ [88] "October 1, 2018: Baltimore Area Tax Preparer Indicted for Felony Theft, Willfully Filing False Taxes and Other Related Charges"                                                                                                                      
+ [89] "October 1, 2018: Floyd Wright Indictment"                                                                                                                                                                                                            
+ [90] "September 14, 2018: Former Correctional Officer Jailed in Corruption and Bribery Conspiracy"                                                                                                                                                         
+ [91] "July 12, 2018: Nine Defendants Plead Guilty to Corruption and Bribery Conspiracy"                                                                                                                                                                    
+ [92] "May 15, 2018: Kelly Madigan Named Deputy State Prosecutor"                                                                                                                                                                                           
+ [93] "April 20, 2018: Shaun Dallas Dance Sentenced"                                                                                                                                                                                                        
+ [94] "April 19, 2018: Former Attorney Charged with Felony Theft from Clients"                                                                                                                                                                              
+ [95] "April 6, 2018: Former Register of Wills for Allegany County Pleads Guilty to Misconduct In Office"                                                                                                                                                   
+ [96] "April 6, 2018: Rebecca Drew, Statement of Facts in Support of Guilty Plea"                                                                                                                                                                           
+ [97] "March 8, 2018: Shaun Dallas Dance, Statement of Facts in Support of Guilty Plea"                                                                                                                                                                     
+ [98] "March 1, 2018: Deputy State Prosecutor Retires After 33 Years"                                                                                                                                                                                       
+ [99] "February 2, 2018: Former Baltimore City School Principal Incarcerated and Ordered to Pay Restitution of $58,689.34 for Thefts from School System"                                                                                                    
+[100] "December 5, 2017: Statement of Facts for Leslie Lewis, Indictment #117075031"                                                                                                                                                                        
+[101] "December 5, 2017: Statement of Facts for Leslie Lewis, Indictment #117075030"                                                                                                                                                                        
+[102] "February 2, 2018: Erica Holland, Former Account Clerk for the Town of Snow Hill, Incarcerated for Theft Scheme"                                                                                                                                      
+[103] "January 23, 2018: Shaun Dallas Dance, Former Superintendent of the Baltimore County Public Schools, Charged With Multiple Counts of Perjury"                                                                                                         
+[104] "January 23, 2018: Indictment of Shaun Dallas Dance"                                                                                                                                                                                                  
+[105] "January 11, 2018: Correctional Officers Among 18 Indicted in Prison Corruption Investigation"                                                                                                                                                        
+[106] "December 22, 2017: Daniel E. Gosnell, Lieutenant with the Aberdeen Police Department, Pleads Guilty to Misconduct in Office and Possession of a Controlled Dangerous Substance"                                                                      
+[107] "December 22, 2017: Daniel E. Gosnell, Statement of Facts in Support of Guilty Plea"                                                                                                                                                                  
+[108] "December 5, 2017: Leslie Lewis, Former Baltimore Community High School Principal, Pleads Guilty To Two Counts Of Felony Theft"                                                                                                                       
+[109] "November 8, 2017: Daniel E. Gosnell, Lieutenant With The Aberdeen Police Department, Charged With Misconduct In Office And Possession Of A Controlled Dangerous Substance"                                                                           
+[110] "November 8, 2017: Daniel E. Gosnell, Criminal Information"                                                                                                                                                                                           
+[111] "November 7, 2017: Former Employee of Historic Inns of Annapolis Pleads Guilty to Felony Theft of State Delegate’s Campaign Funds and Identity Theft"                                                                                                 
+[112] "November 7, 2017: Nicole Smith, Statement of Facts in Support of Guilty Plea"                                                                                                                                                                        
+[113] "September 26, 2017: Erica Holland, Former Account Clerk for Town of Snow Hill, Charged With Felony Theft"                                                                                                                                            
+[114] "September 26, 2017: Indictment of Erica Holland"                                                                                                                                                                                                     
+[115] "July 20, 2017: Rebecca Drew, Register Of Wills For Allegany County, Charged With Misconduct In Office, Two Counts Of Felony Theft And Misappropriation"                                                                                              
+[116] "July 20, 2017: Indictment of Rebecca Drew"                                                                                                                                                                                                           
 [117] "Contact Us"                                                                                                                                                                                                                                          
 [118] "Report Fraud"                                                                                                                                                                                                                                        
 [119] "Facebook "                                                                                                                                                                                                                                           
@@ -878,13 +881,13 @@ tags, but we have lots of them, and it’s hard to see if we have the right ones
 </div>
 <p>Ok, so now we can see the press releases. But they are surrounded by a bunch of things we don’t want, and this <em>still</em> isn’t a dataframe. Let’s solve the second problem first with the <code>as_tibble()</code> function:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>releases <span class="ot">&lt;-</span> osp_results <span class="sc">%&gt;%</span> <span class="fu">html_elements</span>(<span class="st">'li'</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>() <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>releases <span class="ot">&lt;-</span> osp_results <span class="sc">|&gt;</span> <span class="fu">html_elements</span>(<span class="st">'li'</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>() <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 Now we’re getting closer. The press releases have a specific HTML class tied to the
 </li><li>
 <p>tag - in this case “listing-item”. We can isolate those:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>releases <span class="ot">&lt;-</span> osp_results <span class="sc">%&gt;%</span> <span class="fu">html_elements</span>(<span class="st">'li.listing-item'</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>() <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>releases <span class="ot">&lt;-</span> osp_results <span class="sc">|&gt;</span> <span class="fu">html_elements</span>(<span class="st">'li.listing-item'</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>() <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Ok, this is <em>better</em>, but it’s still not great. We have at least two issues:</p>
 <ol type="1">
@@ -893,18 +896,18 @@ Now we’re getting closer. The press releases have a specific HTML class tied t
 </ol>
 <p>Let’s solve both of those using the <code>separate()</code> function, which does what you think it does and gives us a chance to rename the columns:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>releases <span class="ot">&lt;-</span> osp_results <span class="sc">%&gt;%</span> <span class="fu">html_elements</span>(<span class="st">'li.listing-item'</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>() <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> <span class="fu">separate</span>(value, <span class="fu">c</span>(<span class="st">'date'</span>, <span class="st">'title'</span>), <span class="at">sep=</span><span class="st">":"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>releases <span class="ot">&lt;-</span> osp_results <span class="sc">|&gt;</span> <span class="fu">html_elements</span>(<span class="st">'li.listing-item'</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>() <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> <span class="fu">separate</span>(value, <span class="fu">c</span>(<span class="st">'date'</span>, <span class="st">'title'</span>), <span class="at">sep=</span><span class="st">":"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: Expected 2 pieces. Missing pieces filled with `NA` in 8 rows [49, 50, 51, 52,
-53, 54, 56, 57].</code></pre>
+<pre><code>Warning: Expected 2 pieces. Missing pieces filled with `NA` in 8 rows [50, 51, 52, 53,
+54, 55, 57, 58].</code></pre>
 </div>
 </div>
 <p>That worked, but it also exposed a couple of things, as that Warning message indicates: not all of the rows had a colon in them and the <code>title</code> column has a leading space. Let’s fix both of those - we’ll drop the rows where the title is NA and convert the dates into actual dates.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>releases <span class="ot">&lt;-</span> osp_results <span class="sc">%&gt;%</span> <span class="fu">html_elements</span>(<span class="st">'li.listing-item'</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>() <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> <span class="fu">separate</span>(value, <span class="fu">c</span>(<span class="st">'date'</span>, <span class="st">'title'</span>), <span class="at">sep=</span><span class="st">":"</span>) <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>(title) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">title =</span> <span class="fu">str_squish</span>(title), <span class="at">date =</span> <span class="fu">mdy</span>(date))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>releases <span class="ot">&lt;-</span> osp_results <span class="sc">|&gt;</span> <span class="fu">html_elements</span>(<span class="st">'li.listing-item'</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>() <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> <span class="fu">separate</span>(value, <span class="fu">c</span>(<span class="st">'date'</span>, <span class="st">'title'</span>), <span class="at">sep=</span><span class="st">":"</span>) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>(title) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">title =</span> <span class="fu">str_squish</span>(title), <span class="at">date =</span> <span class="fu">mdy</span>(date))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: Expected 2 pieces. Missing pieces filled with `NA` in 8 rows [49, 50, 51, 52,
-53, 54, 56, 57].</code></pre>
+<pre><code>Warning: Expected 2 pieces. Missing pieces filled with `NA` in 8 rows [50, 51, 52, 53,
+54, 55, 57, 58].</code></pre>
 </div>
 </div>
 <p>And now you have the data.</p>

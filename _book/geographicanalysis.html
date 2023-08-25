@@ -351,7 +351,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>For the rest of this chapter, we’re going to work on building a map that will help us gain insight into geographic patterns in foreclosure notices by county in Maryland. What geographic patterns can we identify?</p>
 <p>First, we’ll go out and get the county foreclosure notices and population data for each county using tidycensus. The variable for total population is B01001_001</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>md_county_notices <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/Maryland_Foreclosure_Data_by_County.csv"</span>) <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="sc">-</span><span class="fu">c</span>(<span class="st">'Date'</span>, <span class="st">'Type'</span>), <span class="at">names_to=</span><span class="st">'county'</span>, <span class="at">values_to =</span> <span class="st">'notices'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>md_county_notices <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/Maryland_Foreclosure_Data_by_County.csv"</span>) <span class="sc">|&gt;</span> <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="sc">-</span><span class="fu">c</span>(<span class="st">'Date'</span>, <span class="st">'Type'</span>), <span class="at">names_to=</span><span class="st">'county'</span>, <span class="at">values_to =</span> <span class="st">'notices'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 63 Columns: 27
 ── Column specification ────────────────────────────────────────────────────────
@@ -406,33 +406,65 @@ dbl (25): Allegany County, Anne Arundel County, Baltimore City, Baltimore Co...
   |                                                                            
   |====                                                                  |   6%
   |                                                                            
-  |=====                                                                 |   6%
-  |                                                                            
   |=====                                                                 |   7%
-  |                                                                            
-  |=====                                                                 |   8%
   |                                                                            
   |======                                                                |   8%
   |                                                                            
   |======                                                                |   9%
   |                                                                            
-  |=======                                                               |   9%
-  |                                                                            
   |=======                                                               |  10%
   |                                                                            
-  |========                                                              |  11%
-  |                                                                            
-  |========                                                              |  12%
+  |=======                                                               |  11%
   |                                                                            
   |=========                                                             |  13%
   |                                                                            
+  |==========                                                            |  14%
+  |                                                                            
   |===========                                                           |  16%
+  |                                                                            
+  |============                                                          |  17%
+  |                                                                            
+  |============                                                          |  18%
+  |                                                                            
+  |=============                                                         |  18%
+  |                                                                            
+  |=============                                                         |  19%
+  |                                                                            
+  |==============                                                        |  20%
+  |                                                                            
+  |==============                                                        |  21%
+  |                                                                            
+  |===============                                                       |  21%
+  |                                                                            
+  |================                                                      |  22%
+  |                                                                            
+  |================                                                      |  23%
+  |                                                                            
+  |=================                                                     |  24%
+  |                                                                            
+  |==================                                                    |  25%
+  |                                                                            
+  |==================                                                    |  26%
   |                                                                            
   |===================                                                   |  27%
   |                                                                            
-  |=====================                                                 |  31%
+  |====================                                                  |  28%
+  |                                                                            
+  |====================                                                  |  29%
+  |                                                                            
+  |=====================                                                 |  30%
+  |                                                                            
+  |======================                                                |  31%
+  |                                                                            
+  |======================                                                |  32%
+  |                                                                            
+  |=======================                                               |  32%
   |                                                                            
   |=======================                                               |  33%
+  |                                                                            
+  |=======================                                               |  34%
+  |                                                                            
+  |========================                                              |  34%
   |                                                                            
   |========================                                              |  35%
   |                                                                            
@@ -442,15 +474,21 @@ dbl (25): Allegany County, Anne Arundel County, Baltimore City, Baltimore Co...
   |                                                                            
   |==========================                                            |  38%
   |                                                                            
-  |===========================                                           |  38%
-  |                                                                            
   |===========================                                           |  39%
   |                                                                            
+  |============================                                          |  39%
+  |                                                                            
   |============================                                          |  40%
+  |                                                                            
+  |=============================                                         |  41%
+  |                                                                            
+  |=============================                                         |  42%
   |                                                                            
   |==============================                                        |  43%
   |                                                                            
   |===============================                                       |  44%
+  |                                                                            
+  |===============================                                       |  45%
   |                                                                            
   |================================                                      |  45%
   |                                                                            
@@ -458,15 +496,55 @@ dbl (25): Allegany County, Anne Arundel County, Baltimore City, Baltimore Co...
   |                                                                            
   |=================================                                     |  47%
   |                                                                            
+  |==================================                                    |  48%
+  |                                                                            
+  |==================================                                    |  49%
+  |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |=============================================                         |  64%
+  |===================================                                   |  51%
   |                                                                            
-  |======================================================                |  78%
+  |====================================                                  |  51%
   |                                                                            
-  |==========================================================            |  83%
+  |====================================                                  |  52%
   |                                                                            
-  |===========================================================           |  84%
+  |=====================================                                 |  52%
+  |                                                                            
+  |=====================================                                 |  53%
+  |                                                                            
+  |======================================                                |  54%
+  |                                                                            
+  |======================================                                |  55%
+  |                                                                            
+  |=======================================                               |  56%
+  |                                                                            
+  |========================================                              |  57%
+  |                                                                            
+  |========================================                              |  58%
+  |                                                                            
+  |=========================================                             |  58%
+  |                                                                            
+  |=========================================                             |  59%
+  |                                                                            
+  |==========================================                            |  59%
+  |                                                                            
+  |===================================================                   |  73%
+  |                                                                            
+  |====================================================                  |  74%
+  |                                                                            
+  |====================================================                  |  75%
+  |                                                                            
+  |============================================================          |  85%
+  |                                                                            
+  |============================================================          |  86%
+  |                                                                            
+  |=============================================================         |  87%
+  |                                                                            
+  |==============================================================        |  89%
+  |                                                                            
+  |===============================================================       |  90%
+  |                                                                            
+  |====================================================================  |  98%
   |                                                                            
   |===================================================================== |  98%
   |                                                                            
@@ -560,11 +638,11 @@ First 10 features:
 <p>If they’re going to join properly, we need to clean one of them up to make it match the other.</p>
 <p>Let’s clean the population table. We’re going to rename the “NAME” column to “County”, then remove “, Maryland” and “County” and make the county titlecase. Next we’ll remove any white spaces after that first cleaning step that, if left in, would prevent a proper join. We’re also going to rename the column that contains the population information from “estimate” to “population” and select only the county name and the population columns, along with the geometry. That leaves us with this tidy table.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>md_county_population <span class="ot">&lt;-</span> md_county_population <span class="sc">%&gt;%</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">county =</span> NAME) <span class="sc">%&gt;%</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">county =</span> <span class="fu">str_to_title</span>(<span class="fu">str_remove_all</span>(county,<span class="st">", Maryland"</span>))) <span class="sc">%&gt;%</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">county =</span> <span class="fu">str_trim</span>(county,<span class="at">side=</span><span class="st">"both"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">population =</span> estimate) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>md_county_population <span class="ot">&lt;-</span> md_county_population <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">county =</span> NAME) <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">county =</span> <span class="fu">str_to_title</span>(<span class="fu">str_remove_all</span>(county,<span class="st">", Maryland"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">county =</span> <span class="fu">str_trim</span>(county,<span class="at">side=</span><span class="st">"both"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">population =</span> estimate) <span class="sc">|&gt;</span></span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(county, population, geometry)</span>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>md_county_population</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -590,7 +668,7 @@ First 10 features:
 </div>
 <p>Now we can join them.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>md_pop_with_foreclosures <span class="ot">&lt;-</span> md_county_population <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>md_pop_with_foreclosures <span class="ot">&lt;-</span> md_county_population <span class="sc">|&gt;</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(md_county_notices, <span class="fu">join_by</span>(county))</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>md_pop_with_foreclosures</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -627,9 +705,9 @@ First 10 features:
 </div>
 <p>Our final step before visualization, let’s calculate the number of foreclosure notices per 1000 population and sort from highest to lowest to see what trends we can identify just from the table.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>md_pop_with_foreclosures <span class="ot">&lt;-</span> md_county_population <span class="sc">%&gt;%</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(md_county_notices, <span class="fu">join_by</span>(county)) <span class="sc">%&gt;%</span> </span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rate =</span> notices<span class="sc">/</span>population<span class="sc">*</span><span class="dv">1000</span>) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>md_pop_with_foreclosures <span class="ot">&lt;-</span> md_county_population <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(md_county_notices, <span class="fu">join_by</span>(county)) <span class="sc">|&gt;</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rate =</span> notices<span class="sc">/</span>population<span class="sc">*</span><span class="dv">1000</span>) <span class="sc">|&gt;</span></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(rate))</span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>md_pop_with_foreclosures</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -678,7 +756,7 @@ First 10 features:
 <p>Let’s take a look at the result of this table. The variances in the rates aren’t huge, but there are some clear differences: Charles County and Prince George’s County have higher rates, followed by Baltimore City and some more rural counties.</p>
 <p>First, let’s use the counties() function from tigris to pull down a shapefile of all U.S. counties and grab the ones for Maryland.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>md_counties <span class="ot">&lt;-</span> <span class="fu">counties</span>() <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>md_counties <span class="ot">&lt;-</span> <span class="fu">counties</span>() <span class="sc">|&gt;</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(STATEFP <span class="sc">==</span> <span class="st">"24"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Retrieving data for the year 2020</code></pre>
@@ -692,25 +770,13 @@ First 10 features:
   |                                                                            
   |==                                                                    |   3%
   |                                                                            
-  |==                                                                    |   4%
-  |                                                                            
   |===                                                                   |   4%
   |                                                                            
   |===                                                                   |   5%
   |                                                                            
   |====                                                                  |   5%
   |                                                                            
-  |====                                                                  |   6%
-  |                                                                            
-  |=====                                                                 |   6%
-  |                                                                            
   |=====                                                                 |   7%
-  |                                                                            
-  |=====                                                                 |   8%
-  |                                                                            
-  |======                                                                |   8%
-  |                                                                            
-  |======                                                                |   9%
   |                                                                            
   |=======                                                               |   9%
   |                                                                            
@@ -718,19 +784,11 @@ First 10 features:
   |                                                                            
   |========                                                              |  11%
   |                                                                            
-  |========                                                              |  12%
-  |                                                                            
-  |=========                                                             |  12%
-  |                                                                            
   |=========                                                             |  13%
-  |                                                                            
-  |==========                                                            |  14%
-  |                                                                            
-  |==========                                                            |  15%
   |                                                                            
   |===========                                                           |  15%
   |                                                                            
-  |===========                                                           |  16%
+  |============                                                          |  16%
   |                                                                            
   |============                                                          |  17%
   |                                                                            
@@ -738,41 +796,53 @@ First 10 features:
   |                                                                            
   |=============                                                         |  18%
   |                                                                            
-  |==============                                                        |  20%
+  |=============                                                         |  19%
+  |                                                                            
+  |===============                                                       |  21%
+  |                                                                            
+  |===============                                                       |  22%
   |                                                                            
   |================                                                      |  22%
   |                                                                            
+  |================                                                      |  23%
+  |                                                                            
+  |================                                                      |  24%
+  |                                                                            
+  |=================                                                     |  24%
+  |                                                                            
   |=================                                                     |  25%
+  |                                                                            
+  |==================                                                    |  25%
+  |                                                                            
+  |==================                                                    |  26%
   |                                                                            
   |===================                                                   |  27%
   |                                                                            
-  |====================                                                  |  29%
+  |===================                                                   |  28%
   |                                                                            
-  |=====================                                                 |  31%
+  |====================                                                  |  28%
+  |                                                                            
+  |=====================                                                 |  30%
   |                                                                            
   |======================                                                |  32%
   |                                                                            
-  |=======================                                               |  32%
-  |                                                                            
   |=======================                                               |  33%
+  |                                                                            
+  |=======================                                               |  34%
   |                                                                            
   |========================                                              |  34%
   |                                                                            
-  |========================                                              |  35%
-  |                                                                            
-  |=========================                                             |  35%
-  |                                                                            
-  |==========================                                            |  36%
+  |=========================                                             |  36%
   |                                                                            
   |==========================                                            |  37%
   |                                                                            
+  |==========================                                            |  38%
+  |                                                                            
   |===========================                                           |  38%
   |                                                                            
-  |===========================                                           |  39%
-  |                                                                            
-  |============================                                          |  39%
-  |                                                                            
   |============================                                          |  40%
+  |                                                                            
+  |=============================                                         |  41%
   |                                                                            
   |=============================                                         |  42%
   |                                                                            
@@ -780,23 +850,15 @@ First 10 features:
   |                                                                            
   |==============================                                        |  43%
   |                                                                            
-  |==============================                                        |  44%
-  |                                                                            
   |===============================                                       |  44%
   |                                                                            
-  |===============================                                       |  45%
-  |                                                                            
-  |================================                                      |  45%
-  |                                                                            
   |================================                                      |  46%
-  |                                                                            
-  |=================================                                     |  47%
-  |                                                                            
-  |=================================                                     |  48%
   |                                                                            
   |==================================                                    |  48%
   |                                                                            
   |==================================                                    |  49%
+  |                                                                            
+  |===================================                                   |  49%
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
@@ -804,43 +866,27 @@ First 10 features:
   |                                                                            
   |====================================                                  |  51%
   |                                                                            
-  |====================================                                  |  52%
-  |                                                                            
-  |=====================================                                 |  52%
+  |=====================================                                 |  53%
   |                                                                            
   |======================================                                |  54%
   |                                                                            
+  |======================================                                |  55%
+  |                                                                            
+  |=======================================                               |  55%
+  |                                                                            
   |=======================================                               |  56%
-  |                                                                            
-  |========================================                              |  57%
-  |                                                                            
-  |========================================                              |  58%
   |                                                                            
   |=========================================                             |  58%
   |                                                                            
   |=========================================                             |  59%
   |                                                                            
-  |==========================================                            |  59%
-  |                                                                            
-  |==========================================                            |  60%
-  |                                                                            
-  |==========================================                            |  61%
-  |                                                                            
   |===========================================                           |  61%
   |                                                                            
   |===========================================                           |  62%
   |                                                                            
-  |============================================                          |  62%
-  |                                                                            
-  |============================================                          |  63%
-  |                                                                            
-  |=============================================                         |  65%
-  |                                                                            
-  |==============================================                        |  65%
+  |=============================================                         |  64%
   |                                                                            
   |==============================================                        |  66%
-  |                                                                            
-  |===============================================                       |  67%
   |                                                                            
   |===============================================                       |  68%
   |                                                                            
@@ -856,45 +902,23 @@ First 10 features:
   |                                                                            
   |==================================================                    |  71%
   |                                                                            
-  |==================================================                    |  72%
-  |                                                                            
-  |===================================================                   |  72%
-  |                                                                            
   |===================================================                   |  73%
   |                                                                            
-  |====================================================                  |  74%
-  |                                                                            
-  |====================================================                  |  75%
-  |                                                                            
   |=====================================================                 |  75%
-  |                                                                            
-  |=====================================================                 |  76%
-  |                                                                            
-  |======================================================                |  76%
   |                                                                            
   |======================================================                |  77%
   |                                                                            
   |======================================================                |  78%
   |                                                                            
-  |=======================================================               |  79%
-  |                                                                            
-  |========================================================              |  79%
+  |=======================================================               |  78%
   |                                                                            
   |========================================================              |  80%
-  |                                                                            
-  |========================================================              |  81%
-  |                                                                            
-  |=========================================================             |  81%
   |                                                                            
   |=========================================================             |  82%
   |                                                                            
   |==========================================================            |  82%
   |                                                                            
-  |==========================================================            |  83%
-  |                                                                            
   |===========================================================           |  84%
-  |                                                                            
-  |===========================================================           |  85%
   |                                                                            
   |============================================================          |  85%
   |                                                                            
@@ -904,21 +928,11 @@ First 10 features:
   |                                                                            
   |=============================================================         |  87%
   |                                                                            
-  |=============================================================         |  88%
-  |                                                                            
-  |==============================================================        |  88%
-  |                                                                            
   |==============================================================        |  89%
-  |                                                                            
-  |===============================================================       |  89%
-  |                                                                            
-  |===============================================================       |  90%
-  |                                                                            
-  |===============================================================       |  91%
   |                                                                            
   |================================================================      |  91%
   |                                                                            
-  |================================================================      |  92%
+  |=================================================================     |  92%
   |                                                                            
   |=================================================================     |  93%
   |                                                                            
@@ -926,17 +940,11 @@ First 10 features:
   |                                                                            
   |==================================================================    |  94%
   |                                                                            
-  |==================================================================    |  95%
-  |                                                                            
-  |===================================================================   |  95%
-  |                                                                            
-  |===================================================================   |  96%
-  |                                                                            
   |====================================================================  |  97%
   |                                                                            
-  |====================================================================  |  98%
+  |===================================================================== |  99%
   |                                                                            
-  |===================================================================== |  98%
+  |======================================================================|  99%
   |                                                                            
   |======================================================================| 100%</code></pre>
 </div>

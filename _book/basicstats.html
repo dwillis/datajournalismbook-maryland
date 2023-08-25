@@ -396,7 +396,7 @@ dbl (3): per_pupil_2021, gdp_growth_2021, pop_change_2021
 <p>Let’s start with this question: did states that had the greatest population growth and see GDP growth (our economic activity measure)? We can answer it by examining the relationship or correlation between two variables, pop_change_2021 and gdp_growth_2021. How much do they move in tandem?</p>
 <p>Let’s start by plotting them to get a sense of the pattern.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>state_data <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>state_data <span class="sc">|&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>pop_change_2021,<span class="at">y=</span>gdp_growth_2021)) <span class="sc">+</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">x=</span>pop_change_2021,<span class="at">y=</span>gdp_growth_2021), <span class="at">method=</span><span class="st">"lm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -410,7 +410,7 @@ dbl (3): per_pupil_2021, gdp_growth_2021, pop_change_2021
 <p>It’s a bit messy, but we can see something of a pattern here in the blob of dots. Generally, the dots are moving from the lower left (states with lower population growth) to upper right (states with higher population growth). The blue “line of best fit” shows the general direction of the relationship. It appears that those two things might be at least somewhat related.</p>
 <p>Let’s test another variable, the per-pupil education spending amount per state.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>state_data <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>state_data <span class="sc">|&gt;</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>per_pupil_2021,<span class="at">y=</span>gdp_growth_2021)) <span class="sc">+</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">x=</span>per_pupil_2021,<span class="at">y=</span>gdp_growth_2021), <span class="at">method=</span><span class="st">"lm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -429,8 +429,8 @@ dbl (3): per_pupil_2021, gdp_growth_2021, pop_change_2021
 <p>All r values will fall somewhere on this scale, and how to interpret them isn’t always straightforward. They’re best used to give general guidance when exploring patterns.</p>
 <p>We can calculate r with a function from the corrr package called “correlate()”. First, we remove the non-numeric values from our state_data (state and vote_2020), then we correlate.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>state_data <span class="sc">%&gt;%</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>state, <span class="sc">-</span>vote_2020) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>state_data <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>state, <span class="sc">-</span>vote_2020) <span class="sc">|&gt;</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">correlate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Correlation computed with
@@ -494,8 +494,8 @@ sample estimates:
 <p>We can do this because, in our data, we have a column with two possible categorical values, Biden or Trump, for each state.</p>
 <p>We could just calculate the averages like we’re used to doing.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>state_data <span class="sc">%&gt;%</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(vote_2020) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>state_data <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(vote_2020) <span class="sc">|&gt;</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_gdp_growth =</span> <span class="fu">mean</span>(gdp_growth_2021),</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_per_pupil_education =</span> <span class="fu">mean</span>(per_pupil_2021),</span>

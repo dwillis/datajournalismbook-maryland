@@ -401,7 +401,7 @@ $ geometry   &lt;MULTIPOLYGON [m]&gt; MULTIPOLYGON (((-8755679 48..., MULTIPOLYG
 <p>Let’s look at these zip codes We have 526 of them, according to this data.</p>
 <p>But where in Maryland are these places? We can simply plot them on a longitude-latitude grid using ggplot and geom_sf.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>md_zips <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>md_zips <span class="sc">|&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -431,12 +431,12 @@ in your R script or .Rprofile.</code></pre>
 <p>This looks pretty similar to our Census blocks shapefile, in that it looked mostly like a normal dataframe with the exception of the new geometry column.</p>
 <p>This county shapefile has all 3233 U.S. counties. We only want the Maryland counties, so we’re going to filter the data to only keep Maryland counties. There is no STATE column, but there is a STATEFP column, with each number representing a state. Maryland’s FP number is 24.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>md_counties <span class="ot">&lt;-</span> counties <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>md_counties <span class="ot">&lt;-</span> counties <span class="sc">|&gt;</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(STATEFP <span class="sc">==</span> <span class="st">"24"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To see what this looks like, let’s plot it out with ggplot. We can pretty clearly see the shapes of Maryland counties.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>md_counties <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>md_counties <span class="sc">|&gt;</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -459,7 +459,7 @@ in your R script or .Rprofile.</code></pre>
 <p>Notice the subtle differences at the boundaries?</p>
 <p>Let’s dive back into zip codes and this time bring along data on notices of intent to foreclosure by zip code (found at https://opendata.maryland.gov/Housing/Maryland-Notices-of-Intent-to-Foreclose-by-Zip-Cod/ftsr-vapt). Where are these foreclosure notices appearing?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>foreclosure_zip <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/Maryland_Notices_of_Intent_to_Foreclose_by_Zip_Code.csv"</span>) <span class="sc">%&gt;%</span> <span class="fu">clean_names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>foreclosure_zip <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/Maryland_Notices_of_Intent_to_Foreclose_by_Zip_Code.csv"</span>) <span class="sc">|&gt;</span> <span class="fu">clean_names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 547 Columns: 22
 ── Column specification ────────────────────────────────────────────────────────
@@ -470,14 +470,14 @@ dbl (21): July 2021, August 2021, September 2021, October 2021, November 202...
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>foreclosure_zip_march_2023 <span class="ot">&lt;-</span> foreclosure_zip <span class="sc">%&gt;%</span> </span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>foreclosure_zip_march_2023 <span class="ot">&lt;-</span> foreclosure_zip <span class="sc">|&gt;</span> </span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(zip, march_2023)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(foreclosure_zip_march_2023)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we can join the zip codes to the foreclosure data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>zip_codes_with_foreclosures <span class="ot">&lt;-</span> md_zips <span class="sc">%&gt;%</span> <span class="fu">left_join</span>(foreclosure_zip_march_2023, <span class="fu">join_by</span>(ZIPCODE1<span class="sc">==</span>zip))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>zip_codes_with_foreclosures <span class="ot">&lt;-</span> md_zips <span class="sc">|&gt;</span> <span class="fu">left_join</span>(foreclosure_zip_march_2023, <span class="fu">join_by</span>(ZIPCODE1<span class="sc">==</span>zip))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we can use color to distinguish zip codes from each other. Let’s use the number of foreclosure notices to start with:</p>
 <div class="cell">

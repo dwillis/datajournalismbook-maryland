@@ -386,7 +386,7 @@ lgl  (1): expense_toward
 </div>
 <p>Take a look at that first column, expenditure_date. It <em>looks</em> like a date, but see the <code>&lt;chr</code> right below the column name? That means R thinks it’s actually a character column. What we need to do is make it into an actual date column, which lubridate is very good at doing. It has a variety of functions that match the format of the data you have. In this case, the current format is <code>m/d/y</code>, and the lubridate function is called <code>mdy</code> that we can use with mutate:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>maryland_expenses <span class="ot">&lt;-</span> maryland_expenses <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">expenditure_date=</span><span class="fu">mdy</span>(expenditure_date))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>maryland_expenses <span class="ot">&lt;-</span> maryland_expenses <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">expenditure_date=</span><span class="fu">mdy</span>(expenditure_date))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: There was 1 warning in `mutate()`.
 ℹ In argument: `expenditure_date = mdy(expenditure_date)`.
@@ -420,10 +420,10 @@ Caused by warning:
 <p>We could use formatting to create a Month field but that would group all the Aprils ever together. We could create a year and a month together, but that would give us an invalid date object and that would create problems later. Lubridate has something called a floor date that we can use.</p>
 <p>So to follow along here, we’re going to use mutate to create a month field, group by to lump them together, summarize to count them up and arrange to order them. We’re just chaining things together.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>maryland_expenses <span class="sc">%&gt;%</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month =</span> <span class="fu">floor_date</span>(expenditure_date, <span class="st">"month"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month) <span class="sc">%&gt;%</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount)) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>maryland_expenses <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month =</span> <span class="fu">floor_date</span>(expenditure_date, <span class="st">"month"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month) <span class="sc">|&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount)) <span class="sc">|&gt;</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_amount))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 25 × 2

@@ -385,7 +385,7 @@ dbl (3): Fiscal Year, Amount, Fiscal Period
 <p>The <code>janitor</code> library makes fixing headers trivially simple with the function <code>clean_names()</code></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cleaning function</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cleaned_md_grants_loans <span class="ot">&lt;-</span> md_grants_loans <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cleaned_md_grants_loans <span class="ot">&lt;-</span> md_grants_loans <span class="sc">|&gt;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>()</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># display the cleaned dataset</span></span>
@@ -411,8 +411,8 @@ dbl (3): Fiscal Year, Amount, Fiscal Period
 <p>This function changed <code>Zip Code</code> to <code>zip_code</code> and generally got rid of capital letters and replaced spaces with underscores. If we wanted to rename a column, we can use a tidyverse function <code>rename()</code> to do that. Let’s change <code>grantor</code> to <code>source</code> as an example. NOTE: when using <code>rename()</code>, the <em>new</em> name comes first.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cleaning function</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>cleaned_md_grants_loans <span class="ot">&lt;-</span> md_grants_loans <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>cleaned_md_grants_loans <span class="ot">&lt;-</span> md_grants_loans <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span> </span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">source =</span> grantor)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># display the cleaned dataset</span></span>
@@ -441,9 +441,9 @@ dbl (3): Fiscal Year, Amount, Fiscal Period
 <p>Right now the <code>source</code>, <code>grantee</code> and <code>description</code> columns have inconsistent capitalization. We can fix that using a mutate statement and a function that changes the case of text called <code>str_to_upper()</code>. We’ll use the same columns, overwriting what’s in there since all we’re doing is changing case.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cleaning function</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>cleaned_md_grants_loans <span class="ot">&lt;-</span> md_grants_loans <span class="sc">%&gt;%</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">source =</span> grantor) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>cleaned_md_grants_loans <span class="ot">&lt;-</span> md_grants_loans <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">source =</span> grantor) <span class="sc">|&gt;</span> </span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">source =</span> <span class="fu">str_to_upper</span>(source), <span class="at">grantee =</span> <span class="fu">str_to_upper</span>(grantee), <span class="at">description =</span> <span class="fu">str_to_upper</span>(description))</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># display the cleaned dataset</span></span>
@@ -474,7 +474,7 @@ dbl (3): Fiscal Year, Amount, Fiscal Period
 <p>So the question is, do we have any records repeated?</p>
 <p>Here we’ll use a function called <code>get_dupes</code> from the janitor library to check for fully repeated records in our cleaned data set.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>cleaned_md_grants_loans <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>cleaned_md_grants_loans <span class="sc">|&gt;</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_dupes</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>No variable names specified - using all columns.</code></pre>
@@ -500,10 +500,10 @@ dbl (3): Fiscal Year, Amount, Fiscal Period
 <p>And the answer is … maybe? Because the original dataset doesn’t have a unique identifier for each grant, it’s <em>possible</em> that we have duplicates here, as many as 50. If we could confirm that these actually are duplicates, we can fix this by adding the function <code>distinct()</code> to our cleaning script. This will keep only one copy of each unique record in our table. But we’d need to confirm that first.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cleaning function</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>cleaned_md_grants_loans <span class="ot">&lt;-</span> md_grants_loans <span class="sc">%&gt;%</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">source =</span> grantor) <span class="sc">%&gt;%</span> </span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">source =</span> <span class="fu">str_to_upper</span>(source), <span class="at">grantee =</span> <span class="fu">str_to_upper</span>(grantee), <span class="at">description =</span> <span class="fu">str_to_upper</span>(description)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>cleaned_md_grants_loans <span class="ot">&lt;-</span> md_grants_loans <span class="sc">|&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">source =</span> grantor) <span class="sc">|&gt;</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">source =</span> <span class="fu">str_to_upper</span>(source), <span class="at">grantee =</span> <span class="fu">str_to_upper</span>(grantee), <span class="at">description =</span> <span class="fu">str_to_upper</span>(description)) <span class="sc">|&gt;</span> </span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>()</span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co"># display the cleaned dataset</span></span>
@@ -534,11 +534,11 @@ dbl (3): Fiscal Year, Amount, Fiscal Period
 <p>We’re going to write code that tells R to make a new column for our zips, keeping the first five digits on the left, and get rid of anything after that by using <code>mutate()</code> in concert with <code>str_sub()</code>, from the <code>stringr</code> package.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cleaning function</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>cleaned_md_grants_loans <span class="ot">&lt;-</span> md_grants_loans <span class="sc">%&gt;%</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">source =</span> grantor) <span class="sc">%&gt;%</span> </span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">source =</span> <span class="fu">str_to_upper</span>(source), <span class="at">grantee =</span> <span class="fu">str_to_upper</span>(grantee), <span class="at">description =</span> <span class="fu">str_to_upper</span>(description)) <span class="sc">%&gt;%</span> </span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>cleaned_md_grants_loans <span class="ot">&lt;-</span> md_grants_loans <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">source =</span> grantor) <span class="sc">|&gt;</span> </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">source =</span> <span class="fu">str_to_upper</span>(source), <span class="at">grantee =</span> <span class="fu">str_to_upper</span>(grantee), <span class="at">description =</span> <span class="fu">str_to_upper</span>(description)) <span class="sc">|&gt;</span> </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">zip5 =</span> <span class="fu">str_sub</span>(zip_code, <span class="at">start=</span>1L, <span class="at">end=</span>5L))</span>
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
@@ -566,12 +566,12 @@ dbl (3): Fiscal Year, Amount, Fiscal Period
 <p>If we arrange the zip5 column we can see that there are some non-digits in there, so let’s make those NA. For that, we’re going to use <code>case_when()</code>, a function that let’s us say if a value meets a certain condition, then change it, and if it doesn’t, don’t change it.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cleaning function</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>cleaned_md_grants_loans <span class="ot">&lt;-</span> md_grants_loans <span class="sc">%&gt;%</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">source =</span> grantor) <span class="sc">%&gt;%</span> </span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">source =</span> <span class="fu">str_to_upper</span>(source), <span class="at">grantee =</span> <span class="fu">str_to_upper</span>(grantee), <span class="at">description =</span> <span class="fu">str_to_upper</span>(description)) <span class="sc">%&gt;%</span> </span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">zip5 =</span> <span class="fu">str_sub</span>(zip_code, <span class="at">start=</span>1L, <span class="at">end=</span>5L)) <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>cleaned_md_grants_loans <span class="ot">&lt;-</span> md_grants_loans <span class="sc">|&gt;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">source =</span> grantor) <span class="sc">|&gt;</span> </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">source =</span> <span class="fu">str_to_upper</span>(source), <span class="at">grantee =</span> <span class="fu">str_to_upper</span>(grantee), <span class="at">description =</span> <span class="fu">str_to_upper</span>(description)) <span class="sc">|&gt;</span> </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">zip5 =</span> <span class="fu">str_sub</span>(zip_code, <span class="at">start=</span>1L, <span class="at">end=</span>5L)) <span class="sc">|&gt;</span></span>
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">zip5 =</span> <span class="fu">case_when</span>(</span>
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    zip5 <span class="sc">==</span> <span class="st">"Vario"</span> <span class="sc">~</span> <span class="cn">NA</span>,</span>
 <span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    zip5 <span class="sc">==</span> <span class="st">"UB7 O"</span> <span class="sc">~</span> <span class="cn">NA</span>,</span>
@@ -605,12 +605,12 @@ dbl (3): Fiscal Year, Amount, Fiscal Period
 <p>The second line of our case_when() function below now says, in English: look in the city column. If you find that one of the values starts with “UB7” (the “^” symbol means “starts with”), then (the tilde ~ means then) change it to NA.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cleaning function</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>cleaned_md_grants_loans <span class="ot">&lt;-</span> md_grants_loans <span class="sc">%&gt;%</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">source =</span> grantor) <span class="sc">%&gt;%</span> </span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">source =</span> <span class="fu">str_to_upper</span>(source), <span class="at">grantee =</span> <span class="fu">str_to_upper</span>(grantee), <span class="at">description =</span> <span class="fu">str_to_upper</span>(description)) <span class="sc">%&gt;%</span> </span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">zip5 =</span> <span class="fu">str_sub</span>(zip_code, <span class="at">start=</span>1L, <span class="at">end=</span>5L)) <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>cleaned_md_grants_loans <span class="ot">&lt;-</span> md_grants_loans <span class="sc">|&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">source =</span> grantor) <span class="sc">|&gt;</span> </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">source =</span> <span class="fu">str_to_upper</span>(source), <span class="at">grantee =</span> <span class="fu">str_to_upper</span>(grantee), <span class="at">description =</span> <span class="fu">str_to_upper</span>(description)) <span class="sc">|&gt;</span> </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">zip5 =</span> <span class="fu">str_sub</span>(zip_code, <span class="at">start=</span>1L, <span class="at">end=</span>5L)) <span class="sc">|&gt;</span></span>
 <span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">zip5 =</span> <span class="fu">case_when</span>(</span>
 <span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    zip5 <span class="sc">==</span> <span class="st">"Vario"</span> <span class="sc">~</span> <span class="cn">NA</span>,</span>
 <span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(zip5, <span class="st">"^UB7"</span>) <span class="sc">~</span> <span class="cn">NA</span>,</span>
@@ -639,10 +639,10 @@ dbl (3): Fiscal Year, Amount, Fiscal Period
 </div>
 <p>We’ve gotten the source and zip code data as clean as we can, and now we can answer our question: which zip code has gotten the most amount of money from the Maryland Tourism Board? A good rule of thumb is that you should only spend time cleaning fields that are critical to the specific analysis you want to do.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>cleaned_md_grants_loans <span class="sc">%&gt;%</span> </span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(source <span class="sc">==</span> <span class="st">'COMMERCE/MARYLAND TOURISM BOARD'</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(zip5) <span class="sc">%&gt;%</span> </span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount)) <span class="sc">%&gt;%</span> </span>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>cleaned_md_grants_loans <span class="sc">|&gt;</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(source <span class="sc">==</span> <span class="st">'COMMERCE/MARYLAND TOURISM BOARD'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(zip5) <span class="sc">|&gt;</span> </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount)) <span class="sc">|&gt;</span> </span>
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_amount))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 8 × 2

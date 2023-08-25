@@ -378,6 +378,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 Delimiter: ","
 chr (1): County
 dbl (1): BAR
+num (8): DEM, REP, GRN, LIB, WCP, OTH, UNA, TOTAL
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
@@ -431,13 +432,14 @@ dbl (1): BAR
 </div>
 <p>You can now export that extracted table to a CSV file using the “Export” button. And then we can read it into R and clean up the column names and some other things:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fentanyl_deaths <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/tabula-Annual_2020_Drug_Intox_Report.csv"</span>) <span class="sc">%&gt;%</span> <span class="fu">clean_names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fentanyl_deaths <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/tabula-Annual_2020_Drug_Intox_Report.csv"</span>) <span class="sc">|&gt;</span> <span class="fu">clean_names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 29 Columns: 12
 ── Column specification ────────────────────────────────────────────────────────
 Delimiter: ","
 chr (1): MARYLAND ......................................
 dbl (6): 26, 29, 58, 186, 340, 1,119
+num (5): 1,594, 1,888, 1,927, 2,342, 9,509
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
@@ -466,13 +468,14 @@ dbl (6): 26, 29, 58, 186, 340, 1,119
 <h2 data-number="22.3" class="anchored" data-anchor-id="cleaning-up-the-data-in-r"><span class="header-section-number">22.3</span> Cleaning up the data in R</h2>
 <p>The good news is that we have data we don’t have to retype. The bad news is, we have a few things to fix, starting with the fact that the headers shouldn’t be headers. Let’s start by re-importing it and specifying that the first row doesn’t have column headers:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fentanyl_deaths <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/tabula-Annual_2020_Drug_Intox_Report.csv"</span>, <span class="at">col_names =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> <span class="fu">clean_names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fentanyl_deaths <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/tabula-Annual_2020_Drug_Intox_Report.csv"</span>, <span class="at">col_names =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> <span class="fu">clean_names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 30 Columns: 12
 ── Column specification ────────────────────────────────────────────────────────
 Delimiter: ","
 chr (1): X1
 dbl (5): X2, X3, X4, X5, X6
+num (6): X7, X8, X9, X10, X11, X12
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
@@ -497,8 +500,8 @@ dbl (5): X2, X3, X4, X5, X6
 </div>
 <p>Ok, now we have all the data. But we need actual headers. Let’s add those using <code>rename()</code>, keeping in mind that the new name comes <em>first</em>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fentanyl_deaths <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/tabula-Annual_2020_Drug_Intox_Report.csv"</span>, <span class="at">col_names =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fentanyl_deaths <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/tabula-Annual_2020_Drug_Intox_Report.csv"</span>, <span class="at">col_names =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span> </span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">jurisdiction =</span> x1, <span class="at">deaths_2011 =</span> x2, <span class="at">deaths_2012 =</span> x3, <span class="at">deaths_2013 =</span> x4, <span class="at">deaths_2014 =</span> x5, <span class="at">deaths_2015 =</span> x6, <span class="at">deaths_2016 =</span> x7, <span class="at">deaths_2017 =</span> x8, </span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">deaths_2018 =</span> x9, <span class="at">deaths_2019 =</span> x10, <span class="at">deaths_2020 =</span> x11, <span class="at">deaths_total =</span> x12)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -507,6 +510,7 @@ dbl (5): X2, X3, X4, X5, X6
 Delimiter: ","
 chr (1): X1
 dbl (5): X2, X3, X4, X5, X6
+num (6): X7, X8, X9, X10, X11, X12
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
@@ -533,10 +537,10 @@ dbl (5): X2, X3, X4, X5, X6
 </div>
 <p>We could stop here, but there are a bunch of periods in the jurisdiction column and it’s better to remove them - it will make filtering easier. Let’s use <code>str_replace_all()</code> to do that:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>fentanyl_deaths <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/tabula-Annual_2020_Drug_Intox_Report.csv"</span>, <span class="at">col_names =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>fentanyl_deaths <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/tabula-Annual_2020_Drug_Intox_Report.csv"</span>, <span class="at">col_names =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span> </span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">jurisdiction =</span> x1, <span class="at">deaths_2011 =</span> x2, <span class="at">deaths_2012 =</span> x3, <span class="at">deaths_2013 =</span> x4, <span class="at">deaths_2014 =</span> x5, <span class="at">deaths_2015 =</span> x6, <span class="at">deaths_2016 =</span> x7, <span class="at">deaths_2017 =</span> x8, </span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">deaths_2018 =</span> x9, <span class="at">deaths_2019 =</span> x10, <span class="at">deaths_2020 =</span> x11, <span class="at">deaths_total =</span> x12) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">deaths_2018 =</span> x9, <span class="at">deaths_2019 =</span> x10, <span class="at">deaths_2020 =</span> x11, <span class="at">deaths_total =</span> x12) <span class="sc">|&gt;</span> </span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">jurisdiction =</span> <span class="fu">str_squish</span>(<span class="fu">str_replace_all</span>(jurisdiction,<span class="st">'</span><span class="sc">\\</span><span class="st">.'</span>,<span class="st">''</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 30 Columns: 12
@@ -544,6 +548,7 @@ dbl (5): X2, X3, X4, X5, X6
 Delimiter: ","
 chr (1): X1
 dbl (5): X2, X3, X4, X5, X6
+num (6): X7, X8, X9, X10, X11, X12
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
