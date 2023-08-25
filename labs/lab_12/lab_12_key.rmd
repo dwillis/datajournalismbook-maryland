@@ -36,16 +36,16 @@ library(dplyr)
 ```{r}
 md_attorney_sanctions <- read_csv("data/md_attorney_sanctions.csv")
 
-unique_words <- md_attorney_sanctions %>% select(text) %>%
+unique_words <- md_attorney_sanctions |> select(text) |>
   unnest_tokens(word, text)
 
 data("stop_words")
 
-unique_words %>%
-  anti_join(stop_words) %>%
-  group_by(word) %>%
-  tally(sort=TRUE) %>%
-  mutate(percent = (n/sum(n))*100) %>%
+unique_words |>
+  anti_join(stop_words) |>
+  group_by(word) |>
+  tally(sort=TRUE) |>
+  mutate(percent = (n/sum(n))*100) |>
   top_n(25)
 
 ```
@@ -55,18 +55,18 @@ unique_words %>%
 **A2.** The top phrase is "attorney trust account," which appears 343 times and represents 5.8 percent of all trigrams. Attorney trust accounts are bank accounts where clients place money that is held or controlled by the attorney, making it a possible vector for misuse.
 
 ```{r}
-md_attorney_sanctions %>%
-  unnest_tokens(fiver, text, token = "ngrams", n = 5) %>%
-  separate(fiver, c("word1", "word2", "word3", "word4", "word5"), sep = " ") %>%
-  filter(!word1 %in% stop_words$word) %>%
-  filter(!word2 %in% stop_words$word) %>%
-  filter(!word3 %in% stop_words$word) %>%
-  filter(!word4 %in% stop_words$word) %>%
-  filter(!word5 %in% stop_words$word) %>%
-  mutate(fiver = paste(word1, word2, word3, word4, word5, sep=" ")) %>%
-  group_by(fiver) %>%
-  tally(sort=TRUE) %>%
-  mutate(percent = (n/sum(n))*100) %>%
+md_attorney_sanctions |>
+  unnest_tokens(fiver, text, token = "ngrams", n = 5) |>
+  separate(fiver, c("word1", "word2", "word3", "word4", "word5"), sep = " ") |>
+  filter(!word1 %in% stop_words$word) |>
+  filter(!word2 %in% stop_words$word) |>
+  filter(!word3 %in% stop_words$word) |>
+  filter(!word4 %in% stop_words$word) |>
+  filter(!word5 %in% stop_words$word) |>
+  mutate(fiver = paste(word1, word2, word3, word4, word5, sep=" ")) |>
+  group_by(fiver) |>
+  tally(sort=TRUE) |>
+  mutate(percent = (n/sum(n))*100) |>
   top_n(10)
 ```
 
@@ -75,9 +75,9 @@ md_attorney_sanctions %>%
 **A3.** FY 2021 saw the most sanction actions mentioning "attorney trust account", with 37, slightly more than in 2022, which had 32. Since the start of the pandemic each year has seen totals that exceed any pre-pandemic year (and there are just three so far in FY 2023, which suggests that things are returning to a more normal level).
 
 ```{r}
-md_attorney_sanctions %>% 
-  filter(str_detect(text, "attorney trust account")) %>% 
-  group_by(fiscal_year) %>% 
+md_attorney_sanctions |> 
+  filter(str_detect(text, "attorney trust account")) |> 
+  group_by(fiscal_year) |> 
   tally(sort=TRUE)
 
 

@@ -102,21 +102,21 @@ To do that by hand, we'd have to take each of the 60,672 individual rows (or obs
 
 `dplyr` has a group by function in it that does just this. A massive amount of data analysis involves grouping like things together and then doing simple things like counting them, or averaging them together. So it's a good place to start.
 
-So to do this, we'll take our dataset and we'll introduce a new operator: `%>%`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." The keyboard shortcut for this is cmd-shift-m on the Mac and ctrl-shift-m on Windows. Don't like that character? R now has a new one that does the same thing: `|>`.
+So to do this, we'll take our dataset and we'll introduce a new operator: `|>`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." The keyboard shortcut for this is cmd-shift-m on the Mac and ctrl-shift-m on Windows. Don't like that character? R now has a new one that does the same thing: `|>`.
 
-We're going to establish a pattern that will come up again and again throughout this book: `data %>% function`. In English: take your data set and then do this specific action to it.
+We're going to establish a pattern that will come up again and again throughout this book: `data |> function`. In English: take your data set and then do this specific action to it.
 
 The first step of every analysis starts with the data being used. Then we apply functions to the data.
 
-In our case, the pattern that you'll use many, many times is: `data %>% group_by(COLUMN NAME) %>% summarize(VARIABLE NAME = AGGREGATE FUNCTION(COLUMN NAME))`
+In our case, the pattern that you'll use many, many times is: `data |> group_by(COLUMN NAME) |> summarize(VARIABLE NAME = AGGREGATE FUNCTION(COLUMN NAME))`
 
 In our dataset, the column with term information is called "term"
 
 Here's the code to count the number of courses in each term:
 
 ```{r}
-umd_courses %>%
-  group_by(term) %>%
+umd_courses |>
+  group_by(term) |>
   summarise(
     count_classes = n()
   )
@@ -135,11 +135,11 @@ When we run that, we get a list of terms with a count next to them. But it's not
 So we'll add another "and then do this" symbol -- %\>% -- and use a new function called `arrange()`. Arrange does what you think it does -- it arranges data in order. By default, it's in ascending order -- smallest to largest. But if we want to know the term with the most classes, we need to sort it in descending order. That looks like this:
 
 ```{r}
-umd_courses %>%
-  group_by(term) %>%
+umd_courses |>
+  group_by(term) |>
   summarise(
     count_classes = n()
-  ) %>%
+  ) |>
   arrange(desc(count_classes))
 ```
 
@@ -150,11 +150,11 @@ We can, if we want, group by more than one thing. The courses data contains a co
 We can group by "term" and "department" to see how many courses each department offered in each term. We'll sort by department and term.
 
 ```{r}
-umd_courses %>%
-  group_by(term, department) %>%
+umd_courses |>
+  group_by(term, department) |>
   summarise(
     count_classes = n()
-  ) %>%
+  ) |>
   arrange(term, department)
 ```
 
@@ -165,26 +165,26 @@ In the last example, we grouped like records together and counted them, but ther
 Let's say we wanted to know the total number of seats offered in each term? For that, we could use the `sum()` function to add up all of the values in the column "seats". We put the column we want to total -- "seats" -- inside the sum() function `sum(seats)`. Note that we can simply add a new summarize function here, keeping our count_classes field in our output table.
 
 ```{r}
-umd_courses %>%
-  group_by(term) %>%
+umd_courses |>
+  group_by(term) |>
   summarise(
     count_classes = n(),
     total_seats = sum(seats)
-  ) %>%
+  ) |>
   arrange(desc(total_seats))
 ```
 
 We can also calculate the average number of seats for each department -- the mean -- and the number that sits at the midpoint of our data -- the median.
 
 ```{r}
-umd_courses %>%
-  group_by(term) %>%
+umd_courses |>
+  group_by(term) |>
   summarise(
     count_classes = n(),
     total_seats = sum(seats),
     mean_seats = mean(seats),
     median_seats = median(seats)
-  ) %>%
+  ) |>
   arrange(desc(total_seats))
 ```
 
@@ -193,8 +193,8 @@ We see something interesting here. The mean number of seats is higher than the m
 What about the highest and lowest number of seats for each department? For that, we can use the `min()` and `max()` functions.
 
 ```{r}
-umd_courses %>%
-  group_by(department) %>%
+umd_courses |>
+  group_by(department) |>
   summarise(
     count_classes = n(),
     total_seats = sum(seats),
@@ -202,7 +202,7 @@ umd_courses %>%
     median_seats = median(seats),
     min_seats = min(seats),
     max_seats = max(seats)
-  ) %>%
+  ) |>
   arrange(desc(total_seats))
 ```
 
@@ -211,7 +211,7 @@ From this, we can see that every department has courses with 0 seats listed. We'
 It would be interesting to see what the course with the largest number of seats is. To do that, we could simply take our original data set and sort it from highest to lowest on seats
 
 ```{r}
-umd_courses %>%
+umd_courses |>
   arrange(desc(seats))
 ```
 

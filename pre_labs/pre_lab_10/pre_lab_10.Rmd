@@ -21,10 +21,10 @@ Go to the console and install it with `install.packages("sf")`
 
 To understand geographic queries, you have to get a few things in your head first:
 
-1. Your query is using planar space. Usually that's some kind of projection of the world. If you're lucky, your data is projected, and the software will handle projection differences under the hood without you knowing anything about it.
-2. Projections are cartographers making opinionated decisions about what the world should look like when you take a spheroid -- the earth isn't perfectly round -- and flatten it. Believe it or not, every state in the US has their own geographic projection. There's dozens upon dozens of them.
-3. Geographic queries work in layers. In most geographic applications, you'll have multiple layers. You'll have a boundary file, and a river file, and a road file, and a flood file and combined together they make the map. But you have to think in layers.
-4. See 1. With layers, they're all joined together by the planar space. So you don't need to join one to the other like we did earlier -- the space has done that. So you can query how many X are within the boundaries on layer Y. And it's the plane that holds them together.
+1.  Your query is using planar space. Usually that's some kind of projection of the world. If you're lucky, your data is projected, and the software will handle projection differences under the hood without you knowing anything about it.
+2.  Projections are cartographers making opinionated decisions about what the world should look like when you take a spheroid -- the earth isn't perfectly round -- and flatten it. Believe it or not, every state in the US has their own geographic projection. There's dozens upon dozens of them.
+3.  Geographic queries work in layers. In most geographic applications, you'll have multiple layers. You'll have a boundary file, and a river file, and a road file, and a flood file and combined together they make the map. But you have to think in layers.
+4.  See 1. With layers, they're all joined together by the planar space. So you don't need to join one to the other like we did earlier -- the space has done that. So you can query how many X are within the boundaries on layer Y. And it's the plane that holds them together.
 
 ```{r, echo=FALSE}
 knitr::include_graphics("images/geolayers.jpg")
@@ -35,6 +35,7 @@ knitr::include_graphics("images/geolayers.jpg")
 Let's start with the absolute basics of geographic data: loading and viewing. Load libraries as usual.
 
 ### Task 1: Load packages
+
 **Task** Run the following code to load packages.
 
 ```{r}
@@ -55,8 +56,8 @@ The data we're going to be working with is a Shapefile of Maryland zip codes fro
 Simlar to `readr`, the `sf` library has functions to read geographic data. In this case, we're going to use `st_read` to read in our zip code data. And then glimpse it to look at the columns.
 
 ### Task: Load data
-**Task** Run the following code to load data. Describe what you see in the answer space below. What columns exist in this data?
-**Answer**
+
+**Task** Run the following code to load data. Describe what you see in the answer space below. What columns exist in this data? **Answer**
 
 ```{r}
 md_zips <- st_read("data/md_zips/BNDY_ZIPCodes11Digit_MDP.shp")
@@ -64,13 +65,13 @@ md_zips <- st_read("data/md_zips/BNDY_ZIPCodes11Digit_MDP.shp")
 glimpse(md_zips)
 ```
 
-This looks like a normal dataframe, and mostly it is.  We have one row per zipcode, and each column is some feature of that zip code: the fipscode, name and more.  What sets this data apart from other dataframes we've used is the last column, "geometry", which is of a new data type. It's not a character or a number, it's a "Multipolygon", which is composed of multiple longitude and latitude values. When we plot these on a grid of latitude and longitude, it will draw those shapes on a map.
+This looks like a normal dataframe, and mostly it is. We have one row per zipcode, and each column is some feature of that zip code: the fipscode, name and more. What sets this data apart from other dataframes we've used is the last column, "geometry", which is of a new data type. It's not a character or a number, it's a "Multipolygon", which is composed of multiple longitude and latitude values. When we plot these on a grid of latitude and longitude, it will draw those shapes on a map.
 
 Let's look at these zip codes We have 526 of them, according to this data.
 
 ### Task: Run code
-**Task** Run the following code. Describe the output in the space below: what kind of information does it contain?
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below: what kind of information does it contain? **Answer**
 
 ```{r}
 View(md_zips)
@@ -79,11 +80,11 @@ View(md_zips)
 But where in Maryland are these places? We can simply plot them on a longitude-latitude grid using ggplot and geom_sf.
 
 ### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below. **Answer**
 
 ```{r}
-md_zips %>%
+md_zips |>
   ggplot() +
   geom_sf() +
   theme_minimal()
@@ -95,15 +96,15 @@ If you know anything about Maryland, you can pick out the geographic context her
 
 This is where layering becomes more clear. First, we want to go out and get another shapefile, this one showing Maryland county outlines.
 
-Instead of loading it from our local machine, like we did above, we're going to use a package to directly download it from the U.S. Census.  The package is called `tigris` and it's developed by the same person who made `tidycensus`.
+Instead of loading it from our local machine, like we did above, we're going to use a package to directly download it from the U.S. Census. The package is called `tigris` and it's developed by the same person who made `tidycensus`.
 
 In the console, install tigris with `install.packages('tigris')`
 
 Then load it:
 
 ### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below. **Answer**
 
 ```{r}
 # install.packages('tigris')
@@ -113,8 +114,9 @@ library(tigris)
 Now, let's use the counties() function from tigris to pull down a shapefile of all U.S. counties.
 
 ### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below. **Answer**
+
 ```{r}
 
 counties <- counties()
@@ -124,14 +126,14 @@ glimpse(counties)
 
 This looks pretty similar to our places shapefile, in that it looked mostly like a normal dataframe with the exception of the new geometry column (this time called `geometry`, which is pretty common).
 
-This county shapefile has all 3233 U.S. counties.  We only want the Maryland counties, so we're going to filter the data to only keep Maryland counties.  There is no STATE column, but there is a STATEFP column, with each number representing a state.  Maryland's FP number is 24.
+This county shapefile has all 3233 U.S. counties. We only want the Maryland counties, so we're going to filter the data to only keep Maryland counties. There is no STATE column, but there is a STATEFP column, with each number representing a state. Maryland's FP number is 24.
 
 ### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below. **Answer**
 
 ```{r}
-md_counties <- counties %>%
+md_counties <- counties |>
   filter(STATEFP == "24")
 
 ```
@@ -139,11 +141,11 @@ md_counties <- counties %>%
 To see what this looks like, let's plot it out with ggplot. We can pretty clearly see the shapes of Maryland counties.
 
 ### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below. **Answer**
 
 ```{r}
-md_counties %>%
+md_counties |>
   ggplot() +
   geom_sf() +
   theme_minimal()
@@ -153,11 +155,11 @@ With this county map, we can layer our places data.
 
 Something to note: The layers are rendered in the order they appear. So the first geom_sf is rendered first. The second geom_sf is rendered ON TOP OF the first one.
 
-We're also going to change things up a bit to put the datasets we want to display INSIDE of the geom_sf() function, instead of starting with a dataframe.  We have two to plot now, so it's easier this way.
+We're also going to change things up a bit to put the datasets we want to display INSIDE of the geom_sf() function, instead of starting with a dataframe. We have two to plot now, so it's easier this way.
 
 ### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below. **Answer**
 
 ```{r}
 ggplot() +
@@ -165,36 +167,38 @@ ggplot() +
   geom_sf(data=md_zips) +
   theme_minimal()
 ```
+
 Notice the subtle differences at the boundaries?
 
-Let's dive back into zip codes and this time bring along data on notices of intent to foreclosure by zip code (found at https://opendata.maryland.gov/Housing/Maryland-Notices-of-Intent-to-Foreclose-by-Zip-Cod/ftsr-vapt). Where are these foreclosure notices appearing?
+Let's dive back into zip codes and this time bring along data on notices of intent to foreclosure by zip code (found at <https://opendata.maryland.gov/Housing/Maryland-Notices-of-Intent-to-Foreclose-by-Zip-Cod/ftsr-vapt>). Where are these foreclosure notices appearing?
 
 ### Task: Run code to load the foreclosure notice data.
-**Task** Run the following code. Describe the output in the space below.
-**Answer** 
+
+**Task** Run the following code. Describe the output in the space below. **Answer**
 
 ```{r}
-foreclosure_zip <- read_csv("data/Maryland_Notices_of_Intent_to_Foreclose_by_Zip_Code.csv") %>% clean_names()
-foreclosure_zip_march_2023 <- foreclosure_zip %>% 
+foreclosure_zip <- read_csv("data/Maryland_Notices_of_Intent_to_Foreclose_by_Zip_Code.csv") |> clean_names()
+foreclosure_zip_march_2023 <- foreclosure_zip |> 
   select(zip, march_2023)
 
 View(foreclosure_zip_march_2023)
 ```
+
 Now we can join the zip codes to the foreclosure data.
 
 ### Task: Run code to join the zip code shapes with the foreclosure notice data
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below. **Answer**
 
 ```{r}
-zip_codes_with_foreclosures <- md_zips %>% left_join(foreclosure_zip_march_2023, join_by(ZIPCODE1=zip))
+zip_codes_with_foreclosures <- md_zips |> left_join(foreclosure_zip_march_2023, join_by(ZIPCODE1=zip))
 ```
 
 Now we can use color to distinguish zip codes from each other. Let's use the number of foreclosure notices to start with:
 
 ### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below. **Answer**
 
 ```{r}
 county_centroids <- st_centroid(zip_codes_with_foreclosures)
@@ -214,8 +218,8 @@ In the previous chapter, we looked at foreclosure notices by zip codes to find p
 First, let's load the libraries we'll need. We're also going to load tidycensus and set an API key for tidycensus.
 
 ### Task: Load libraries
-**Task** Run the following code. Describe the output in the space below. Be sure to input your census api key.
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below. Be sure to input your census api key. **Answer**
 
 ```{r}
 library(tidyverse)
@@ -227,25 +231,26 @@ library(tidycensus)
 
 For the rest of this chapter, we're going to work on building a map that will help us gain insight into geographic patterns in foreclosure notices by county in Maryland. What geographic patterns can we identify?
 
-First, we'll go out and get the county foreclosure notices and population data for each county using tidycensus. The variable for total population is B01001_001  
+First, we'll go out and get the county foreclosure notices and population data for each county using tidycensus. The variable for total population is B01001_001
 
 ### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below. **Answer**
 
 ```{r}
-md_county_notices <- read_csv("data/Maryland_Foreclosure_Data_by_County.csv") %>% slice(1) %>% pivot_longer(cols=-c('Date', 'Type'), names_to='county', values_to = 'notices')
+md_county_notices <- read_csv("data/Maryland_Foreclosure_Data_by_County.csv") |> slice(1) |> pivot_longer(cols=-c('Date', 'Type'), names_to='county', values_to = 'notices')
 
 md_county_population <- get_acs(geography = "county",
               variables = c(population = "B01001_001"),
               year = 2021,
               state = "MD")
 ```
-Ultimately, we're going to join this county table with population with foreclosure notices by county, and then calculate a percentage.  But remember, we then want to visualize this data by drawing a zip code map that helps us pick out trends. Thinking ahead, we know we'll need a zip code map shapefile. Fortunately, we can pull this geometry information right from tidycensus at the same time that we pull in the population data by adding "geometry = TRUE" to our get_acs function.
+
+Ultimately, we're going to join this county table with population with foreclosure notices by county, and then calculate a percentage. But remember, we then want to visualize this data by drawing a zip code map that helps us pick out trends. Thinking ahead, we know we'll need a zip code map shapefile. Fortunately, we can pull this geometry information right from tidycensus at the same time that we pull in the population data by adding "geometry = TRUE" to our get_acs function.
 
 ### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below. **Answer**
 
 ```{r}
 md_county_population <- get_acs(geography = "county",
@@ -256,15 +261,16 @@ md_county_population <- get_acs(geography = "county",
 
 md_county_population
 ```
+
 We now have a new column, geometry, that contains the "MULTIPOLYGON" data that will draw an outline of each county when we go to draw a map.
 
 The next step will be to join our population data to our foreclosure data on the county column.
 
-But there's a problem.  The column in our population data that has county names is called "NAME", and it has the full name of the county spelled out in title case -- first word capitalized and has "County" and "Maryland" in it.  The foreclosure data just has the name of the county.  For example, the population data has "Anne Arundel County, Maryland" and the foreclosure data has "Anne Arundel County".
+But there's a problem. The column in our population data that has county names is called "NAME", and it has the full name of the county spelled out in title case -- first word capitalized and has "County" and "Maryland" in it. The foreclosure data just has the name of the county. For example, the population data has "Anne Arundel County, Maryland" and the foreclosure data has "Anne Arundel County".
 
 ### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below. **Answer**
 
 ```{r}
 md_county_population
@@ -272,46 +278,48 @@ md_county_population
 md_county_notices
 ```
 
-If they're going to join properly, we need to clean one of them up to make it match the other.  
+If they're going to join properly, we need to clean one of them up to make it match the other.
 
 Let's clean the population table. We're going to rename the "NAME" column to "county", then remove ", Maryland" and make the county titlecase. Next we'll remove any white spaces after that first cleaning step that, if left in, would prevent a proper join. We're also going to rename the column that contains the population information from "estimate" to "population" and select only the county name and the population columns, along with the geometry. That leaves us with this tidy table.
 
 ### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below. **Answer**
 
 ```{r}
-md_county_population <- md_county_population %>%
-  rename(county = NAME) %>%
-  mutate(county = str_to_title(str_remove_all(county,", Maryland"))) %>%
-  mutate(county = str_trim(county,side="both")) %>%
-  rename(population = estimate) %>%
+md_county_population <- md_county_population |>
+  rename(county = NAME) |>
+  mutate(county = str_to_title(str_remove_all(county,", Maryland"))) |>
+  mutate(county = str_trim(county,side="both")) |>
+  rename(population = estimate) |>
   select(county, population, geometry)
 
 md_county_population
 ```
+
 Now we can join them!
 
 ### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below. **Answer**
 
 ```{r}
-md_pop_with_foreclosures <- md_county_population %>%
+md_pop_with_foreclosures <- md_county_population |>
   left_join(md_county_notices, join_by(county))
 
 md_pop_with_foreclosures
 ```
+
 Our final step before visualization, let's calculate the number of foreclosure notices per 1000 population and sort from highest to lowest to see what trends we can identify just from the table.
 
 ### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below. **Answer**
 
 ```{r}
-md_pop_with_foreclosures <- md_county_population %>%
-  left_join(md_county_notices, join_by(county)) %>% 
-  mutate(rate = notices/population*1000) %>%
+md_pop_with_foreclosures <- md_county_population |>
+  left_join(md_county_notices, join_by(county)) |> 
+  mutate(rate = notices/population*1000) |>
   arrange(desc(rate))
 
 md_pop_with_foreclosures
@@ -319,11 +327,11 @@ md_pop_with_foreclosures
 
 Let's take a look at the result of this table. The variances in the rates aren't huge, but there are some clear differences: Charles County and Prince George's County have higher rates, followed by Baltimore City and some more rural counties.
 
-Okay, now let's visualize.  We're going to build a choropleth map, with the color of each county -- the fill -- set according to the number of notices per 1K population on a color gradient.  
+Okay, now let's visualize. We're going to build a choropleth map, with the color of each county -- the fill -- set according to the number of notices per 1K population on a color gradient.
 
 ### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below. **Answer**
 
 ```{r}
 
@@ -336,11 +344,12 @@ ggplot() +
   geom_text(aes(x = X, y = Y, label = NAME), data = county_centroids_df, size = 3, check_overlap = TRUE) +
   theme_minimal()
 ```
+
 This map is okay, but the color scale makes it hard to draw fine-grained differences. Let's try applying the magma color scale we learned in the last chapter.
 
 ### Task: Run code
-**Task** Run the following code. Describe the output in the space below.
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below. **Answer**
 
 ```{r}
 ggplot() +
@@ -348,13 +357,14 @@ ggplot() +
   theme_minimal() +
   scale_fill_viridis_b(option="magma")
 ```
+
 The highest ranking counties stand out nicely in this version, but it's still hard to make out fine-grained differences between other counties.
 
 So let's change the color scale to a "log" scale, which will help us see those differences a bit more clearly.
 
 ### Task: Run code
-**Task** Run the following code. Describe the output in the space below. What regional patterns do you see?
-**Answer**
+
+**Task** Run the following code. Describe the output in the space below. What regional patterns do you see? **Answer**
 
 ```{r}
 ggplot() +

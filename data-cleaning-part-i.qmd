@@ -82,12 +82,12 @@ The second smell we can find in code is **wrong spatial data**. Spatial data mea
 We can check to see if any of the zip codes are less than five characters by using [a function called `str_length`](https://stringr.tidyverse.org/reference/str_length.html) inside a filter:
 
 ```{r}
-payments %>%
-  group_by(`Vendor Zip`) %>%
-  filter(str_length(`Vendor Zip`) < 5) %>% 
+payments |>
+  group_by(`Vendor Zip`) |>
+  filter(str_length(`Vendor Zip`) < 5) |> 
   summarise(
     count=n()
-  ) %>%
+  ) |>
   arrange(desc(count))
 ```
 
@@ -103,9 +103,9 @@ md_grants_loans <- read_csv("data/State_of_Maryland_Grant_and_Loan_Data__FY2009_
 Each row represents a recipient of state grant or loan, along with information about their location and the state agency that provided the money. When we talk about gaps, often they indicate the administrative rules. Here's an example: let's count the number of payments in each category (Grant or Loan) by year in this dataset:
 
 ```{r}
-md_grants_loans %>% 
-  group_by(`Fiscal Year`, Category) %>% 
-  summarize(count = n()) %>% 
+md_grants_loans |> 
+  group_by(`Fiscal Year`, Category) |> 
+  summarize(count = n()) |> 
   arrange(`Fiscal Year`)
 ```
 We can see a couple of issues here: first, there is no loan data for FY 2009. That's mentioned in [the source page for the data](https://opendata.maryland.gov/Budget/State-of-Maryland-Grant-and-Loan-Data-FY2009-to-FY/absk-avps). It's good to be aware of all gaps in data, but they don't always represent a problem. Second, and more problematic, there are a few records where the Category is NA - that data is missing. There also are some inconsistent values - there are 50 records in FY2013 with the category of "L" (probably loans) and one in FY 2017 that is listed as "Contract".
@@ -115,7 +115,7 @@ We can see a couple of issues here: first, there is no loan data for FY 2009. Th
 Any time you are going to focus on a column for analysis, you should check for unusual values. Are there any unusually large values or unusually small values? Are there any values that raise immediate questions about the data? Let's look at the smallest amounts in the grants and loan data.
 
 ```{r}
-md_grants_loans %>% 
+md_grants_loans |> 
   arrange(Amount)
 ```
 

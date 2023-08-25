@@ -103,8 +103,7 @@ Once it loads, look at the environment window at right in RStudio for umd_course
 glimpse(umd_courses)
 ```
 
-In the space below, write the data type for the "id" column and the "seats" column (it's in light gray, offset by \< \>). 
-**Answer**
+In the space below, write the data type for the "id" column and the "seats" column (it's in light gray, offset by \< \>). **Answer**
 
 ### Task 7: Examine data "head"
 
@@ -114,8 +113,7 @@ In the space below, write the data type for the "id" column and the "seats" colu
 head(umd_courses)
 ```
 
-In the space below, write the name of the business from the first row of the "name" column. 
-**Answer**
+In the space below, write the name of the business from the first row of the "name" column. **Answer**
 
 ### Task 8: Explore data with interactive dataframe
 
@@ -125,13 +123,13 @@ In the space below, write the name of the business from the first row of the "na
 
 So what if we wanted to know how many classes were offered in each term?
 
-To do that by hand, we'd have to take each of the 60,672 individual rows (or observations or records) and sort them into a pile. We'd put them in groups -- one for each term -- and then count them. To do this, we'll take our dataset and we'll introduce a new operator: `%>%`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." The keyboard shortcut for this is cmd-shift-m on the Mac and ctrl-shift-m on Windows. Don't like that character? R now has a new one that does the same thing: `|>`.
+To do that by hand, we'd have to take each of the 60,672 individual rows (or observations or records) and sort them into a pile. We'd put them in groups -- one for each term -- and then count them. To do this, we'll take our dataset and we'll introduce a new operator: `|>`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." The keyboard shortcut for this is cmd-shift-m on the Mac and ctrl-shift-m on Windows. Don't like that character? R now has a new one that does the same thing: `|>`.
 
 **Task** Run the following codeblock:
 
 ```{r}
-umd_courses %>%
-  group_by(term) %>%
+umd_courses |>
+  group_by(term) |>
   summarise(
     count_classes = n()
   )
@@ -146,27 +144,26 @@ Describe what you think each line of this code is doing below, based on the resu
 **Task** Run the following codeblock:
 
 ```{r}
-umd_courses %>%
-  group_by(term) %>%
+umd_courses |>
+  group_by(term) |>
   summarise(
     count_classes = n()
-  ) %>%
+  ) |>
   arrange(desc(count_classes))
 ```
 
-Compared to the previous codeblock, what has changed and how did that affect the result? 
-**Answer**
+Compared to the previous codeblock, what has changed and how did that affect the result? **Answer**
 
 ### Task 11: Grouping by multiple columns
 
 **Task** Run the following codeblock.
 
 ```{r}
-umd_courses %>%
-  group_by(term, department) %>%
+umd_courses |>
+  group_by(term, department) |>
   summarise(
     count_classes = n()
-  ) %>%
+  ) |>
   arrange(term, department)
 ```
 
@@ -179,44 +176,42 @@ Compared to the previous codeblock, how did the output change and what in the co
 **Task** Run the following codeblock:
 
 ```{r}
-umd_courses %>%
-  group_by(term) %>%
+umd_courses |>
+  group_by(term) |>
   summarise(
     count_classes = n(),
     total_seats = sum(seats)
-  ) %>%
+  ) |>
   arrange(desc(total_seats))
 ```
 
-Compared to the previous codeblock, what has changed and how did that affect the result? 
-**Answer**
+Compared to the previous codeblock, what has changed and how did that affect the result? **Answer**
 
 ### Task 13: different kinds of summarizations
 
 **Task** Run the following codeblock to group the umd_courses dataframe by term. Then do the following summarizations for each term: count the number of courses, add up the total of all seats, and calculate the mean and median contribution number of seats. Then sort so the term with the most total seats is listed first.
 
 ```{r}
-umd_courses %>%
-  group_by(term) %>%
+umd_courses |>
+  group_by(term) |>
   summarise(
     count_classes = n(),
     total_seats = sum(seats),
     mean_seats = mean(seats),
     median_seats = median(seats)
-  ) %>%
+  ) |>
   arrange(desc(total_seats))
 ```
 
-Compared to the previous codeblock, what has changed and how did that affect the result? What do the top terms have in common? 
-**Answer**
+Compared to the previous codeblock, what has changed and how did that affect the result? What do the top terms have in common? **Answer**
 
 ### Task 14: more aggregations
 
 **Task** Run the following codeblock to group the umd_courses dataframe by the department. Then do the following summarizations for each group: count the number of courses, add up the total of all seats, calculate the mean and median number of seats and then add lines to calculate the smallest and largest seat numbers using the `min()` and `max()` functions. Then sort so the department with the largest total number of seats is listed first.
 
 ```{r}
-umd_courses %>%
-  group_by(department) %>%
+umd_courses |>
+  group_by(department) |>
   summarise(
     count_classes = n(),
     total_seats = sum(seats),
@@ -224,7 +219,7 @@ umd_courses %>%
     median_seats = median(seats),
     # add minimum seats here
     # add maximum seats here
-  ) %>%
+  ) |>
   arrange(desc(total_seats))
 ```
 

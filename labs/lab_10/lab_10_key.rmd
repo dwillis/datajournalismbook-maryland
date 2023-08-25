@@ -40,19 +40,19 @@ Get the geometry for Maryland's counties using tigris and, joining that datafram
 **A1.** Moore did better than Brown almost everywhere except Baltimore City and Prince George's County, and in particular did better in rural, whiter counties on the eastern shore. The most interesting county might be Harford.
 
 ```{r}
-md_statewide <- read_csv("data/md_statewide_county.csv") %>% 
-  clean_names() %>% 
-  mutate(geoid = as.character(geoid)) %>% 
-  mutate(total_ag = peroutka + brown + ag_writein) %>% 
-  mutate(total_gov = cox + moore + lashar + wallace + harding + sefcik + gov_writein) %>%
+md_statewide <- read_csv("data/md_statewide_county.csv") |> 
+  clean_names() |> 
+  mutate(geoid = as.character(geoid)) |> 
+  mutate(total_ag = peroutka + brown + ag_writein) |> 
+  mutate(total_gov = cox + moore + lashar + wallace + harding + sefcik + gov_writein) |>
   mutate(pct_brown = brown/total_ag * 100, pct_moore = moore/total_gov *100, moore_brown_diff = pct_moore - pct_brown)
 
 counties <- counties()
 
-md_counties <- counties %>%
+md_counties <- counties |>
   filter(STATEFP == "24")
 
-md_statewide_geometry <- md_counties %>% 
+md_statewide_geometry <- md_counties |> 
   inner_join(md_statewide, by=c('GEOID'='geoid'))
 
 ggplot() +
@@ -68,9 +68,9 @@ ggplot() +
 
 ```{r}
 
-md_county_outages <- read_csv("data/county_outages_march2023.csv") %>% mutate(rate = outage_customers/total_customers*10000)
+md_county_outages <- read_csv("data/county_outages_march2023.csv") |> mutate(rate = outage_customers/total_customers*10000)
 
-md_county_outages_geo <- md_counties %>% inner_join(md_county_outages, by=c('NAME'='county'))
+md_county_outages_geo <- md_counties |> inner_join(md_county_outages, by=c('NAME'='county'))
 
 ggplot() +
   geom_sf(data=md_county_outages_geo, aes(fill=rate)) +
@@ -80,8 +80,8 @@ ggplot() +
 ```
 
 ```{r}
-outages <- read_csv("~/Downloads/Power_Outages_-_County(1).csv") %>% mutate(dt_stamp = mdy_hms(dt_stamp)) %>% mutate(month = floor_date(dt_stamp, "month"))
-april_2023 <- outages %>% group_by(area) %>% summarize(total_customers = sum(outages))
+outages <- read_csv("~/Downloads/Power_Outages_-_County(1).csv") |> mutate(dt_stamp = mdy_hms(dt_stamp)) |> mutate(month = floor_date(dt_stamp, "month"))
+april_2023 <- outages |> group_by(area) |> summarize(total_customers = sum(outages))
 ```
 
 
@@ -98,9 +98,9 @@ Finally, make a second county map showing the per capita rate. What counties sta
 For the second map, it's Montgomery and Howard counties, and then every other county in the state, which makes sense. With the exception of Wicomico County, most of the eastern and western parts of Maryland trail far behind.
 
 ```{r}
-electric_hybrid <- read_csv("data/ev_2020_2023.csv") %>% mutate(pct_change = (march_2023-july_2020)/july_2020 *100)
+electric_hybrid <- read_csv("data/ev_2020_2023.csv") |> mutate(pct_change = (march_2023-july_2020)/july_2020 *100)
 
-electric_hybrid_with_geo <- md_counties %>% inner_join(electric_hybrid, by=c('NAME'='county'))
+electric_hybrid_with_geo <- md_counties |> inner_join(electric_hybrid, by=c('NAME'='county'))
 
 ggplot() +
   geom_sf(data=electric_hybrid_with_geo, aes(fill=pct_change)) +
@@ -112,7 +112,7 @@ md_county_population <- get_acs(geography = "county",
               year = 2021,
               state = "MD")
 
-electric_hybrid_with_geo_pop <- electric_hybrid_with_geo %>% inner_join(md_county_population, by=('GEOID')) %>% mutate(rate = march_2023/estimate*10000)
+electric_hybrid_with_geo_pop <- electric_hybrid_with_geo |> inner_join(md_county_population, by=('GEOID')) |> mutate(rate = march_2023/estimate*10000)
 
 ggplot() +
   geom_sf(data=electric_hybrid_with_geo_pop, aes(fill=rate)) +

@@ -73,7 +73,7 @@ knitr::include_graphics(rep("images/md_fentanyl_deaths_4.png"))
 You can now export that extracted table to a CSV file using the "Export" button. And then we can read it into R and clean up the column names and some other things:
 
 ```{r}
-fentanyl_deaths <- read_csv("data/tabula-Annual_2020_Drug_Intox_Report.csv") %>% clean_names()
+fentanyl_deaths <- read_csv("data/tabula-Annual_2020_Drug_Intox_Report.csv") |> clean_names()
 
 fentanyl_deaths
 ```
@@ -83,7 +83,7 @@ fentanyl_deaths
 The good news is that we have data we don't have to retype. The bad news is, we have a few things to fix, starting with the fact that the headers shouldn't be headers. Let's start by re-importing it and specifying that the first row doesn't have column headers:
 
 ```{r}
-fentanyl_deaths <- read_csv("data/tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) %>% clean_names()
+fentanyl_deaths <- read_csv("data/tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) |> clean_names()
 
 fentanyl_deaths
 ```
@@ -91,8 +91,8 @@ fentanyl_deaths
 Ok, now we have all the data. But we need actual headers. Let's add those using `rename()`, keeping in mind that the new name comes _first_.
 
 ```{r}
-fentanyl_deaths <- read_csv("data/tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) %>% 
-  clean_names() %>% 
+fentanyl_deaths <- read_csv("data/tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) |> 
+  clean_names() |> 
   rename(jurisdiction = x1, deaths_2011 = x2, deaths_2012 = x3, deaths_2013 = x4, deaths_2014 = x5, deaths_2015 = x6, deaths_2016 = x7, deaths_2017 = x8, 
          deaths_2018 = x9, deaths_2019 = x10, deaths_2020 = x11, deaths_total = x12)
 
@@ -102,10 +102,10 @@ fentanyl_deaths
 We could stop here, but there are a bunch of periods in the jurisdiction column and it's better to remove them - it will make filtering easier. Let's use `str_replace_all()` to do that:
 
 ```{r}
-fentanyl_deaths <- read_csv("data/tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) %>% 
-  clean_names() %>% 
+fentanyl_deaths <- read_csv("data/tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) |> 
+  clean_names() |> 
   rename(jurisdiction = x1, deaths_2011 = x2, deaths_2012 = x3, deaths_2013 = x4, deaths_2014 = x5, deaths_2015 = x6, deaths_2016 = x7, deaths_2017 = x8, 
-         deaths_2018 = x9, deaths_2019 = x10, deaths_2020 = x11, deaths_total = x12) %>% 
+         deaths_2018 = x9, deaths_2019 = x10, deaths_2020 = x11, deaths_total = x12) |> 
   mutate(jurisdiction = str_squish(str_replace_all(jurisdiction,'\\.','')))
 
 fentanyl_deaths

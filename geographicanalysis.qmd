@@ -22,7 +22,7 @@ For the rest of this chapter, we're going to work on building a map that will he
 First, we'll go out and get the county foreclosure notices and population data for each county using tidycensus. The variable for total population is B01001_001  
 
 ```{r}
-md_county_notices <- read_csv("data/Maryland_Foreclosure_Data_by_County.csv") %>% slice(1) %>% pivot_longer(cols=-c('Date', 'Type'), names_to='county', values_to = 'notices')
+md_county_notices <- read_csv("data/Maryland_Foreclosure_Data_by_County.csv") |> slice(1) |> pivot_longer(cols=-c('Date', 'Type'), names_to='county', values_to = 'notices')
 
 md_county_population <- get_acs(geography = "county",
               variables = c(population = "B01001_001"),
@@ -59,11 +59,11 @@ If they're going to join properly, we need to clean one of them up to make it ma
 Let's clean the population table. We're going to rename the "NAME" column to "County", then remove ", Maryland" and "County" and make the county titlecase. Next we'll remove any white spaces after that first cleaning step that, if left in, would prevent a proper join. We're also going to rename the column that contains the population information from "estimate" to "population" and select only the county name and the population columns, along with the geometry. That leaves us with this tidy table.
 
 ```{r}
-md_county_population <- md_county_population %>%
-  rename(county = NAME) %>%
-  mutate(county = str_to_title(str_remove_all(county,", Maryland"))) %>%
-  mutate(county = str_trim(county,side="both")) %>%
-  rename(population = estimate) %>%
+md_county_population <- md_county_population |>
+  rename(county = NAME) |>
+  mutate(county = str_to_title(str_remove_all(county,", Maryland"))) |>
+  mutate(county = str_trim(county,side="both")) |>
+  rename(population = estimate) |>
   select(county, population, geometry)
 
 md_county_population
@@ -72,7 +72,7 @@ md_county_population
 Now we can join them.
 
 ```{r}
-md_pop_with_foreclosures <- md_county_population %>%
+md_pop_with_foreclosures <- md_county_population |>
   left_join(md_county_notices, join_by(county))
 
 md_pop_with_foreclosures
@@ -81,9 +81,9 @@ md_pop_with_foreclosures
 Our final step before visualization, let's calculate the number of foreclosure notices per 1000 population and sort from highest to lowest to see what trends we can identify just from the table.
 
 ```{r}
-md_pop_with_foreclosures <- md_county_population %>%
-  left_join(md_county_notices, join_by(county)) %>% 
-  mutate(rate = notices/population*1000) %>%
+md_pop_with_foreclosures <- md_county_population |>
+  left_join(md_county_notices, join_by(county)) |> 
+  mutate(rate = notices/population*1000) |>
   arrange(desc(rate))
 
 md_pop_with_foreclosures
@@ -95,7 +95,7 @@ First, let's use the counties() function from tigris to pull down a shapefile of
 
 ```{r}
 
-md_counties <- counties() %>%
+md_counties <- counties() |>
   filter(STATEFP == "24")
 
 ```

@@ -51,7 +51,7 @@ What do you think the story here is? Put the answer below along with the URL of 
 **A2.** 
 
 ```{r}
-md_votes_by_type <- read_csv("data/md_votes_by_type.csv") %>% 
+md_votes_by_type <- read_csv("data/md_votes_by_type.csv") |> 
   mutate(pct_early = Early/Total *100, pct_election_day = `Election Day`/Total *100, pct_mail = Mail/Total *100)
 
 
@@ -73,8 +73,8 @@ What do you think the story here is, and what would you want to know more about?
 ```{r}
 montco_911 <- read_csv("data/montgomery_2022_overdoses.csv")
 
-montco_911_zip <- montco_911 %>% 
-  group_by(zip) %>% 
+montco_911_zip <- montco_911 |> 
+  group_by(zip) |> 
   summarize(count = n())
 
 write_csv(montco_911_zip, "data/montco_911_zip.csv")

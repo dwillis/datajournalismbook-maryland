@@ -57,7 +57,7 @@ View(county_voters_combined)
 **Answer** 
 
 ```{r}
-county_voters_combined %>% filter(COUNTY == 'Frederick')
+county_voters_combined |> filter(COUNTY == 'Frederick')
 ```
 
 ## Joining data
@@ -78,7 +78,7 @@ view(maryland_population)
 
 ```{r}
 # with nrow included to show row total
-maryland_population %>% left_join(county_voters_2020, join_by("COUNTY")) %>% nrow()
+maryland_population |> left_join(county_voters_2020, join_by("COUNTY")) |> nrow()
 ```
 
 ### Task 7: Looking at Joined Data
@@ -87,7 +87,7 @@ maryland_population %>% left_join(county_voters_2020, join_by("COUNTY")) %>% nro
 
 ```{r}
 # without nrow
-maryland_population %>% left_join(county_voters_2022, join_by("COUNTY"))
+maryland_population |> left_join(county_voters_2022, join_by("COUNTY"))
 ```
 
 ### Task 8: Assign Joined Data to New Dataframe
@@ -97,7 +97,7 @@ By default, `dplyr` will do a "natural" join, where it'll match all the matching
 **Task** Create a new dataframe with population and voter data joined together. Add a description of what this code does to your reference notebook.
 
 ```{r}
-maryland_population_with_voters <- maryland_population %>% left_join(county_voters_2022)
+maryland_population_with_voters <- maryland_population |> left_join(county_voters_2022)
 ```
 
 ### Task 9: Add the Demographic Data
@@ -115,7 +115,7 @@ view(maryland_demographics)
 **Task** Join the demographic data to the our combined voting/population data. To do this, we need to specify the join columns since the names aren't the same in the two dataframes.
 
 ```{r}
-maryland_population_with_voters_and_demographics <- maryland_population_with_voters %>% left_join(maryland_demographics, join_by(COUNTY == NAME))
+maryland_population_with_voters_and_demographics <- maryland_population_with_voters |> left_join(maryland_demographics, join_by(COUNTY == NAME))
 ```
 
 ### Task 11: Asking Demographic Questions
@@ -124,9 +124,9 @@ maryland_population_with_voters_and_demographics <- maryland_population_with_vot
 **Answer**
 
 ```{r}
-maryland_population_with_voters_and_demographics %>%
-  mutate(pct_black_18_plus = (pop_black/pop_18_over)*100, pct_dems = (DEM/TOTAL)*100) %>% 
-  arrange(desc(pct_black_18_plus)) %>% 
+maryland_population_with_voters_and_demographics |>
+  mutate(pct_black_18_plus = (pop_black/pop_18_over)*100, pct_dems = (DEM/TOTAL)*100) |> 
+  arrange(desc(pct_black_18_plus)) |> 
   select(COUNTY, pct_black_18_plus, pct_dems)
 ```
 
@@ -136,9 +136,9 @@ maryland_population_with_voters_and_demographics %>%
 **Answer**
 
 ```{r}
-maryland_population_with_voters_and_demographics %>%
-  mutate(pct_asian_18_plus = (pop_asian/pop_18_over)*100, pct_dems = (DEM/TOTAL)*100) %>% 
-  arrange(desc(pct_asian_18_plus)) %>% 
+maryland_population_with_voters_and_demographics |>
+  mutate(pct_asian_18_plus = (pop_asian/pop_18_over)*100, pct_dems = (DEM/TOTAL)*100) |> 
+  arrange(desc(pct_asian_18_plus)) |> 
   select(COUNTY, pct_asian_18_plus, pct_dems)
 ```
 
@@ -160,7 +160,7 @@ The column we're interested in, ZCTA5N, is a <dbl> column - it's a number. We wa
 **Answer**
 
 ```{r}
-maryland_zcta <- maryland_zcta %>% mutate(ZCTA5N = as.character(ZCTA5N))
+maryland_zcta <- maryland_zcta |> mutate(ZCTA5N = as.character(ZCTA5N))
 ```
 
 Now we can join this dataframe to other zip code data where the zip code column is text, not numbers.

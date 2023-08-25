@@ -35,7 +35,7 @@ You will need to create columns for the date, week and month based on the existi
 ```{r}
 pg_calls <- read_csv("data/prince_georges_2022_overdoses.csv")
 
-pg_calls <- pg_calls %>% mutate(date = date(datetime), month = month(datetime, label=TRUE), week = week(datetime))
+pg_calls <- pg_calls |> mutate(date = date(datetime), month = month(datetime, label=TRUE), week = week(datetime))
 
 ```
 
@@ -53,14 +53,14 @@ Compare the results here to those from the pre_lab bar chart - are there major d
 
 ```{r}
 # Calculate the percentage
-pg_calls_month <- pg_calls %>%
-  group_by(month) %>% 
-  summarize(total_calls = n()) %>% 
-  mutate(pct = total_calls/1397 *100) %>% 
+pg_calls_month <- pg_calls |>
+  group_by(month) |> 
+  summarize(total_calls = n()) |> 
+  mutate(pct = total_calls/1397 *100) |> 
   arrange(desc(pct))
 
 # Plot the data.  Use geom_line to draw the line, geom_point to add points, geom_text to add labels.  Use scale_x_date to set breaks at 1 day. 
-pg_calls_month %>%
+pg_calls_month |>
   ggplot() + 
   geom_bar(aes(x=reorder(month,pct), weight=pct)) + 
   coord_flip() +
@@ -85,11 +85,11 @@ Describe the pattern of results; you may want to look at the data to dig into pa
 
 
 ```{r}
-pg_calls_week <- pg_calls %>%
-  group_by(week) %>% 
+pg_calls_week <- pg_calls |>
+  group_by(week) |> 
   summarize(total_calls = n())
 
-pg_calls_week %>% 
+pg_calls_week |> 
   ggplot() + 
   geom_line(aes(x=week, y=total_calls)) + 
   labs(
@@ -126,16 +126,16 @@ To answer this question, do the following:
 **A3.**  
 
 ```{r}
-pg_calls_zip <- pg_calls %>% 
-  group_by(zipcode) %>% 
+pg_calls_zip <- pg_calls |> 
+  group_by(zipcode) |> 
   summarize(total_calls = n())
 
 md_median_income_zip <- get_acs(geography = 'zcta', variables='B19013_001', state='MD', year=2019)
 
-pg_calls_with_income <- pg_calls_zip %>% inner_join(md_median_income_zip, by=c('zipcode'='GEOID'))
+pg_calls_with_income <- pg_calls_zip |> inner_join(md_median_income_zip, by=c('zipcode'='GEOID'))
 
 # Plot it using geom_point.
-pg_calls_with_income %>%
+pg_calls_with_income |>
   ggplot() +
   geom_point(aes(x=total_calls,y=estimate)) +
   geom_text(aes(x=total_calls,y=estimate, label=zipcode), check_overlap = TRUE) +

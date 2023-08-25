@@ -38,17 +38,17 @@ Let's get to scraping.
 ```{r}
 url <- "https://grants.maryland.gov/Pages/StateGrants.aspx"
 
-results <- url %>% 
-  read_html() %>% 
+results <- url |> 
+  read_html() |> 
   html_table()
 
-grants <- results[[1]] %>% 
-  clean_names() %>% 
+grants <- results[[1]] |> 
+  clean_names() |> 
   mutate(due_date = mdy(due_date))
 
-grants %>% 
-  group_by(organization) %>% 
-  summarize(count = n()) %>% 
+grants |> 
+  group_by(organization) |> 
+  summarize(count = n()) |> 
   arrange(desc(count))
 
 ```
@@ -62,18 +62,18 @@ When you finish scraping into a dataframe, write code to find the press releases
 ```{r}
 url <- "https://www.opd.state.md.us/press-releases"
 
-results <- url %>% 
-  read_html() %>% 
-  html_elements('a.wixui-rich-text__text') %>% 
-  html_text() %>% 
+results <- url |> 
+  read_html() |> 
+  html_elements('a.wixui-rich-text__text') |> 
+  html_text() |> 
   as_tibble()
 
-results <- results %>% 
-  separate(value, c('date', 'title'), sep=":") %>% 
-  drop_na(title) %>% 
+results <- results |> 
+  separate(value, c('date', 'title'), sep=":") |> 
+  drop_na(title) |> 
   mutate(title = str_squish(title), date = mdy(date))
 
-results %>% 
+results |> 
   filter(str_detect(title, "Police"))
 ```
 
@@ -91,28 +91,28 @@ Finally, tell me what questions you could ask of this data. Be creative.
 
 ```{r}
 
-results <- "https://www.cardin.senate.gov/?post_type=press-releases" %>% 
+results <- "https://www.cardin.senate.gov/?post_type=press-releases" |> 
   read_html() 
 
-dates <- results %>% 
-  html_elements("h5") %>% 
-  html_text() %>% 
+dates <- results |> 
+  html_elements("h5") |> 
+  html_text() |> 
   as_tibble()
 
-titles <- results %>% 
-  html_elements("h3 a") %>% 
-  html_text() %>% 
+titles <- results |> 
+  html_elements("h3 a") |> 
+  html_text() |> 
   as_tibble()
 
-urls <- results %>% 
-  html_elements("h3 a") %>% 
-  html_attr('href') %>% 
+urls <- results |> 
+  html_elements("h3 a") |> 
+  html_attr('href') |> 
   as_tibble()
 
 releases <- bind_cols(dates, titles, urls)
 
-releases <- releases %>% 
-  rename(date = 1, title = 2, url = 3) %>% 
+releases <- releases |> 
+  rename(date = 1, title = 2, url = 3) |> 
   mutate(date = mdy(date))
 
 ```

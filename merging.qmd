@@ -62,13 +62,13 @@ In the best-case scenario, the two tables we want to join share a common column.
 We can do this join multiple ways and get a similar result. We can put the population file on the left and the registration data on the right and use a left join to get them all together. And we use `by=` to join by the correct column. I'm going to count the rows at the end. The reason I'm doing this is important: **Rule 1 in joining data is having an idea of what you are expecting to get**. So with a left join with population on the left, I have 24 rows, so I expect to get 24 rows when I'm done.
 
 ```{r}
-maryland_population %>% left_join(county_voters_2020, join_by("COUNTY")) %>% nrow()
+maryland_population |> left_join(county_voters_2020, join_by("COUNTY")) |> nrow()
 ```
 
 Remove the nrow and run it again for yourself. By default, `dplyr` will do a "natural" join, where it'll match all the matching columns in both tables. So if we take out the `join_by()`, it'll use all the common columns between the tables. That may not be right in every instance but let's try it. If it works, we should get 24 rows.
 
 ```{r}
-maryland_population %>% left_join(county_voters_2020)
+maryland_population |> left_join(county_voters_2020)
 ```
 
 Since we only have one column in common between the two tables, the join only used that column. And we got the same answer. If we had more columns in common, you could see in your results columns with .X after them - that's a sign of duplicative columns between two tables, and you may decide you don't need both moving forward.
@@ -76,7 +76,7 @@ Since we only have one column in common between the two tables, the join only us
 Let's save our joined data to a new dataframe, but this time let's remove the select function so we don't limit the columns to just three.
 
 ```{r}
-maryland_population_with_voters <- maryland_population %>% left_join(county_voters_2020)
+maryland_population_with_voters <- maryland_population |> left_join(county_voters_2020)
 ```
 
 Now, with our joined data, we can answer questions in a more useful way. But joins can do even more than just bring data together; they can include additional data to enable you to ask more sophisticated questions. Right now we have registered voters and total population. But we can do more.
@@ -90,7 +90,7 @@ maryland_demographics <- read_csv('data/maryland_demographics.csv')
 Again, we can use a `left_join` to make our demographic data available. This time we'll need to specify the two fields to join because they do not have identical names. We'll use `COUNTY` from our population data and `NAME` from the demographic data, and the order matters - the first column is from the dataframe you name _first_.
 
 ```{r, error=TRUE}
-maryland_population_with_voters_and_demographics <- maryland_population_with_voters %>% left_join(maryland_demographics, join_by(COUNTY == NAME))
+maryland_population_with_voters_and_demographics <- maryland_population_with_voters |> left_join(maryland_demographics, join_by(COUNTY == NAME))
 ```
 
 Now we've got population data and demographic data by county. That means we can draw from both datasets in asking our questions. For example, we could see the counties with the highest 18+ Black population as a percentage of all population 18 and over and also the percentage of Democrats in that county.
@@ -98,9 +98,9 @@ Now we've got population data and demographic data by county. That means we can 
 We can get this by using mutate and arrange:
 
 ```{r}
-maryland_population_with_voters_and_demographics %>%
-  mutate(pct_black_18_plus = (pop_black/pop_18_over)*100, pct_dems = (DEM/TOTAL)*100) %>%
-  arrange(desc(pct_black_18_plus)) %>%
+maryland_population_with_voters_and_demographics |>
+  mutate(pct_black_18_plus = (pop_black/pop_18_over)*100, pct_dems = (DEM/TOTAL)*100) |>
+  arrange(desc(pct_black_18_plus)) |>
   select(COUNTY, pct_black_18_plus, pct_dems)
 ```
 
@@ -109,9 +109,9 @@ If you know Maryland political demographics, this result isn't too surprising, b
 Let's change that to look at Asian population:
 
 ```{r}
-maryland_population_with_voters_and_demographics %>%
-  mutate(pct_asian_18_plus = (pop_asian/pop_18_over)*100, pct_dems = (DEM/TOTAL)*100) %>%
-  arrange(desc(pct_asian_18_plus)) %>%
+maryland_population_with_voters_and_demographics |>
+  mutate(pct_asian_18_plus = (pop_asian/pop_18_over)*100, pct_dems = (DEM/TOTAL)*100) |>
+  arrange(desc(pct_asian_18_plus)) |>
   select(COUNTY, pct_asian_18_plus, pct_dems)
 ```
 
@@ -126,7 +126,7 @@ glimpse(maryland_zcta)
 You can see that ZCTA5N, the column representing the Zip Code Tabulation Area, is a numeric column. But should it be? Do we ever want to know the average zip code in Maryland? Zip codes and ZCTAs look like numbers but really are character columns. Let's change that so that we can be sure to join them correctly with other data where the zip codes are not numbers. We'll use `mutate`:
 
 ```{r}
-maryland_zcta <- maryland_zcta %>% mutate(ZCTA5N = as.character(ZCTA5N))
+maryland_zcta <- maryland_zcta |> mutate(ZCTA5N = as.character(ZCTA5N))
 ```
 
 What's happening here is that we're telling R to take all of the values in the ZCTA5N column and make them "as.character". If we wanted to change a column to numeric, we'd do "as.numeric". When you join two dataframes, the join columns _must_ be the same datatype.

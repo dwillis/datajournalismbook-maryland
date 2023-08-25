@@ -39,7 +39,7 @@ Let's start by plotting them to get a sense of the pattern.
 
 ```{r}
 
-state_data %>%
+state_data |>
   ggplot() +
   geom_point(aes(x=pop_change_2021,y=gdp_growth_2021)) +
   geom_smooth(aes(x=pop_change_2021,y=gdp_growth_2021), method="lm")
@@ -52,7 +52,7 @@ Let's test another variable, the per-pupil education spending amount per state.
 
 ```{r}
 
-state_data %>%
+state_data |>
   ggplot() +
   geom_point(aes(x=per_pupil_2021,y=gdp_growth_2021)) +
   geom_smooth(aes(x=per_pupil_2021,y=gdp_growth_2021), method="lm")
@@ -74,8 +74,8 @@ All r values will fall somewhere on this scale, and how to interpret them isn't 
 We can calculate r with a function from the corrr package called "correlate()". First, we remove the non-numeric values from our state_data (state and vote_2020), then we correlate.
 
 ```{r}
-state_data %>%
-  select(-state, -vote_2020) %>%
+state_data |>
+  select(-state, -vote_2020) |>
   correlate()
 
 ```
@@ -119,8 +119,8 @@ We can do this because, in our data, we have a column with two possible categori
 We could just calculate the averages like we're used to doing.
 
 ```{r}
-state_data %>%
-  group_by(vote_2020) %>%
+state_data |>
+  group_by(vote_2020) |>
   summarise(
     mean_gdp_growth = mean(gdp_growth_2021),
     mean_per_pupil_education = mean(per_pupil_2021),

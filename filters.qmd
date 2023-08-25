@@ -22,7 +22,7 @@ If we want to see only those courses offered a particular department, we can use
 **Be careful: `=` is not `==` and `=` is not "equal to". `=` is an assignment operator in most languages -- how things get named.**
 
 ```{r}
-journalism_courses <- umd_courses %>% filter(department == "Journalism")
+journalism_courses <- umd_courses |> filter(department == "Journalism")
 
 head(journalism_courses)
 ```
@@ -34,7 +34,7 @@ We also have more data than we might want. For example, we may only want to work
 To simplify our dataset, we can use select.
 
 ```{r}
-selected_journalism_courses <- journalism_courses %>% select(id, title)
+selected_journalism_courses <- journalism_courses |> select(id, title)
 
 head(selected_journalism_courses)
 ```
@@ -46,7 +46,7 @@ And now we only have two columns of data for whatever analysis we might want to 
 So let's say we wanted to see all the courses in the Theatre department with at least 15 seats. We can do this a number of ways. The first is we can chain together a whole lot of filters.
 
 ```{r}
-theatre_seats_15 <- umd_courses %>% filter(department == "Theatre") %>% filter(seats >= 15)
+theatre_seats_15 <- umd_courses |> filter(department == "Theatre") |> filter(seats >= 15)
 
 nrow(theatre_seats_15)
 ```
@@ -58,7 +58,7 @@ The difference? With AND, all conditions must be true to be included. With OR, a
 Here's the difference.
 
 ```{r}
-and_theatre_seats_15 <- umd_courses %>% filter(department == "Theatre" & seats >= 15)
+and_theatre_seats_15 <- umd_courses |> filter(department == "Theatre" & seats >= 15)
 
 nrow(and_theatre_seats_15)
 ```
@@ -66,7 +66,7 @@ nrow(and_theatre_seats_15)
 So AND gives us the same answer we got before. What does OR give us?
 
 ```{r}
-and_theatre_seats_15 <- umd_courses %>% filter(department == "Theatre" | seats >= 15)
+and_theatre_seats_15 <- umd_courses |> filter(department == "Theatre" | seats >= 15)
 
 nrow(and_theatre_seats_15)
 ```

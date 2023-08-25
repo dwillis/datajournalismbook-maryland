@@ -80,8 +80,8 @@ We'll need to write code to add columns showing the total number of votes for ea
 
 ```{r}
 
-md_gov_county <- md_gov_county %>% 
-  mutate(total = cox + moore + lashar + wallace + harding + write_ins) %>% 
+md_gov_county <- md_gov_county |> 
+  mutate(total = cox + moore + lashar + wallace + harding + write_ins) |> 
   mutate(pct_moore = moore/total * 100)
 
 write_csv(md_gov_county, "data/md_gov_county_with_percent.csv")

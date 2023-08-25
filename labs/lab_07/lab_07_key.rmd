@@ -62,7 +62,7 @@ arrange(md_median_age, estimate)
 **A2** Talbot and Worcester counties
 
 ```{r}
-md_median_age %>% filter(estimate >= 50)
+md_median_age |> filter(estimate >= 50)
 ```
 
 **Q3** We're interested in knowing more about Montgomery County zip codes where overdose calls are coming from and the demographic characteristics they possess. In particular, we want to calculate a rate of calls per 1,000 population. To do this, you'll need to:
@@ -79,15 +79,15 @@ Which zip code has the highest rate of calls? Which has the lowest?
 **A3** 20877 is the highest, 20707 is the lowest.
 
 ```{r}
-montgomery_911_calls <- read_csv("data/montgomery_2022_overdoses.csv") %>% mutate(zip = as.character(zip))
+montgomery_911_calls <- read_csv("data/montgomery_2022_overdoses.csv") |> mutate(zip = as.character(zip))
 
-montco_totals <- montgomery_911_calls %>% group_by(zip) %>% summarize(calls = n()) %>% arrange(desc(calls))
+montco_totals <- montgomery_911_calls |> group_by(zip) |> summarize(calls = n()) |> arrange(desc(calls))
 
 md_zcta_population <- get_acs(geography="zcta", variables = "B09021_001", state='MD', year=2019)
 
-montco_zip_with_population <- montco_totals %>% inner_join(md_zcta_population, by=c('zip' = 'GEOID')) %>% rename(population = estimate)
+montco_zip_with_population <- montco_totals |> inner_join(md_zcta_population, by=c('zip' = 'GEOID')) |> rename(population = estimate)
 
-montco_zip_with_population <- montco_zip_with_population %>% mutate(rate_per_1k = (calls/population)*1000) %>% arrange(desc(rate_per_1k))
+montco_zip_with_population <- montco_zip_with_population |> mutate(rate_per_1k = (calls/population)*1000) |> arrange(desc(rate_per_1k))
 ```
 
 **Q4** Using [CensusReporter.org](https://censusreporter.org/), examine the zip codes with the highest and lowest rates and compare and contrast their demographic profiles. Is there a story here?
@@ -99,8 +99,8 @@ montco_zip_with_population <- montco_zip_with_population %>% mutate(rate_per_1k 
 **A5** They are the same, which should give us more confidence that they are the highest and lowest rates by zip code.
 
 ```{r}
-montco_zip_with_population <- montco_zip_with_population %>% 
-  mutate(population_min = population-moe, population_max = population+moe) %>% 
+montco_zip_with_population <- montco_zip_with_population |> 
+  mutate(population_min = population-moe, population_max = population+moe) |> 
   mutate(rate_per_1k_min = (calls/population_min)*1000, rate_per_1k_max = (calls/population_max)*1000)
 ```
 

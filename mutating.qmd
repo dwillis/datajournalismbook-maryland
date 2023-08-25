@@ -22,7 +22,7 @@ Let's add a column called `percent_moore` for the percentage of votes that went 
 To calculate a percentage, we need both the number of votes for Moore but also the total number of votes. We'll use mutate to create both columns. The first will be total votes. The key here is to save the dataframe to itself so that our changes stick.
 
 ```{r}
-general_22 <- general_22 %>%
+general_22 <- general_22 |>
   mutate(
     total_votes = cox + moore + lashar + wallace + write_ins,
     pct_moore = moore/total_votes
@@ -32,7 +32,7 @@ general_22 <- general_22 %>%
 But what do you see right away? Do those numbers look like we expect them to? No. They're a decimal expressed as a percentage. So let's fix that by multiplying by 100. Since we're replacing the contents of our new `pct_moore` column, we can just update our previous code and run it again:
 
 ```{r}
-general_22 <- general_22 %>%
+general_22 <- general_22 |>
   mutate(
     pct_moore = (moore/total_votes)*100
   )
@@ -41,17 +41,17 @@ general_22 <- general_22 %>%
 Now, does this ordering do anything for us? No. Let's fix that with arrange.
 
 ```{r}
-general_22 <- general_22 %>%
+general_22 <- general_22 |>
   mutate(
     pct_moore = (moore/total_votes)*100
-  ) %>% 
+  ) |> 
   arrange(desc(pct_moore))
 ```
 
 So now we have results ordered by `pct_moore` with the highest percentage first. To see the lowest percentage first, we can reverse that `arrange` function - we don't need to recalculate the column:
 
 ```{r}
-general_22 %>%
+general_22 |>
   arrange(pct_moore)
 ```
 
@@ -73,7 +73,7 @@ You'll notice that there's a mix of styles: lower-case and upper-case names like
 So how can we fix that? Mutate - it's not just for math! And a function called `str_to_upper` that will convert a character column into all uppercase.
 
 ```{r}
-standardized_maryland_expenses <- maryland_expenses %>%
+standardized_maryland_expenses <- maryland_expenses |>
   mutate(
     payee_upper = str_to_upper(payee_name)
 )
@@ -86,7 +86,7 @@ There are lots of potential uses for standardization - addresses, zip codes, any
 Mutate is even more useful when combined with some additional functions. Let's keep rolling with our expenditure data. Take a look at the address column: it contains a full address, including the state, spelled out. It would be useful to have a separate `state` column with an abbreviation. We can check to see if a state name is contained in that column and then populate a new column with the value we want, using the functions `str_detect` and `case_when`. We can identify the state by the following pattern: a space, followed by the full name, followed by another space. So, " Maryland ". The `case_when` function handles multiple variations, such as if the state is Maryland or the state is Texas, etc. Crucially, we can tell R to populate the new column with `NA` if it doesn't find a match.
 
 ```{r}
-maryland_expenses_with_state <- maryland_expenses %>%
+maryland_expenses_with_state <- maryland_expenses |>
   mutate(
     state = case_when(
         str_detect(address, " Maryland ") ~ "MD",
@@ -108,9 +108,9 @@ There's a lot going on here, so let's unpack it. It starts out as a typical muta
 We can then use our new `state` column in group_by statements to make summarizing easier.
 
 ```{r}
-maryland_expenses_with_state %>%
-  group_by(state) %>%
-  summarize(total = sum(amount)) %>%
+maryland_expenses_with_state |>
+  group_by(state) |>
+  summarize(total = sum(amount)) |>
   arrange(desc(total))
 ```
 

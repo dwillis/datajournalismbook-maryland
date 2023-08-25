@@ -27,7 +27,7 @@ This week we'll be combining and joining data to make it more useful and to ask 
 *Before* you combine them you'll need to clean up some of the column names to make the data easier to work with - make sure you have loaded the library to do that. You also need to make sure that each column has the same name and datatype (you can check the datatypes using `glimpse`). If any of them does not, you need to fix that.
 
 ```{r}
-carroll_911 <- read_csv("data/carroll_911.csv") %>% clean_names()
+carroll_911 <- read_csv("data/carroll_911.csv") |> clean_names()
 cecil_911 <- read_csv("data/cecil_911.csv")
 allegany_911 <- read_csv("data/allegany_911.csv")
 
@@ -37,11 +37,11 @@ combined_911 <- bind_rows(list(carroll_911, cecil_911, allegany_911))
 Then we'll join some demographic data with Baltimore City 911 calls and ask some questions of that. For that, you'll need to load the Baltimore City data and the demographic data, and join them based on the zip code. Remember, the zip codes in both dataframes must be the same datatype (and should be characters).
 
 ```{r}
-baltimore_911 <- read_csv("data/baltimore_911.csv") %>% mutate(zip_code = as.character(zip_code))
+baltimore_911 <- read_csv("data/baltimore_911.csv") |> mutate(zip_code = as.character(zip_code))
 
-maryland_zcta <- read_csv("data/maryland_zcta.csv") %>% clean_names() %>% mutate(zcta5n = as.character(zcta5n))
+maryland_zcta <- read_csv("data/maryland_zcta.csv") |> clean_names() |> mutate(zcta5n = as.character(zcta5n))
 
-baltimore_911_with_demographics <- baltimore_911 %>% left_join(maryland_zcta, by=c('zip_code' = 'zcta5n'))
+baltimore_911_with_demographics <- baltimore_911 |> left_join(maryland_zcta, by=c('zip_code' = 'zcta5n'))
 ```
 
 ## Answer questions
@@ -51,9 +51,9 @@ Q1. Let's start with our data from Allegany, Harford and Carroll counties. Write
 A1. Carroll, Cecil, Allegany - all of them have similar numbers of calls. 
 
 ```{r}
-combined_911 %>% 
-  group_by(county) %>% 
-  summarise(calls = n()) %>% 
+combined_911 |> 
+  group_by(county) |> 
+  summarise(calls = n()) |> 
   arrange(desc(calls))
 ```
 
@@ -64,15 +64,15 @@ Then calculate the most calls per county and location. Which location had the mo
 A2. August was the leading month for calls for all three counties, with Allegany having more in several months than the others. The top location in this data is 314 Grove Neck Rd. in Earleville, Cecil County. It is the site of an addiction treatment center.
 
 ```{r}
-combined_911 %>% 
-  mutate(month = month(date)) %>% 
-  group_by(county, month) %>% 
-  summarize(calls = n()) %>% 
+combined_911 |> 
+  mutate(month = month(date)) |> 
+  group_by(county, month) |> 
+  summarize(calls = n()) |> 
   arrange(desc(calls))
 
-combined_911 %>% 
-  group_by(county, location) %>% 
-  summarize(calls = n()) %>% 
+combined_911 |> 
+  group_by(county, location) |> 
+  summarize(calls = n()) |> 
   arrange(desc(calls))
 ```
 
@@ -89,14 +89,14 @@ A3. There are seven zip codes in the city with at least 75% population under 18.
 The zip code with the highest rate of calls per 1,000 population, 21217, is 86.4 percent Black, and is located northwest of the downtown area.Some of the neighborhoods in that zip code are Upton, Sandtown-Winchester and Mondawin.
 
 ```{r}
-baltimore_911_with_demographics %>% 
-  filter(pct_under_18 >= 75) %>% 
-  group_by(zip_code, population) %>% 
-  summarize(calls = n()) %>% 
+baltimore_911_with_demographics |> 
+  filter(pct_under_18 >= 75) |> 
+  group_by(zip_code, population) |> 
+  summarize(calls = n()) |> 
   mutate(rate = calls/population *1000)
 
-baltimore_911_with_demographics %>% 
-  filter(zip_code == "21217") %>% 
+baltimore_911_with_demographics |> 
+  filter(zip_code == "21217") |> 
   distinct(neighborhood) 
 ```
 

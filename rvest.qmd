@@ -71,7 +71,7 @@ Let's write a bit of code to tell R to go to the URL for the page and ingest all
 
 ```{r}
 # read in the html
-results <- courts_url %>%
+results <- courts_url |>
   read_html()
 
 # display the html below
@@ -105,8 +105,8 @@ Because it's inside of a table, and not some other kind of element (like a `<div
 
 ```{r}
 # read in the html and extract all the tables
-results <- courts_url %>%
-  read_html() %>%
+results <- courts_url |>
+  read_html() |>
   html_table()
 
 # show the dataframe
@@ -122,8 +122,8 @@ Let's say we are interested in 2023, so all we need to do now is to store that f
 
 ```{r}
 # Read in all html from table, store all tables on page as nested list of dataframes.
-results <- courts_url %>%
-  read_html() %>%
+results <- courts_url |>
+  read_html() |>
   html_table()
 
 # Just keep the first dataframe in our list
@@ -140,15 +140,15 @@ From here, we can do a little cleaning. First we'll use clean_names() to lower t
 
 ```{r}
 # Read in all html from table, get the HTML table.
-results <- courts_url %>%
-  read_html() %>%
+results <- courts_url |>
+  read_html() |>
   html_table()
 
 # Standardize column headers, remove last row
 
-results <- results[[1]] %>%
-  clean_names() %>%
-  rename(title = news_release_news_item) %>%
+results <- results[[1]] |>
+  clean_names() |>
+  rename(title = news_release_news_item) |>
   mutate(date = mdy(date))
 
 # show the dataframe
@@ -170,7 +170,7 @@ The next step is similar to before, too, except this time we're not going to cal
 One reason that we use HTML elements like ul and li is to help organize the code and make it easier to maintain. But it also helps with scraping, because we can zero in on the elements we want. Let's start by reading it in:
 
 ```{r}
-osp_results <- osp_url %>%
+osp_results <- osp_url |>
   read_html()
 
 # show the result
@@ -180,25 +180,25 @@ osp_results
 Once again we get a list of two as our result. In this case, we don't want to isolate the first item in our list. Instead, we want to try to locate all of the `li` tags inside this HTML. Since the `li` tag is an HTML element, we use the function `html_elements()` to get them. If we only wanted a single element, we'd use `html_element()`:
 
 ```{r}
-osp_results %>% html_elements('li')
+osp_results |> html_elements('li')
 ```
 
 Good news and bad news here: we have all of the <li> tags, but we have lots of them, and it's hard to see if we have the right ones. Let's see what we're dealing with and just look at the text *inside* the <li> tags. To do that, we add `html_text()` to the end of the last code block:
 
 ```{r}
-osp_results %>% html_elements('li') %>% html_text()
+osp_results |> html_elements('li') |> html_text()
 ```
 
 Ok, so now we can see the press releases. But they are surrounded by a bunch of things we don't want, and this *still* isn't a dataframe. Let's solve the second problem first with the `as_tibble()` function:
 
 ```{r}
-releases <- osp_results %>% html_elements('li') %>% html_text() %>% as_tibble()
+releases <- osp_results |> html_elements('li') |> html_text() |> as_tibble()
 ```
 
 Now we're getting closer. The press releases have a specific HTML class tied to the <li> tag - in this case "listing-item". We can isolate those:
 
 ```{r}
-releases <- osp_results %>% html_elements('li.listing-item') %>% html_text() %>% as_tibble()
+releases <- osp_results |> html_elements('li.listing-item') |> html_text() |> as_tibble()
 ```
 
 Ok, this is _better_, but it's still not great. We have at least two issues: 
@@ -209,13 +209,13 @@ Ok, this is _better_, but it's still not great. We have at least two issues:
 Let's solve both of those using the `separate()` function, which does what you think it does and gives us a chance to rename the columns:
 
 ```{r}
-releases <- osp_results %>% html_elements('li.listing-item') %>% html_text() %>% as_tibble() %>% separate(value, c('date', 'title'), sep=":")
+releases <- osp_results |> html_elements('li.listing-item') |> html_text() |> as_tibble() |> separate(value, c('date', 'title'), sep=":")
 ```
 
 That worked, but it also exposed a couple of things, as that Warning message indicates: not all of the rows had a colon in them and the `title` column has a leading space. Let's fix both of those - we'll drop the rows where the title is NA and convert the dates into actual dates.
 
 ```{r}
-releases <- osp_results %>% html_elements('li.listing-item') %>% html_text() %>% as_tibble() %>% separate(value, c('date', 'title'), sep=":") %>% drop_na(title) %>% mutate(title = str_squish(title), date = mdy(date))
+releases <- osp_results |> html_elements('li.listing-item') |> html_text() |> as_tibble() |> separate(value, c('date', 'title'), sep=":") |> drop_na(title) |> mutate(title = str_squish(title), date = mdy(date))
 ```
 
 And now you have the data.

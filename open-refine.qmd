@@ -37,7 +37,7 @@ Let's load that Maryland state government grants and loan data that we've been w
 
 ```{r include=FALSE}
 
-md_grant_loans <- read_csv("data/State_of_Maryland_Grant_and_Loan_Data__FY2009_to_FY2022.csv") %>% 
+md_grant_loans <- read_csv("data/State_of_Maryland_Grant_and_Loan_Data__FY2009_to_FY2022.csv") |> 
   mutate(Grantee = str_to_upper(Grantee))
 
 ```
@@ -47,12 +47,12 @@ Now let's try and group and count the number of grants by recipient. To make it 
 The filter function in the codeblock below says: look in the city column, and pluck out any value that starts with (the "\^" symbol means "starts with") a lowercase "w" OR (the vertical "\|", called a pipe, means OR) an uppercase "W".
 
 ```{r}
-md_grant_loans %>%
-  group_by(Grantee) %>%
+md_grant_loans |>
+  group_by(Grantee) |>
   summarise(
     count=n()
-  ) %>%
-  filter(str_detect(Grantee, '^w|^W')) %>%
+  ) |>
+  filter(str_detect(Grantee, '^w|^W')) |>
   arrange(Grantee)
 ```
 
@@ -67,8 +67,8 @@ The key collision merge function takes each string and extracts the key parts of
 One rule you should follow when using this is: **do not overwrite your original fields**. Always work on a copy. If you overwrite your original field, how will you know if it did the right thing? How can you compare it to your original data? To follow this, I'm going to mutate a new field called clean_city and put the results of key collision merge there.
 
 ```{r}
-cleaned_md_grant_loans <- md_grant_loans %>%
-  mutate(grantee_clean=key_collision_merge(Grantee)) %>%
+cleaned_md_grant_loans <- md_grant_loans |>
+  mutate(grantee_clean=key_collision_merge(Grantee)) |>
   select(Grantee, grantee_clean, everything())
 
 cleaned_md_grant_loans
@@ -78,12 +78,12 @@ cleaned_md_grant_loans
 To examine changes `refinr` made, let's examine the changes it made to cities that start with the letter "W".
 
 ```{r}
-cleaned_md_grant_loans %>%
-  group_by(Grantee, grantee_clean) %>%
+cleaned_md_grant_loans |>
+  group_by(Grantee, grantee_clean) |>
   summarise(
     count=n()
-  ) %>%
-  filter(str_detect(Grantee, '^w|^W')) %>%
+  ) |>
+  filter(str_detect(Grantee, '^w|^W')) |>
   arrange(Grantee)
 ```
 
@@ -92,8 +92,8 @@ You can see several changes on the first page of results, including that refinr 
 There's another merging algorithim that's part of refinr that works a bit differently, called `n_gram_merge()`. Let's try applying that one.
 
 ```{r}
-cleaned_md_grant_loans <- md_grant_loans %>%
-  mutate(grantee_clean=n_gram_merge(Grantee)) %>%
+cleaned_md_grant_loans <- md_grant_loans |>
+  mutate(grantee_clean=n_gram_merge(Grantee)) |>
   select(Grantee, grantee_clean, everything())
 
 cleaned_md_grant_loans
@@ -102,12 +102,12 @@ cleaned_md_grant_loans
 To examine changes `refinr` made with this algorithm, let's again look at recipients that start with the letter "W". We see there wasn't a substantial change from the previous method, and it even missed a few the first method got.
 
 ```{r}
-cleaned_md_grant_loans %>%
-  group_by(Grantee, grantee_clean) %>%
+cleaned_md_grant_loans |>
+  group_by(Grantee, grantee_clean) |>
   summarise(
     count=n()
-  ) %>%
-  filter(str_detect(Grantee, '^w|^W')) %>%
+  ) |>
+  filter(str_detect(Grantee, '^w|^W')) |>
   arrange(Grantee)
 ```
 

@@ -46,8 +46,8 @@ You will need to read in and clean up the data so that it can be used for analys
 ```{r}
 baltco_911_overdose_calls <- read_csv("data/tabula-Baltimore County; Carey, Samantha log OD.csv", col_names = FALSE)
 
-baltco_911_overdose_calls <- baltco_911_overdose_calls %>% 
-  rename(date = X1, time = X2, case_number = X3, event_type = X4, location = X5) %>% 
+baltco_911_overdose_calls <- baltco_911_overdose_calls |> 
+  rename(date = X1, time = X2, case_number = X3, event_type = X4, location = X5) |> 
   mutate(date = mdy(date))
 ```
 
@@ -58,9 +58,9 @@ Q1. Write code to generate the number of calls that occurred on each date. Which
 A1. July 14 and October 4 both had 23 overdose calls. This dataset has 366 records, ranging from Feb. 6, 2022 to Feb. 6, 2023, which suggests that there were no days during that period with zero overdose calls. 
 
 ```{r}
-baltco_911_overdose_calls %>% 
-  group_by(location) %>% 
-  summarize(count = n()) %>% 
+baltco_911_overdose_calls |> 
+  group_by(location) |> 
+  summarize(count = n()) |> 
   arrange(desc(count))
 
 ```
@@ -70,13 +70,13 @@ Q2. You want to understand if there's a pattern in the day of the week that over
 A2. The number of calls is pretty evenly distributed across the days of the week, with slightly higher percentages on Sunday, Monday and Saturday.
 
 ```{r}
-baltco_911_overdose_calls <- baltco_911_overdose_calls %>% 
+baltco_911_overdose_calls <- baltco_911_overdose_calls |> 
   mutate(day_of_week = wday(date))
 
-baltco_911_overdose_calls %>% 
-  group_by(day_of_week) %>% 
-  summarize(count = n()) %>% 
-  mutate(pct_total = count/4112*100) %>% 
+baltco_911_overdose_calls |> 
+  group_by(day_of_week) |> 
+  summarize(count = n()) |> 
+  mutate(pct_total = count/4112*100) |> 
   arrange(desc(count))
 ```
 
@@ -85,9 +85,9 @@ Q3. Now let's look at locations. Which ones have the most calls? How would you d
 A3. 4540 SILVER SPRING RD is listed 36 times; that seems a bit unusual because it's way more than any other location and doesn't appear to be near much of anything. The next two are police precincts, which is interesting - not sure those are actual locations of the calls, but maybe? There is an event type column that might be used to describe two different things occurring at the same date, time and location, so it's possible that these aren't separate calls and we have fewer unique calls.
 
 ```{r}
-baltco_911_overdose_calls %>% 
-  group_by(location) %>% 
-  summarize(count = n()) %>% 
+baltco_911_overdose_calls |> 
+  group_by(location) |> 
+  summarize(count = n()) |> 
   arrange(desc(count))
 ```
 

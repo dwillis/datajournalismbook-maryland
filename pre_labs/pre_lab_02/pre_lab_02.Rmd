@@ -58,7 +58,7 @@ More often than not, we have more data than we want. Sometimes we need to be rid
 **Task** Run the following code to limit our courses to the Journalism school.
 
 ```{r}
-journalism_courses <- umd_courses %>% filter(department == "Journalism")
+journalism_courses <- umd_courses |> filter(department == "Journalism")
 
 head(journalism_courses)
 ```
@@ -68,7 +68,7 @@ And just like that, we have just Journalism results, which we can verify looking
 **Task** Run the following code to limit our courses to those in terms in 2023:
 
 ```{r}
-courses_2023 <- umd_courses %>% filter(term > 202300)
+courses_2023 <- umd_courses |> filter(term > 202300)
 
 head(courses_2023)
 ```
@@ -82,7 +82,7 @@ To simplify our dataset, we can use select.
 **Task** Run the following code to select only certain columns and answer the question below.
 
 ```{r}
-selected_journalism_courses <- journalism_courses %>% select(id, title)
+selected_journalism_courses <- journalism_courses |> select(id, title)
 
 head(selected_journalism_courses)
 ```
@@ -100,7 +100,7 @@ So let's say we wanted to see all the courses in the Theatre department with at 
 **Task** Run the following code
 
 ```{r}
-theatre_seats_15 <- umd_courses %>% filter(department == "Theatre") %>% filter(seats >= 15)
+theatre_seats_15 <- umd_courses |> filter(department == "Theatre") |> filter(seats >= 15)
 
 nrow(theatre_seats_15)
 ```
@@ -110,7 +110,7 @@ That gives us 213 records But that's repetitive, no? We can do better using a si
 **Task** Run the following code
 
 ```{r}
-and_theatre_seats_15 <- umd_courses %>% filter(department == "Theatre" & seats >= 15)
+and_theatre_seats_15 <- umd_courses |> filter(department == "Theatre" & seats >= 15)
 
 nrow(and_theatre_seats_15)
 ```
@@ -120,7 +120,7 @@ So AND gives us the same answer we got before. What does using the OR operator g
 **Task** Run the following code and put the number of results below.
 
 ```{r}
-and_theatre_seats_15 <- umd_courses %>% filter(department == "Theatre" | seats >= 15)
+and_theatre_seats_15 <- umd_courses |> filter(department == "Theatre" | seats >= 15)
 
 nrow(and_theatre_seats_15)
 ```
@@ -136,7 +136,7 @@ Sometimes you need to find rows that contain a certain pattern rather than an ex
 **Task** Run the following code
 
 ```{r}
-umd_courses %>% 
+umd_courses |> 
   filter(str_detect(title, "Shakespeare"))
 ```
 
@@ -163,7 +163,7 @@ Take a look at that first column, expenditure_date. It *looks* like a date, but 
 **Task** Run the following code and describe the change in the expenditure_date column.
 
 ```{r}
-maryland_expenses <- maryland_expenses %>% mutate(expenditure_date=mdy(expenditure_date))
+maryland_expenses <- maryland_expenses |> mutate(expenditure_date=mdy(expenditure_date))
 
 head(maryland_expenses)
 ```
@@ -193,10 +193,10 @@ So to follow along here, we're going to use a new function, `mutate`, to create 
 **Task** Run the following code
 
 ```{r}
-maryland_expenses %>%
-  mutate(month = floor_date(expenditure_date, "month")) %>%
-  group_by(month) %>%
-  summarise(total_amount = sum(amount)) %>%
+maryland_expenses |>
+  mutate(month = floor_date(expenditure_date, "month")) |>
+  group_by(month) |>
+  summarise(total_amount = sum(amount)) |>
   arrange(desc(total_amount))
 ```
 
@@ -225,7 +225,7 @@ To calculate a percentage, we need both the number of votes for Moore but also t
 **Task** Let's add a new column based on an existing column. Run the following code to create a new column called `total_votes` based on the votes cast for each candidate, and then to create a new column called
 
 ```{r}
-general_22 <- general_22 %>%
+general_22 <- general_22 |>
   mutate(
     total_votes = cox + moore + lashar + wallace + write_ins,
     pct_moore = moore/total_votes
@@ -242,7 +242,7 @@ Describe what you think this code is doing below.
 
 ```{r}
 # make it a percentage
-general_22 <- general_22 %>%
+general_22 <- general_22 |>
   mutate(
     pct_moore = (moore/total_votes)*100
   )
@@ -254,10 +254,10 @@ general_22 <- general_22 %>%
 
 ```{r}
 # better ordering?
-general_22 <- general_22 %>%
+general_22 <- general_22 |>
   mutate(
     pct_moore = (moore/total_votes)*100
-  ) %>% 
+  ) |> 
   arrange(desc(pct_moore))
 ```
 
@@ -271,7 +271,7 @@ How did the answer change from the previous task, and why?
 
 ```{r}
 # better ordering ?
-general_22 %>%
+general_22 |>
   arrange(pct_moore)
 ```
 
@@ -297,7 +297,7 @@ So how can we fix that? Mutate - it's not just for math! And a function called `
 **Task** Run the following code:
 
 ```{r}
-standardized_maryland_expenses <- maryland_expenses %>%
+standardized_maryland_expenses <- maryland_expenses |>
   mutate(
     payee_upper = str_to_upper(payee_name)
 )
@@ -318,7 +318,7 @@ Mutate is even more useful when combined with some additional functions. Let's k
 **Answer**
 
 ```{r}
-maryland_expenses_with_state <- maryland_expenses %>%
+maryland_expenses_with_state <- maryland_expenses |>
   mutate(
     state = case_when(
         str_detect(address, " Maryland ") ~ "MD",
@@ -342,9 +342,9 @@ We can then use our new `state` column in group_by statements to make summarizin
 **Task** Run the following code.
 
 ```{r}
-maryland_expenses_with_state %>%
-  group_by(state) %>%
-  summarize(total = sum(amount)) %>%
+maryland_expenses_with_state |>
+  group_by(state) |>
+  summarize(total = sum(amount)) |>
   arrange(desc(total))
 ```
 

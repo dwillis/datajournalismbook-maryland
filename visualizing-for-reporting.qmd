@@ -33,10 +33,10 @@ So what does the chart of the top months with the most 911 overdose calls look l
 First, we'll add a month column to our dataframe using lubridate.
 
 ```{r}
-baltco_911_calls_by_month <- baltco_911_calls %>%
-  mutate(month = month(date, label=TRUE)) %>% 
-  group_by(month) %>% 
-  summarize(total_calls = n()) %>% 
+baltco_911_calls_by_month <- baltco_911_calls |>
+  mutate(month = month(date, label=TRUE)) |> 
+  group_by(month) |> 
+  summarize(total_calls = n()) |> 
   arrange(desc(total_calls))
 
 baltco_911_calls_by_month
@@ -44,10 +44,10 @@ baltco_911_calls_by_month
 
 Now let's create a bar chart using ggplot.
 
-With ggplot, the first thing we'll always do is draw a blank canvas that will house our chart. We start with our dataframe name, and then (%>%) we invoke the ggplot() function to make that blank canvas.  All this does is make a gray box, the blank canvas that will hold our chart.
+With ggplot, the first thing we'll always do is draw a blank canvas that will house our chart. We start with our dataframe name, and then (|>) we invoke the ggplot() function to make that blank canvas.  All this does is make a gray box, the blank canvas that will hold our chart.
 
 ```{r}
-baltco_911_calls_by_month %>%
+baltco_911_calls_by_month |>
   ggplot()
 ```
 
@@ -71,10 +71,10 @@ We're setting the values on the x axis (horizontal) to be the name of the county
 
 One quirk here with ggplot.
 
-After we've invoked the ggplot() function, you'll notice we're using a + symbol.  It means the same thing as  %>% -- "and then do this".  It's just a quirk of ggplot() that after you invoke the ggplot() function, you use + instead of %>%.  It makes no sense to me either, just something to live with.
+After we've invoked the ggplot() function, you'll notice we're using a + symbol.  It means the same thing as  |> -- "and then do this".  It's just a quirk of ggplot() that after you invoke the ggplot() function, you use + instead of |>.  It makes no sense to me either, just something to live with.
 
 ```{r}
-baltco_911_calls_by_month %>%
+baltco_911_calls_by_month |>
   ggplot() +
   geom_bar(aes(x=month, weight=total_calls))
 ```
@@ -82,7 +82,7 @@ baltco_911_calls_by_month %>%
 This is a very basic chart.  But it's hard to derive much meaning from this chart, because the counties aren't ordered from highest to lowest by total_loans. We can fix that by using the reorder() function to do just that:
 
 ```{r}
-baltco_911_calls_by_month %>%
+baltco_911_calls_by_month |>
   ggplot() +
   geom_bar(aes(x=reorder(month,total_calls), weight=total_calls))
 ```
@@ -90,7 +90,7 @@ baltco_911_calls_by_month %>%
 This is a little more useful. But the bottom is kind of a mess, with overlapping names.  We can fix that by flipping it from a vertical bar chart (also called a column chart) to a horizontal one. coord_flip() does that for you.
 
 ```{r}
-baltco_911_calls_by_month %>%
+baltco_911_calls_by_month |>
   ggplot() +
   geom_bar(aes(x=reorder(month,total_calls), weight=total_calls)) +
   coord_flip()
@@ -105,7 +105,7 @@ But it's worth mentioning that we can pretty up these charts for publication, if
 It's kind of like applying CSS to html. Here I'm changing the theme slightly to remove the gray background with one of ggplot's built in themes, theme_minimal()
 
 ```{r}
-baltco_911_calls_by_month %>%
+baltco_911_calls_by_month |>
   ggplot() +
   geom_bar(aes(x=reorder(month,total_calls), weight=total_calls)) +
   coord_flip() + 
@@ -122,7 +122,7 @@ library(ggthemes)
 
 And now we'll apply the economist theme from that package with theme_economist()
 ```{r}
-baltco_911_calls_by_month %>%
+baltco_911_calls_by_month |>
   ggplot() +
   geom_bar(aes(x=reorder(month,total_calls), weight=total_calls)) +
   coord_flip() + 
@@ -131,7 +131,7 @@ baltco_911_calls_by_month %>%
 Those axis titles are kind of a mess. Let's change "count" on the x axis to "net change" and change "reorder(County,TOTAL_DIFF)" to "county".  And while we're at it, let's add a basic title and a source as a caption. We'll use a new function, labs(), which is short for labels.
 
 ```{r}
-baltco_911_calls_by_month %>%
+baltco_911_calls_by_month |>
   ggplot() +
   geom_bar(aes(x=reorder(month,total_calls), weight=total_calls)) +
   coord_flip() + 
@@ -153,8 +153,8 @@ Line charts can show change over time. It works much the same as a bar chart, co
 
 
 ```{r}
-baltco_911_calls_by_date <- baltco_911_calls %>%
-  group_by(date) %>%
+baltco_911_calls_by_date <- baltco_911_calls |>
+  group_by(date) |>
   summarise(
     total_calls=n()
   )
@@ -167,7 +167,7 @@ And now let's make a line chart to look for patterns in this data.
 We'll put the date on the x axis and total calls on the y axis.
 
 ```{r}
-baltco_911_calls_by_date %>%
+baltco_911_calls_by_date |>
   ggplot() + 
   geom_line(aes(x=date, y=total_calls))
 ```
@@ -181,7 +181,7 @@ We can't really tell.  So let's modify the x axis to have one tick mark and labe
 We'll set the date_breaks to appear for every week; if we wanted every month, we'd say date_breaks = "1 month". We can set the date to appear as month abbreviated name (%b) and day (%d). 
 
 ```{r}
-baltco_911_calls_by_date %>%
+baltco_911_calls_by_date |>
   ggplot() + 
   geom_line(aes(x=date, y=total_calls)) + 
   scale_x_date(date_breaks = "1 week", date_labels = "%b %d")
@@ -190,7 +190,7 @@ baltco_911_calls_by_date %>%
 Those are a little hard to read, so we can turn them 45 degrees to remove the overlap using the theme() function for styling.  With "axis.text.x = element_text(angle = 45,  hjust=1)" we're saying, turn the date labels 45 degrees.
 
 ```{r}
-baltco_911_calls_by_date %>%
+baltco_911_calls_by_date |>
   ggplot() + 
   geom_line(aes(x=date, y=total_calls)) + 
   scale_x_date(date_breaks = "1 week", date_labels = "%b %d") +

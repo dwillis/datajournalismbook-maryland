@@ -58,12 +58,12 @@ md_grant_loans
 
 # The filter function in the codeblock below says: look in the Grantee column, and pluck out any value that starts with (the "^" symbol means "starts with") a lowercase "w" OR (the vertical "|", called a pipe, means OR) an uppercase "W". 
 
-md_grant_loans %>%
-  group_by(Grantee) %>%
+md_grant_loans |>
+  group_by(Grantee) |>
   summarise(
     count=n()
-  ) %>%
-  filter(str_detect(Grantee, '^w|^W')) %>%
+  ) |>
+  filter(str_detect(Grantee, '^w|^W')) |>
   arrange(Grantee)
 ```
 
@@ -73,8 +73,8 @@ md_grant_loans %>%
 **Answer**
 
 ```{r}
-cleaned_md_grant_loans <- md_grant_loans %>%
-  mutate(grantee_clean=key_collision_merge(Grantee)) %>%
+cleaned_md_grant_loans <- md_grant_loans |>
+  mutate(grantee_clean=key_collision_merge(Grantee)) |>
   select(Grantee, grantee_clean, everything())
 
 cleaned_md_grant_loans
@@ -86,12 +86,12 @@ cleaned_md_grant_loans
 **Task** Run the following code to group by grantee_clean and Grantee, then filter for recipients that start with W. Name three changes the refinr function made in the first 30 results. **Answer**
 
 ```{r}
-cleaned_md_grant_loans %>%
-  group_by(Grantee, grantee_clean) %>%
+cleaned_md_grant_loans |>
+  group_by(Grantee, grantee_clean) |>
   summarise(
     count=n()
-  ) %>%
-  filter(str_detect(Grantee, '^w|^W')) %>%
+  ) |>
+  filter(str_detect(Grantee, '^w|^W')) |>
   arrange(Grantee)
 ```
 
@@ -101,19 +101,19 @@ cleaned_md_grant_loans %>%
 **Answer**
 
 ```{r}
-cleaned_md_grant_loans <- md_grant_loans %>%
-  mutate(grantee_clean=n_gram_merge(Grantee)) %>%
+cleaned_md_grant_loans <- md_grant_loans |>
+  mutate(grantee_clean=n_gram_merge(Grantee)) |>
   select(Grantee, grantee_clean, everything())
 
 cleaned_md_grant_loans
 
 
-cleaned_md_grant_loans %>%
-  group_by(Grantee, grantee_clean) %>%
+cleaned_md_grant_loans |>
+  group_by(Grantee, grantee_clean) |>
   summarise(
     count=n()
-  ) %>%
-  filter(str_detect(Grantee, '^w|^W')) %>%
+  ) |>
+  filter(str_detect(Grantee, '^w|^W')) |>
   arrange(Grantee)
 
 ```

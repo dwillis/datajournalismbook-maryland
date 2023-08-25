@@ -34,41 +34,41 @@ library(rvest)
 ```{r}
 md_attorney_sanctions <- read_csv("data/md_attorney_sanctions.csv")
 
-unique_words <- md_attorney_sanctions %>% select(text) %>%
+unique_words <- md_attorney_sanctions |> select(text) |>
   unnest_tokens(word, text)
 view(unique_words)
 
 data("stop_words")
 
-unique_words_top_10 <- unique_words %>%
-  anti_join(stop_words) %>%
-  group_by(word) %>%
-  tally(sort=TRUE) %>%
-  mutate(percent = (n/sum(n))*100) %>%
+unique_words_top_10 <- unique_words |>
+  anti_join(stop_words) |>
+  group_by(word) |>
+  tally(sort=TRUE) |>
+  mutate(percent = (n/sum(n))*100) |>
   top_n(10)
 
 unique_words_top_10
 
-stop_words_amended <- stop_words %>%
-  add_row(word = "failing") %>% 
-  add_row(word = "client") %>% 
-  add_row(word = "clients") %>% 
-  add_row(word = "attorney") %>% 
-  add_row(word = "conduct") %>%
-  add_row(word = "disbarred") %>%
-  add_row(word = "suspension") %>% 
-  add_row(word = "temporary") %>% 
-  add_row(word = "consent") %>% 
-  add_row(word = "reprimanded") %>%
-  add_row(word = "reprimand") %>%
-  add_row(word = "commission") %>%
+stop_words_amended <- stop_words |>
+  add_row(word = "failing") |> 
+  add_row(word = "client") |> 
+  add_row(word = "clients") |> 
+  add_row(word = "attorney") |> 
+  add_row(word = "conduct") |>
+  add_row(word = "disbarred") |>
+  add_row(word = "suspension") |> 
+  add_row(word = "temporary") |> 
+  add_row(word = "consent") |> 
+  add_row(word = "reprimanded") |>
+  add_row(word = "reprimand") |>
+  add_row(word = "commission") |>
   add_row(word = "respondent")
 
-unique_words_top_10_amended <- unique_words %>%
-  anti_join(stop_words_amended) %>%
-  group_by(word) %>%
-  tally(sort=TRUE) %>%
-  mutate(percent = (n/sum(n))*100) %>%
+unique_words_top_10_amended <- unique_words |>
+  anti_join(stop_words_amended) |>
+  group_by(word) |>
+  tally(sort=TRUE) |>
+  mutate(percent = (n/sum(n))*100) |>
   top_n(10)
 
 unique_words_top_10_amended
@@ -79,16 +79,16 @@ unique_words_top_10_amended
 **A2.** The top trigram is "attorney trust account" and it appears 343 times, accounting for 5.891% of all that was said in the sanctions since 2011. From checking online, an attorney trust account is a type of bank account where client funds are usually kept until a lawyer is able to withdraw them. 
 
 ```{r}
-md_attorney_sanctions %>%
-  unnest_tokens(trigram, text, token = "ngrams", n = 3) %>%
-  separate(trigram, c("word1", "word2", "word3"), sep = " ") %>%
-  filter(!word1 %in% stop_words$word) %>%
-  filter(!word2 %in% stop_words$word) %>%
-  filter(!word3 %in% stop_words$word) %>%
-  mutate(trigram = paste(word1, word2, word3, sep=" ")) %>%
-  group_by(trigram) %>%
-  tally(sort=TRUE) %>%
-  mutate(percent = (n/sum(n))*100) %>%
+md_attorney_sanctions |>
+  unnest_tokens(trigram, text, token = "ngrams", n = 3) |>
+  separate(trigram, c("word1", "word2", "word3"), sep = " ") |>
+  filter(!word1 %in% stop_words$word) |>
+  filter(!word2 %in% stop_words$word) |>
+  filter(!word3 %in% stop_words$word) |>
+  mutate(trigram = paste(word1, word2, word3, sep=" ")) |>
+  group_by(trigram) |>
+  tally(sort=TRUE) |>
+  mutate(percent = (n/sum(n))*100) |>
   top_n(10)
 ```
 
@@ -97,9 +97,9 @@ md_attorney_sanctions %>%
 **A3.** The fiscal year which mentions the term "attorney trust account" the most in its sanctions is 2021, with the term appearing 37 times and accounting for 19.577% of all times the term was said in the sanctions since 2011. This leads me to believe that many people had funds in their attorney trust accounts in 2021 as a consequence of the COVID-19 pandemic, and one of the most common infractions for lawyers to commit is stealing escrow funds from their clients' accounts. So it is possible that many lawyers in practice were stealing funds and exploiting those who were disadvantaged (particularly families and businesses) during the pandemic.
 
 ```{r}
-md_attorney_sanctions %>%
-  filter(str_detect(text, "attorney trust account")) %>%
-  group_by(fiscal_year) %>%
-  tally(sort=TRUE) %>%
+md_attorney_sanctions |>
+  filter(str_detect(text, "attorney trust account")) |>
+  group_by(fiscal_year) |>
+  tally(sort=TRUE) |>
   mutate(percent = (n/sum(n))*100)
 ```

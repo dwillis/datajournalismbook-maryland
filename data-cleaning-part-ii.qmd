@@ -43,7 +43,7 @@ The `janitor` library makes fixing headers trivially simple with the function `c
 
 ```{r}
 # cleaning function
-cleaned_md_grants_loans <- md_grants_loans %>%
+cleaned_md_grants_loans <- md_grants_loans |>
   clean_names()
 
 # display the cleaned dataset
@@ -54,8 +54,8 @@ This function changed `Zip Code` to `zip_code` and generally got rid of capital 
 
 ```{r}
 # cleaning function
-cleaned_md_grants_loans <- md_grants_loans %>%
-  clean_names() %>% 
+cleaned_md_grants_loans <- md_grants_loans |>
+  clean_names() |> 
   rename(source = grantor)
 
 # display the cleaned dataset
@@ -68,9 +68,9 @@ Right now the `source`, `grantee` and `description` columns have inconsistent ca
 
 ```{r}
 # cleaning function
-cleaned_md_grants_loans <- md_grants_loans %>%
-  clean_names() %>% 
-  rename(source = grantor) %>% 
+cleaned_md_grants_loans <- md_grants_loans |>
+  clean_names() |> 
+  rename(source = grantor) |> 
   mutate(source = str_to_upper(source), grantee = str_to_upper(grantee), description = str_to_upper(description))
 
 # display the cleaned dataset
@@ -88,7 +88,7 @@ So the question is, do we have any records repeated?
 Here we'll use a function called `get_dupes` from the janitor library to check for fully repeated records in our cleaned data set.
 
 ```{r}
-cleaned_md_grants_loans %>%
+cleaned_md_grants_loans |>
   get_dupes()
 ```
 
@@ -96,10 +96,10 @@ And the answer is ... maybe? Because the original dataset doesn't have a unique 
 
 ```{r}
 # cleaning function
-cleaned_md_grants_loans <- md_grants_loans %>%
-  clean_names() %>% 
-  rename(source = grantor) %>% 
-  mutate(source = str_to_upper(source), grantee = str_to_upper(grantee), description = str_to_upper(description)) %>% 
+cleaned_md_grants_loans <- md_grants_loans |>
+  clean_names() |> 
+  rename(source = grantor) |> 
+  mutate(source = str_to_upper(source), grantee = str_to_upper(grantee), description = str_to_upper(description)) |> 
   distinct()
 
 # display the cleaned dataset
@@ -116,11 +116,11 @@ We're going to write code that tells R to make a new column for our zips, keepin
 
 ```{r}
 # cleaning function
-cleaned_md_grants_loans <- md_grants_loans %>%
-  clean_names() %>% 
-  rename(source = grantor) %>% 
-  mutate(source = str_to_upper(source), grantee = str_to_upper(grantee), description = str_to_upper(description)) %>% 
-  distinct() %>%
+cleaned_md_grants_loans <- md_grants_loans |>
+  clean_names() |> 
+  rename(source = grantor) |> 
+  mutate(source = str_to_upper(source), grantee = str_to_upper(grantee), description = str_to_upper(description)) |> 
+  distinct() |>
   mutate(zip5 = str_sub(zip_code, start=1L, end=5L))
 
 
@@ -134,12 +134,12 @@ If we arrange the zip5 column we can see that there are some non-digits in there
 
 ```{r}
 # cleaning function
-cleaned_md_grants_loans <- md_grants_loans %>%
-  clean_names() %>% 
-  rename(source = grantor) %>% 
-  mutate(source = str_to_upper(source), grantee = str_to_upper(grantee), description = str_to_upper(description)) %>% 
-  distinct() %>%
-  mutate(zip5 = str_sub(zip_code, start=1L, end=5L)) %>%
+cleaned_md_grants_loans <- md_grants_loans |>
+  clean_names() |> 
+  rename(source = grantor) |> 
+  mutate(source = str_to_upper(source), grantee = str_to_upper(grantee), description = str_to_upper(description)) |> 
+  distinct() |>
+  mutate(zip5 = str_sub(zip_code, start=1L, end=5L)) |>
   mutate(zip5 = case_when(
     zip5 == "Vario" ~ NA,
     zip5 == "UB7 O" ~ NA,
@@ -161,12 +161,12 @@ The second line of our case_when() function below now says, in English: look in 
 
 ```{r}
 # cleaning function
-cleaned_md_grants_loans <- md_grants_loans %>%
-  clean_names() %>% 
-  rename(source = grantor) %>% 
-  mutate(source = str_to_upper(source), grantee = str_to_upper(grantee), description = str_to_upper(description)) %>% 
-  distinct() %>%
-  mutate(zip5 = str_sub(zip_code, start=1L, end=5L)) %>%
+cleaned_md_grants_loans <- md_grants_loans |>
+  clean_names() |> 
+  rename(source = grantor) |> 
+  mutate(source = str_to_upper(source), grantee = str_to_upper(grantee), description = str_to_upper(description)) |> 
+  distinct() |>
+  mutate(zip5 = str_sub(zip_code, start=1L, end=5L)) |>
   mutate(zip5 = case_when(
     zip5 == "Vario" ~ NA,
     str_detect(zip5, "^UB7") ~ NA,
@@ -180,10 +180,10 @@ cleaned_md_grants_loans
 We've gotten the source and zip code data as clean as we can, and now we can answer our question: which zip code has gotten the most amount of money from the Maryland Tourism Board? A good rule of thumb is that you should only spend time cleaning fields that are critical to the specific analysis you want to do.
 
 ```{r}
-cleaned_md_grants_loans %>% 
-  filter(source == 'COMMERCE/MARYLAND TOURISM BOARD') %>% 
-  group_by(zip5) %>% 
-  summarize(total_amount = sum(amount)) %>% 
+cleaned_md_grants_loans |> 
+  filter(source == 'COMMERCE/MARYLAND TOURISM BOARD') |> 
+  group_by(zip5) |> 
+  summarize(total_amount = sum(amount)) |> 
   arrange(desc(total_amount))
 ```
 

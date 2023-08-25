@@ -60,7 +60,7 @@ Let's start by plotting them to get a sense of the pattern.
 **Answer**
 ```{r}
 
-state_data %>%
+state_data |>
   ggplot() +
   geom_point(aes(x=pop_change_2021,y=gdp_growth_2021)) +
   geom_smooth(aes(x=pop_change_2021,y=gdp_growth_2021), method="lm")
@@ -75,7 +75,7 @@ Let's test another variable, the per-pupil education spending amount per state.
 **Answer**
 ```{r}
 
-state_data %>%
+state_data |>
   ggplot() +
   geom_point(aes(x=per_pupil_2021,y=gdp_growth_2021)) +
   geom_smooth(aes(x=per_pupil_2021,y=gdp_growth_2021), method="lm")
@@ -100,8 +100,8 @@ We can calculate r with a function from the corrr package called "correlate()". 
 **Answer**
 
 ```{r}
-state_data %>%
-  select(-state, -vote_2020) %>%
+state_data |>
+  select(-state, -vote_2020) |>
   correlate()
 ```
 
@@ -153,8 +153,8 @@ We could just calculate the averages like we're used to doing.
 **Task** Run the following code. Describe the table. What do you see?
 **Answer**
 ```{r}
-state_data %>%
-  group_by(vote_2020) %>%
+state_data |>
+  group_by(vote_2020) |>
   summarise(
     mean_gdp_growth = mean(gdp_growth_2021),
     mean_per_pupil_education = mean(per_pupil_2021),

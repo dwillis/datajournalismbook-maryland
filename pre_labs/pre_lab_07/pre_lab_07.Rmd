@@ -85,9 +85,9 @@ As you can see, we have a GEOID, NAME, then variable and value. Variable and val
 **Task** Run the following codeblock to rename the population total columns in each dataframe:
 
 ```{r}
-p10 %>% select(GEOID, NAME, value) %>% rename(Population2010=value) -> p10
+p10 |> select(GEOID, NAME, value) |> rename(Population2010=value) -> p10
 
-p00 %>% select(GEOID, NAME, value) %>% rename(Population2000=value) -> p00
+p00 |> select(GEOID, NAME, value) |> rename(Population2000=value) -> p00
 ```
 
 Now we join the data together.
@@ -95,7 +95,7 @@ Now we join the data together.
 **Task** Run the following codeblock to combine the two dataframes into a single variable called `alldata`:
 
 ```{r}
-alldata <- p00 %>% inner_join(p10)
+alldata <- p00 |> inner_join(p10)
 ```
 
 And now we calculate the percent change.
@@ -103,7 +103,7 @@ And now we calculate the percent change.
 **Task** Run the following codeblock to calculate the percentage change and put the state with the largest percentage growth below. **Answer**
 
 ```{r}
-alldata %>% mutate(change = ((Population2010-Population2000)/Population2000)*100) %>% arrange(desc(change))
+alldata |> mutate(change = ((Population2010-Population2000)/Population2000)*100) |> arrange(desc(change))
 ```
 
 You may be asking: hey, wasn't there a 2020 Census? Where's that data? The answer is that it's coming - the Census Bureau has a [schedule of releases](https://www.census.gov/programs-surveys/popest/about/schedule.html). There are some variables available:
@@ -132,7 +132,7 @@ md <- get_acs(geography = "county",
               state = "MD",
               year = 2021)
 
-md <- md %>% arrange(desc(estimate)) %>% top_n(20, estimate)
+md <- md |> arrange(desc(estimate)) |> top_n(20, estimate)
 
 md
 ```
@@ -145,8 +145,8 @@ What do the top counties all have in common? Lots of suburban flight from D.C an
 **Answer** 
 
 ```{r}
-md %>%
-  mutate(NAME = gsub(" County, Maryland", "", NAME)) %>%
+md |>
+  mutate(NAME = gsub(" County, Maryland", "", NAME)) |>
   ggplot(aes(x = estimate, y = reorder(NAME, estimate))) +
   geom_errorbarh(aes(xmin = estimate - moe, xmax = estimate + moe)) +
   geom_point(color = "red") +
@@ -188,14 +188,14 @@ What we're going to do next is a lot, but each step is simple. We're going to jo
 **Answer**
 
 ```{r}
-md10 %>%
+md10 |>
   # join md10 to md21 using the shared GEOID and NAME columns
-  inner_join(md21, by=c("GEOID", "NAME")) %>%
+  inner_join(md21, by=c("GEOID", "NAME")) |>
   # rename the first estimate to clarify that it's from 2010 and the second estimate to clarify that it's from 2021
-  rename(estimate2010=estimate.x, estimate2021=estimate.y) %>%
-  mutate(min2010 = estimate2010-moe.x, max2010 = estimate2010+moe.x, min2020 = estimate2021-moe.y, max2021 = estimate2021+moe.y) %>%
-  select(-variable.x, -variable.y, -moe.x, -moe.y) %>%
-  mutate(change = ((estimate2021-estimate2010)/estimate2010)*100) %>%
+  rename(estimate2010=estimate.x, estimate2021=estimate.y) |>
+  mutate(min2010 = estimate2010-moe.x, max2010 = estimate2010+moe.x, min2020 = estimate2021-moe.y, max2021 = estimate2021+moe.y) |>
+  select(-variable.x, -variable.y, -moe.x, -moe.y) |>
+  mutate(change = ((estimate2021-estimate2010)/estimate2010)*100) |>
   arrange(desc(change))
 ```
 
@@ -206,7 +206,7 @@ Combining Census data with other types of data really unlocks its power for jour
 **Task** Run the following codeblock to load the CSV file and make sure the zip code is a character column, because that's what we'll need to join.
 
 ```{r}
-md_high_schools <- read_csv("data/md_high_schools.csv") %>%
+md_high_schools <- read_csv("data/md_high_schools.csv") |>
   mutate(zip = as.character(zip))
 ```
 
@@ -217,8 +217,8 @@ The Census Bureau has Zip Code Tabulation Areas - they are mostly identical to w
 
 ```{r}
 md_zipcodes <- get_acs(geography="zcta", variables = "B19013_001", state='MD', year=2019)
-md_high_schools_with_acs <- md_high_schools %>% left_join(md_zipcodes, by=c('zip'='GEOID'))
-md_high_schools_with_acs <- md_high_schools_with_acs %>% mutate(min=(estimate-moe), max=(estimate+moe)) %>% drop_na()
+md_high_schools_with_acs <- md_high_schools |> left_join(md_zipcodes, by=c('zip'='GEOID'))
+md_high_schools_with_acs <- md_high_schools_with_acs |> mutate(min=(estimate-moe), max=(estimate+moe)) |> drop_na()
 ```
 
 
@@ -226,12 +226,12 @@ md_high_schools_with_acs <- md_high_schools_with_acs %>% mutate(min=(estimate-mo
 **Answer**
 
 ```{r}
-md_high_schools_with_acs %>%
-  filter(percent_of_high_school_graduates_enrolled >= 60) %>% 
+md_high_schools_with_acs |>
+  filter(percent_of_high_school_graduates_enrolled >= 60) |> 
   summarize(avg_income = mean(estimate), count =n())
 
-md_high_schools_with_acs %>%
-  filter(percent_of_high_school_graduates_enrolled <= 40) %>% 
+md_high_schools_with_acs |>
+  filter(percent_of_high_school_graduates_enrolled <= 40) |> 
   summarize(avg_income = mean(estimate), count = n())
 ```
 

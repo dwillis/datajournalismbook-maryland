@@ -29,7 +29,7 @@ head(maryland_expenses)
 Take a look at that first column, expenditure_date. It *looks* like a date, but see the `<chr` right below the column name? That means R thinks it's actually a character column. What we need to do is make it into an actual date column, which lubridate is very good at doing. It has a variety of functions that match the format of the data you have. In this case, the current format is `m/d/y`, and the lubridate function is called `mdy` that we can use with mutate:
 
 ```{r}
-maryland_expenses <- maryland_expenses %>% mutate(expenditure_date=mdy(expenditure_date))
+maryland_expenses <- maryland_expenses |> mutate(expenditure_date=mdy(expenditure_date))
 
 head(maryland_expenses)
 ```
@@ -55,10 +55,10 @@ We could use formatting to create a Month field but that would group all the Apr
 So to follow along here, we're going to use mutate to create a month field, group by to lump them together, summarize to count them up and arrange to order them. We're just chaining things together.
 
 ```{r}
-maryland_expenses %>%
-  mutate(month = floor_date(expenditure_date, "month")) %>%
-  group_by(month) %>%
-  summarise(total_amount = sum(amount)) %>%
+maryland_expenses |>
+  mutate(month = floor_date(expenditure_date, "month")) |>
+  group_by(month) |>
+  summarise(total_amount = sum(amount)) |>
   arrange(desc(total_amount))
 ```
 

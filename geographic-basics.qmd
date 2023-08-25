@@ -51,7 +51,7 @@ Let's look at these zip codes We have 526 of them, according to this data.
 But where in Maryland are these places? We can simply plot them on a longitude-latitude grid using ggplot and geom_sf.
 
 ```{r}
-md_zips %>%
+md_zips |>
   ggplot() +
   geom_sf() +
   theme_minimal()
@@ -88,7 +88,7 @@ This looks pretty similar to our Census blocks shapefile, in that it looked most
 This county shapefile has all 3233 U.S. counties.  We only want the Maryland counties, so we're going to filter the data to only keep Maryland counties.  There is no STATE column, but there is a STATEFP column, with each number representing a state.  Maryland's FP number is 24.
 
 ```{r}
-md_counties <- counties %>%
+md_counties <- counties |>
   filter(STATEFP == "24")
 
 ```
@@ -96,7 +96,7 @@ md_counties <- counties %>%
 To see what this looks like, let's plot it out with ggplot. We can pretty clearly see the shapes of Maryland counties.
 
 ```{r}
-md_counties %>%
+md_counties |>
   ggplot() +
   geom_sf() +
   theme_minimal()
@@ -119,8 +119,8 @@ Notice the subtle differences at the boundaries?
 Let's dive back into zip codes and this time bring along data on notices of intent to foreclosure by zip code (found at https://opendata.maryland.gov/Housing/Maryland-Notices-of-Intent-to-Foreclose-by-Zip-Cod/ftsr-vapt). Where are these foreclosure notices appearing?
 
 ```{r}
-foreclosure_zip <- read_csv("data/Maryland_Notices_of_Intent_to_Foreclose_by_Zip_Code.csv") %>% clean_names()
-foreclosure_zip_march_2023 <- foreclosure_zip %>% 
+foreclosure_zip <- read_csv("data/Maryland_Notices_of_Intent_to_Foreclose_by_Zip_Code.csv") |> clean_names()
+foreclosure_zip_march_2023 <- foreclosure_zip |> 
   select(zip, march_2023)
 
 View(foreclosure_zip_march_2023)
@@ -129,7 +129,7 @@ View(foreclosure_zip_march_2023)
 Now we can join the zip codes to the foreclosure data.
 
 ```{r}
-zip_codes_with_foreclosures <- md_zips %>% left_join(foreclosure_zip_march_2023, join_by(ZIPCODE1==zip))
+zip_codes_with_foreclosures <- md_zips |> left_join(foreclosure_zip_march_2023, join_by(ZIPCODE1==zip))
 ```
 
 Now we can use color to distinguish zip codes from each other. Let's use the number of foreclosure notices to start with:
