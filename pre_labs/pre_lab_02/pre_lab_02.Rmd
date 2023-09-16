@@ -1,7 +1,7 @@
 ---
 title: "pre_lab_02.Rmd"
 author: "Derek Willis"
-date: "2023-01-06"
+date: "2023-09-15"
 output: html_document
 ---
 
@@ -9,11 +9,13 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Points to hit
+## This week's topics
 
-1.  Review of first lab and questions/problems.
-2.  Review GitHub
-3.  Demonstration of filtering, dates and mutate.
+* Using filter() to find specific records
+* Using select() to see only certain columns
+* Using lubridate to work with dates
+* Using mutate() to add and update columns
+* Using case_when() to conditionally populate columns
 
 ### Task 1: Load libraries
 
@@ -23,7 +25,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # turn off sci notation
 options(scipen=999)
 library(tidyverse)
-library(lubridate) # look up lubridate and describe its uses in your reference notebook
+library(lubridate)
 ```
 
 ### Task 2: Load data
@@ -36,13 +38,11 @@ umd_courses <- read_rds("data/umd_courses.rds")
 
 ### Task 3: Glimpse data
 
-**Task** Run the following codeblock to use head(), summary(), colnames() and glimpse() to get a sense of the data, some of the values in each field/variable/column, and the data types of each field/variable/column. Add a description of what these do to your reference notebook.
+**Task** Run the following codeblock to use summary() and colnames() to get a sense of the data and the data types of each field/variable/column. Add a description of what these do to your reference notebook.
 
 ```{r}
-head(umd_courses)
 summary(umd_courses)
 colnames(umd_courses)
-glimpse(umd_courses)
 ```
 
 ## Filter and Select
@@ -75,7 +75,7 @@ head(courses_2023)
 
 ### Task 5: Select
 
-We also have more data than we might want. For example, we may only want to work with the course id and title.
+We also have more columns than we might want. For example, we may only want to work with the course id and title.
 
 To simplify our dataset, we can use select.
 
@@ -136,13 +136,13 @@ Sometimes you need to find rows that contain a certain pattern rather than an ex
 **Task** Run the following code
 
 ```{r}
-umd_courses |> 
+umd_courses |>
   filter(str_detect(title, "Shakespeare"))
 ```
 
 The latest version of the tidyverse also has a function called `str_like` which uses the wildcard search operator % to do partial matching.
 
-A general tip about using filter: it's easier to work your way towards the filter syntax you need rather than try and write it once and trust the result. Each time you modify your filter, check the results to see if they make sense. This adds a little time to your process but you'll thank yourself for doing it because it helps avoid mistakes. Note that whatever you're trying to match using `filter` - whether an exact match or a partial one - R is case-sensitive by default. Go back and try the previous block, changing the pattern to "shakespeare" to see this.
+A general tip about using filter: it's easier to work your way towards the filter syntax you need in steps rather than try and write it once and trust the result. Each time you modify your filter, check the results to see if they make sense. This adds a little time to your process but you'll thank yourself for doing it because it helps avoid mistakes. Note that whatever you're trying to match using `filter` - whether an exact match or a partial one - R is case-sensitive by default. Go back and try the previous block, changing the pattern to "shakespeare" to see this.
 
 ## Dates
 
@@ -257,7 +257,7 @@ general_22 <- general_22 |>
 general_22 <- general_22 |>
   mutate(
     pct_moore = (moore/total_votes)*100
-  ) |> 
+  ) |>
   arrange(desc(pct_moore))
 ```
 
@@ -283,12 +283,7 @@ Is this a more interesting or useful answer? Why?
 
 Mutate is also useful for standardizing data - for example, making different spellings of, say, campaign spending recipients.
 
-Let's load some Maryland state campaign expenditures into a `maryland_expenses` dataframe, and focus in particular on the `payee_name` column.
-
-```{r}
-maryland_expenses <- read_csv("data/maryland_expenses.csv")
-maryland_expenses
-```
+Let's use our Maryland expenditure data and focus in particular on the `payee_name` column.
 
 You'll notice that there's a mix of styles: lower-case and upper-case names like "Anedot" and "ANEDOT", for example. R will think those are two different payees, and that will mean that any aggregates we create based on payee_name won't be accurate.
 
@@ -360,7 +355,7 @@ Now that you have seen how to use mutate, filtering and dates, give me three que
 
 **Answer**
 
-1.  
+1.
 
 2.  
 

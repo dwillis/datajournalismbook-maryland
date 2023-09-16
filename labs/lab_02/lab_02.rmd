@@ -1,7 +1,7 @@
 ---
 title: "lab_02"
 author: "derek willis"
-date: "2023-08-25"
+date: "2023-09-15"
 output: html_document
 ---
 
@@ -32,29 +32,38 @@ maryland_expenses <- read_csv("data/maryland_expenses.csv")
 
 ## Answer questions
 
-**Q1** Create a new column that divides the expense amounts into the following categories - \$0-\$500, \$500-\$5000, \$5001-\$50000, \$50001\_\$100000, \$100001-\$500000 - giving each an appropriate text value, and count how many expenses are in each group. How would you describe the distribution of expenses in a sentence? Would you change the categories?
-
+**Q1.** How many departments have offered the courses with "Climate" in the title and at least one seat? Which department has offered the most?
 **A1.**
 
 ```{r}
 ```
 
-**Q2.** How many departments have offered the courses with "Climate" in the title and at least one seat? Which department has offered the most? **A2.**
+**Q2.** Of the departments listed in A2, which one is the most interesting to you, and why?
+**A2.**
+
+
+**Q3** Which departments have the most courses in the Fall 2023 term? And which departments in that term have at least one syllabus posted? How are the top five departments different in each result?
+
+**A3.**
 
 ```{r}
 ```
 
-**Q3.** Of the departments listed in A2, which one is the most interesting to you, and why? 
-**A3.**
-
-**Q4.** Using the Maryland campaign expenses data, change the datatype of the expenditure_date column so that it is a date and not a chr. Then create a new column for the month based on expenditure_date. Then write code that shows total amount spent each month by Wes Moore's committee (you'll need to search the data to find the exact name). Write a sentence describing the pattern of spending over time.
+**Q4.** Using the Maryland campaign expenses data, change the datatype of the expenditure_date column so that it is a date and not a chr, saving the result as the same dataframe. Then create a new column for the month based on expenditure_date. Then write code that shows total amount spent each month by Wes Moore's committee (you'll need to search the data to find the exact name). Write a sentence describing the pattern of spending over time.
 **A4.**
 
 ```{r}
 ```
 
-**Q5.** Choose your own adventure: using either the UMD courses or campaign expenses data, ask and answer a question that is different than the previous ones. You can use one of the ones you provided in the pre_lab.
-**A5.**
+**Q5.** Using case_when(), create a column in the Maryland expenses data called `spending_location` indicating whether each record spent money in Maryland or outside Maryland. For records that are in Maryland, make the new column's value "In-state" and for the others, make it "Out of state". Then write code that shows the total amount of money spent in each category and describe the results. You can do this in one statement or break it up into two statements (saving the new column to your dataframe).
+**A5**
+
+```{r}
+```
+
+
+**Q6.** Choose your own adventure: using either the UMD courses or campaign expenses data, ask and answer a question that is different than the previous ones. You can use one of the ones you provided in the pre_lab.
+**A6.**
 
 ```{r}
 ```
