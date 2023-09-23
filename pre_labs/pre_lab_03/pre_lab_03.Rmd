@@ -63,7 +63,8 @@ The second smell we can find in code is **wrong spatial data**. Spatial data mea
 
 We can check to see if any of the zip codes are less than five characters by using [a function called `str_length`](https://stringr.tidyverse.org/reference/str_length.html) inside a filter.
 
-**Task** Run the following codeblock to group by the vendor's zip code and show any that are less than five characters in length. How many zip codes do not have five characters? What do you think is happening with this data? **Answer**
+**Task** Run the following codeblock to group by the vendor's zip code and show any that are less than five characters in length. How many zip codes do not have five characters? What do you think explains those records? 
+**Answer**
 
 ```{r}
 payments |>
@@ -87,9 +88,10 @@ md_grants_loans <- read_csv("data/State_of_Maryland_Grant_and_Loan_Data__FY2009_
 
 Each row represents a recipient of state grant or loan, along with information about their location and the state agency that provided the money. When we talk about gaps, often they indicate the administrative rules. Here's an example: let's count the number of payments in each category (Grant or Loan) by year in this dataset.
 
-### Task 7: Count the number of payments in each category by year:
+### Task 7: Looking at categories
 
-**Task** Run the following codeblock to count the number of payments. Looking at the result, what jumps out at you as potentially problematic? **Answer**
+**Task** Run the following codeblock and describe below what each line is doing. Looking at the results, what jumps out at you as potentially problematic? 
+**Answer**
 
 ```{r}
 md_grants_loans |> 
@@ -102,7 +104,8 @@ Any time you are going to focus on a column for analysis, you should check for u
 
 ### Task 8: Find outliers
 
-**Task** Run the following code to arrange the grants & loan data so that the smallest amount is first. Describe what you see. **Answer**
+**Task** Run the following code to arrange the grants & loan data so that the smallest amount is first. Describe what you see. 
+**Answer**
 
 ```{r}
 md_grants_loans |> 
@@ -138,7 +141,8 @@ Let's get cleaning. Our goal will be to build up one block of code that does all
 
 ### Task 3: Use clean_names()
 
-**Task** Run the following codeblock to use the `clean_names()` function from janitor to standardize column names. How does the function change the headers? Answer below. **Answer**
+**Task** Run the following codeblock to use the `clean_names()` function from janitor to standardize column names. How does it change the headers? Answer below.
+**Answer**
 
 ```{r}
 # cleaning function
@@ -167,7 +171,8 @@ Right now the `source`, `grantee` and `description` columns have inconsistent ca
 
 ### Task 5: Using str_to_upper() to standardize case
 
-**Task** Run the following codeblock to use str_to_upper() to make the source, grantee and description columns upper-cased.
+**Task** Run the following codeblock to use str_to_upper() to make the source, grantee and description columns upper-cased. Describe what each line is doing.
+**Answer** 
 
 ```{r}
 # cleaning function
@@ -182,7 +187,8 @@ cleaned_md_grants_loans
 
 ### Task 6: Check for duplicate rows
 
-**Task** Run the following codeblock to check for duplicate rows using get_dupes(). How many duplicates are possible? **Answer**
+**Task** Run the following codeblock to check for duplicate rows using get_dupes(). How many duplicates are possible? 
+**Answer**
 
 ```{r}
 cleaned_md_grants_loans |>
@@ -191,7 +197,8 @@ cleaned_md_grants_loans |>
 
 ### Task 7: Get rid of duplicate rows
 
-**Task** Run the following codeblock to use distinct() to get rid of duplicate rows. How many rows does the new dataframe have? Answer below. **Answer**
+**Task** Run the following codeblock to use distinct() to get rid of duplicate rows. How many rows does the new dataframe have? Answer below. 
+**Answer**
 
 ```{r}
 # cleaning function
@@ -213,7 +220,8 @@ Let's start by cleaning up the zip field. Remember, some of the rows had a five-
 
 We're going to write code that tells R to make a new column for our zips, keeping the first five digits on the left, and get rid of anything after that by using `mutate()` in concert with `str_sub()`, from the `stringr` package.
 
-**Task** Run the following codeblock to use str_sub() to convert the ZIP codes that have nine digits to five digits, creating a new column. Look at the difference in the result - what changed? **Answer**
+**Task** Run the following codeblock to use str_sub() to convert the ZIP codes that have nine digits to five digits, creating a new column. Look at the difference in the result - what changed? 
+**Answer**
 
 ```{r}
 # cleaning function
@@ -252,31 +260,10 @@ cleaned_md_grants_loans <- md_grants_loans |>
 cleaned_md_grants_loans
 ```
 
-### Task 10: Clean up city field more with case_when()
+### Task 10: Answer our question!
 
-**Task** Run the following codeblock to use case_when() to fix zip5 issues using both the exact match method and the str_detect() method.
-
-```{r}
-# cleaning function
-cleaned_md_grants_loans <- md_grants_loans |>
-  clean_names() |> 
-  rename(source = grantor) |> 
-  mutate(source = str_to_upper(source), grantee = str_to_upper(grantee), description = str_to_upper(description)) |> 
-  distinct() |>
-  mutate(zip5 = str_sub(zip_code, start=1L, end=5L)) |>
-  mutate(zip5 = case_when(
-    zip5 == "Vario" ~ NA,
-    str_detect(zip5, "^UB7") ~ NA,
-    .default = zip5
-  ))
-
-# display the cleaned dataset
-cleaned_md_grants_loans
-```
-
-### Task 11: Answer our question!
-
-**Task** Write and run code to answer our original question: which zip code has gotten the most amount of money from the Maryland Tourism Board? Does that zip code make sense to you?
+**Task** Write and run code to answer our original question: which zip code has gotten the most amount of money from the Maryland Tourism Board? Where is that zip code, and does that zip code make sense to you as the top recipient? Write a sentence describing the top result.
+**Answer**
 
 ```{r}
 
