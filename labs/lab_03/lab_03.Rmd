@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Load libraries and establish settings
+## TASK: Load libraries
 
 ```{r}
 # Turn off scientific notation
@@ -22,7 +22,7 @@ options(scipen=999)
 
 ## TASK: Load data and clean up the column names
 
-Load the two datasets we worked with in the pre_lab: the Maryland payments to vendors and Maryland grants and loans and, using janitor, change the columns so that they are lower-cased and any spaces are replaced with underscores.
+Load the two datasets we worked with in the pre_lab: the Maryland payments to vendors and Maryland grants and loans AND, using janitor, change the column names so that they are lower-cased and any spaces are replaced with underscores.
 
 ```{r}
 # Load in the Maryland state agency payments data, making sure that it correctly sets the datatypes using all of the rows
@@ -32,7 +32,11 @@ Load the two datasets we worked with in the pre_lab: the Maryland payments to ve
 
 ## Answer questions
 
-Q1: You want to know how much money state agencies have paid to the Prince George's County School system, but to do that you'll need to find all of the variations of how the school system might be listed. Write code to find rows where the vendor name contains the county's school system, starting with a broad search and then narrowing it down. When you have found as many as possible, save the result to a new dataframe called `pg_schools`. How many records did you find? Look at & search the records in the dataframe while you construct your code.
+Q1: You want to know how much money state agencies have paid to the Prince George's County School system, but to do that you'll need to find all of the variations of how the school system might be listed in the payments data. Look at & search the records in the dataframe to start your search, starting with a broad search and then narrowing it down. Then write code to find rows where the vendor name contains some version of the county's school system. 
+
+HINT: you should use filter() just once, and inside your filter you want to look for the variations one at a time. Think "this version OR that version."
+
+When you have found as many as possible, save the result to a new dataframe called `pg_schools`. How many records did you find? 
 
 A1:
 
@@ -46,14 +50,16 @@ A2:
 ```{r}
 ```
 
-Q3. You're interested in examining the vendors paid for capital projects at the University of Maryland. Search the payments data to find those payments, then write code to produce a list of each vendor and the total amount it received. Look carefully at that list - what cleaning will it require to ensure that you have only one row per vendor and zip code? Provide at least three examples of vendor names that are similar and should be combined into one. Describe how you might clean that data so that any nearly identical vendors would look identical - what would you change and how?
+Q3. You're interested in examining the vendors paid for capital projects at the University of Maryland. Search the payments data to find those payments, then write code to produce a list of each vendor and the total amount it received. 
+
+Look carefully at that list - what cleaning will it require to ensure that you have only one row per vendor and zip code? Provide at least three examples of vendor names that are similar and should be combined into one. Describe in words how you might clean that data so that any nearly identical vendors would look identical - what would you change and how?
 
 A3.
 
 ```{r}
 ```
 
-Q4: You want to understand how much state grant money went to stem cell research projects each fiscal year. Search the data to find grants that fit that description. Once you find which columns contain the information you want, your code should standardize the data needed to find just the grants for stem cell research in a single filter. Then create a total amount of money for each fiscal year. Write a sentence summarizing how stem cell research funding has changed over time.
+Q4: You want to understand how much state grant money went to stem cell research projects each fiscal year. Search the data to find grants that fit that description. Once you find which column(s) contain the information you want, your code should find just the grants for stem cell research in a single filter. Then calculate the total amount of money for each fiscal year. Write a sentence summarizing how stem cell research funding has changed over time.
 
 A4:
 
@@ -62,8 +68,7 @@ A4:
 
 Q5: Using the Maryland grants and loan data, find records where the zip code is the one where the University of Maryland-College Park is located in and produce a list of grantees from that zip code, along with the total amount they received. Write a paragraph explaining how many grantees are there, what you would need to do to clean the results so that you had one record per grantee and which grantees are most interesting to you?
 
-A5: 
+A5:
 
 ```{r}
 ```
-
