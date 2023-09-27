@@ -1,7 +1,7 @@
 ---
 title: "lab_03"
 author: "Derek Willis"
-date: "2023-02-22"
+date: "2023-09-25"
 output: html_document
 ---
 
@@ -20,7 +20,7 @@ options(scipen=999)
 # Load janitor
 ```
 
-## Load data and clean up the column names
+## TASK: Load data and clean up the column names
 
 Load the two datasets we worked with in the pre_lab: the Maryland payments to vendors and Maryland grants and loans and, using janitor, change the columns so that they are lower-cased and any spaces are replaced with underscores.
 
@@ -32,14 +32,14 @@ Load the two datasets we worked with in the pre_lab: the Maryland payments to ve
 
 ## Answer questions
 
-Q1: You want to know how much money state agencies have paid to the Prince George's County School system, but to do that you'll need to find all of the variations of how the school system might be listed. Write code to find rows where the vendor name contains the county's school system, starting with a broad search and then narrowing it down. When you have found as many as possible, save the result to a new dataframe called `pg_schools`. How many records did you find?
+Q1: You want to know how much money state agencies have paid to the Prince George's County School system, but to do that you'll need to find all of the variations of how the school system might be listed. Write code to find rows where the vendor name contains the county's school system, starting with a broad search and then narrowing it down. When you have found as many as possible, save the result to a new dataframe called `pg_schools`. How many records did you find? Look at & search the records in the dataframe while you construct your code.
 
 A1:
 
 ```{r}
 ```
 
-Q2: Using that `pg_schools` dataframe, write code to calculate the total amount of payments to the Prince George's County School system for each fiscal year. Which fiscal year had the largest total amount? What do you notice about the years listed, and what questions do you have about that data?
+Q2: Using that `pg_schools` dataframe, write code to calculate the total amount of payments to the Prince George's County School system for each fiscal year. Which fiscal year had the largest total amount? Are there any aspects of the results that stand out to you?
 
 A2:
 
@@ -59,3 +59,11 @@ A4:
 
 ```{r}
 ```
+
+Q5: Using the Maryland grants and loan data, find records where the zip code is the one where the University of Maryland-College Park is located in and produce a list of grantees from that zip code, along with the total amount they received. Write a paragraph explaining how many grantees are there, what you would need to do to clean the results so that you had one record per grantee and which grantees are most interesting to you?
+
+A5: 
+
+```{r}
+```
+

@@ -45,9 +45,9 @@ pg_schools <- md_payments |>
   filter(str_detect(vendor_name, "PRINCE GEORGES PUBLIC") | str_detect(vendor_name, "PRINCE GEORGES COUNTY SCHOOL") | str_detect(vendor_name, "PG COUNTY PUBLIC"))
 ```
 
-Q2: Using that `pg_schools` dataframe, write code to calculate the total amount of payments to the Prince George's County School system for each fiscal year. Which fiscal year had the largest total amount? What do you notice about the years listed?
+Q2: Using that `pg_schools` dataframe, write code to calculate the total amount of payments to the Prince George's County School system for each fiscal year. Which fiscal year had the largest total amount? Are there any aspects of the results that stand out to you?
 
-A2: 2020 had the largest amount, with \$1,362,372,202. In addition to missing 2021 and 2022 data, 2016 appears to be missing.
+A2: Depending on how you did Q1, 2020 had the largest amount, with \$1,362,372,202. In addition to missing 2021 and 2022 data, 2016 appears to be missing.
 
 ```{r}
 pg_schools |>
@@ -66,7 +66,7 @@ A3. There are multiple duplicates in the results, and removing punctuation would
 md_payments |> 
   filter(agency_name == 'CAPITAL PROJECTS- UNIVERSITY OF MARYLAND') |> 
   group_by(vendor_name) |> 
-  summarize(total = sum(amount)) |> 
+  summarise(total = sum(amount)) |> 
   arrange(vendor_name)
 ```
 
@@ -79,5 +79,17 @@ md_grants_loans |>
   mutate(description = str_to_upper(description)) |> 
   filter(str_detect(description,"STEM CELL RESEARCH GRANT")) |> 
   group_by(fiscal_year) |> 
-  summarize(total = sum(amount))
+  summarise(total = sum(amount))
 ```
+Q5. Using the Maryland grants and loan data, find records where the zip code is the one where the University of Maryland-College Park is located in and produce a list of grantees from that zip code, along with the total amount they received. Write a paragraph explaining how many grantees are there, what you would need to do to clean the results so that you had one record per grantee and which grantees are most interesting to you?
+
+A5. There are 18 grantees in the data from the 20742 zip code, but several of them are UMCP and could be standardized into a single record for the university. In addition, one of the zip codes is a nine-digit zip and could be made into a five-digit zip code. OVALTZ INC	is an interesting one, because I can't find any evidence of it in search results.
+
+```{r}
+md_grants_loans |> 
+  filter(str_detect(zip_code, '20742')) |> 
+  group_by(grantee) |> 
+  summarise(total = sum(amount)) |> 
+  arrange(desc(total))
+```
+
