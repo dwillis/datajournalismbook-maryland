@@ -38,19 +38,26 @@ md_grants_loans <- read_csv("data/State_of_Maryland_Grant_and_Loan_Data__FY2009_
 
 Q1: You want to know how much money state agencies have paid to the Prince George's County School system, but to do that you'll need to find all of the variations of how the school system might be listed. Write code to find rows where the vendor name contains the county's school system, starting with a broad search and then narrowing it down. When you have found as many as possible, save the result to a new dataframe called `pg_schools`. How many records did you find?
 
-A1: There are anywhere from 27-79 records, depending on how many variations you were able to find.
+A1: There are anywhere from a handful to 87 records, depending on how many variations you were able to find.
 
 ```{r}
 pg_schools <- md_payments |> 
-  filter(str_detect(vendor_name, "PRINCE GEORGES PUBLIC") | str_detect(vendor_name, "PRINCE GEORGES COUNTY SCHOOL") | str_detect(vendor_name, "PG COUNTY PUBLIC"))
+  filter(
+    str_detect(vendor_name, "PRINCE GEORGES PUBLIC") | 
+    str_detect(vendor_name, "PRINCE GEORGES COUNTY SCHOOL") | 
+    str_detect(vendor_name, "PG COUNTY PUBLIC") |
+    str_detect(vendor_name, "PRINCE GEORGES COUNTY PUBLIC SCHOOL") |
+    str_detect(vendor_name, "BD OF EDUCATION OF PG CO") |
+    str_detect(vendor_name, "BOARD OF EDUCATION OF PRINCE GEORGE")
+  )
 ```
 
 Q2: Using that `pg_schools` dataframe, write code to calculate the total amount of payments to the Prince George's County School system for each fiscal year. Which fiscal year had the largest total amount? Are there any aspects of the results that stand out to you?
 
-A2: Depending on how you did Q1, 2020 had the largest amount, with \$1,362,372,202. In addition to missing 2021 and 2022 data, 2016 appears to be missing.
+A2: Depending on how you did Q1, 2022 had the largest amount, with \$1,578,857,325, and no years should be missing.
 
 ```{r}
-pg_schools |>
+totals <- pg_schools |>
   group_by(fiscal_year) |>
   summarise(
     total_amount = sum(amount)
@@ -81,9 +88,10 @@ md_grants_loans |>
   group_by(fiscal_year) |> 
   summarise(total = sum(amount))
 ```
+
 Q5. Using the Maryland grants and loan data, find records where the zip code is the one where the University of Maryland-College Park is located in and produce a list of grantees from that zip code, along with the total amount they received. Write a paragraph explaining how many grantees are there, what you would need to do to clean the results so that you had one record per grantee and which grantees are most interesting to you?
 
-A5. There are 18 grantees in the data from the 20742 zip code, but several of them are UMCP and could be standardized into a single record for the university. In addition, one of the zip codes is a nine-digit zip and could be made into a five-digit zip code. OVALTZ INC	is an interesting one, because I can't find any evidence of it in search results.
+A5. There are 18 grantees in the data from the 20742 zip code, but several of them are UMCP and could be standardized into a single record for the university. In addition, one of the zip codes is a nine-digit zip and could be made into a five-digit zip code. OVALTZ INC is an interesting one, because I can't find any evidence of it in search results.
 
 ```{r}
 md_grants_loans |> 
@@ -92,4 +100,3 @@ md_grants_loans |>
   summarise(total = sum(amount)) |> 
   arrange(desc(total))
 ```
-
