@@ -51,7 +51,7 @@ You can now export that extracted table to a CSV file using the "Export" button.
 **Task** Load the Maryland voters by county data by running the following codeblock.
 
 ```{r}
-voters_by_county <- read_csv("tabula-Eligible Active Voters by County - GP22.csv")
+voters_by_county <- read_csv("tabula-Eligible Active Voters by County - GG22.csv")
 View(voters_by_county)
 ```
 
