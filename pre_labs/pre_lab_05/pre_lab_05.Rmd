@@ -1,7 +1,7 @@
 ---
 title: "pre_lab_05.Rmd"
 author: "derek willis"
-date: "2023-03-05"
+date: "2023-10-13"
 output: html_document
 ---
 
@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Points to hit
 
-1.  Review of fifth lab questions/problems.
+1.  Review of previous lab questions/problems.
 2.  Demonstration of PDF parsing with Tabula
 
 ### Task 1: Load libraries
@@ -38,7 +38,7 @@ When Tabula opens, you click browse to find the PDF on your computer somewhere, 
 knitr::include_graphics(rep("images/md_voters.png"))
 ```
 
-ow you can hit the green "Preview & Export Extracted Data" button on the top right. You should see something very like this:
+Now you can hit the green "Preview & Export Extracted Data" button on the top right. You should see something very like this:
 
 ```{r, echo=FALSE}
 knitr::include_graphics(rep("images/md_voters2.png"))
@@ -51,7 +51,7 @@ You can now export that extracted table to a CSV file using the "Export" button.
 **Task** Load the Maryland voters by county data by running the following codeblock.
 
 ```{r}
-voters_by_county <- read_csv("tabula-Eligible Active Voters by County - GP22.csv")
+voters_by_county <- read_csv("tabula-Eligible Active Voters by County - GG22.csv")
 View(voters_by_county)
 ```
 
