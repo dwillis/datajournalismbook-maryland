@@ -1,7 +1,7 @@
 ---
 title: "lab_05"
 author: "derek willis"
-date: "2023-03-07"
+date: "2023-10-18"
 output: html_document
 ---
 
@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## You will need
 
-- Tabula
+-   Tabula
 
 ## Load libraries and establish settings
 
@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Turn off scientific notation
 options(scipen=999)
 
-# Load the tidyverse.
+# Load the tidyverse, plus any other packages you will need to clean data and work with dates.
 
 ```
 
@@ -29,7 +29,7 @@ We'll be working with the [911 overdose calls from Baltimore County](https://dri
 
 ## Extract Data from PDF Using Tabula
 
-Start Tabula, then go to http://127.0.0.1:8080/ in your browser. Click the "Browse" button and find the PDF file and click "open", and then click the "Import button" in Tabula. This will take a few seconds or longer.
+Start Tabula, then go to <http://127.0.0.1:8080/> in your browser. Click the "Browse" button and find the PDF file and click "open", and then click the "Import button" in Tabula. This will take a few seconds or longer.
 
 This PDF has a single table spread over multiple pages to extract. We're going to make a single dataframe from this table, exporting it to a CSV file that you will load into R. In Tabula, highlight the table and click the "Preview & Export Extracted Data" button. You may want to play with including or excluding the column headers - YOU SHOULD HAVE FIVE COLUMNS OF DATA.
 
@@ -48,21 +48,21 @@ You will need to read in and clean up the data so that it can be used for analys
 
 Q1. Write code to generate the number of calls that occurred on each date. Which date in 2022 had the most overdose calls, and how many? Look at the total number of rows in your result and explore the range of dates - based on your result, do you believe there are any days with no overdose calls at all? Explain why or why not.
 
-A1. 
+A1.
 
 ```{r}
 ```
 
 Q2. You want to understand if there's a pattern in the day of the week that overdose calls are made. Add a column to your dataframe that displays what day of the week each date represents. You should search for how to do that using lubridate. Then write code to calculate the number of calls for each day of the week, and add a column to that result that calculates the percentage of all calls that occurred on each day of the week (so you want a dataframe with the day of the week, total number of calls and the percentage of calls on that day out of the total number of all calls). Describe your findings to me.
 
-A2. 
+A2.
 
 ```{r}
 ```
 
 Q3. Now let's look at locations. Which ones have the most calls? How would you describe them (feel free to search for more information on them)? Is there anything about the structure of the original data that might make you less confident in the counts by location or date?
 
-A3. 
+A3.
 
 ```{r}
 
@@ -70,4 +70,4 @@ A3.
 
 Q4. What's the best story idea or question you've seen as a result of the work you've done in this lab?
 
-A4. 
+A4.
