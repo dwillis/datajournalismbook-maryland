@@ -75,7 +75,7 @@ view(maryland_population)
 
 ```{r}
 # with nrow included to show row total
-maryland_population |> left_join(county_voters_2020, join_by("COUNTY")) |> nrow()
+maryland_population |> left_join(county_voters_2022, join_by("COUNTY")) |> nrow()
 ```
 
 ### Task 7: Looking at Joined Data
