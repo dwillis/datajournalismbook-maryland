@@ -48,7 +48,7 @@ baltimore_911_with_demographics <- baltimore_911 |> left_join(maryland_zcta, by=
 
 Q1. Let's start with our data from Allegany, Harford and Carroll counties. Write code to generate a dataframe that shows the total number of calls for each county. What's the order of counties from most calls to least?
 
-A1. Carroll, Cecil, Allegany - all of them have similar numbers of calls. 
+A1. Carroll, Cecil, Allegany - all of them have similar numbers of calls.
 
 ```{r}
 combined_911 |> 
@@ -57,7 +57,7 @@ combined_911 |>
   arrange(desc(calls))
 ```
 
-Q2. In your combined dataframe that you used in A1, add a column for the month of each call, then write code to show the total number of calls per county and month. Are there any outliers or noteworthy results? Describe the general pattern of the results. 
+Q2. In your combined dataframe that you used in A1, add a column for the month of each call, then write code to show the total number of calls per county and month. Are there any outliers or noteworthy results? Describe the general pattern of the results.
 
 Then calculate the most calls per county and location. Which location had the most calls - where and what is that location?
 
@@ -76,11 +76,11 @@ combined_911 |>
   arrange(desc(calls))
 ```
 
-Q3. Let's turn to the Baltimore City data. You're interested in exploring calls in zip codes with a high percentage of children under 18. Write code to isolate calls in zip codes where the percentage of under 18 population is at least 75% and then show the zip code and population and how many calls occurred in each of those zip codes. 
+Q3. Let's turn to the Baltimore City data. You're interested in exploring calls in zip codes with a high percentage of children under 18. Write code to isolate calls in zip codes where the percentage of under 18 population is at least 75% and then show the zip code and population and how many calls occurred in each of those zip codes.
 
 Where are those zip codes in the city?
 
-Add a column to your code that calculates the number of calls per 1,000 people for those zip codes. To calculate a per capita rate, you might find this short guide handy: https://observablehq.com/@palewire/per-capita-calculator.
+Add a column to your code that calculates the number of calls per 1,000 people for those zip codes. To calculate a per capita rate, you might find this short guide handy: [https://observablehq.com/\@palewire/per-capita-calculator](https://observablehq.com/@palewire/per-capita-calculator){.uri}.
 
 Which zip code has the highest rate of calls per 1,000 people? Find the neighborhoods in that zip code that are listed in the data - you can use group_by or distinct to do this. What are some of those neighborhoods, and what else can you tell me about the population there?
 
@@ -102,7 +102,7 @@ baltimore_911_with_demographics |>
 
 Q4. Choose your own adventure: I want you to come up with a question you could ask of the Baltimore City data that combines both the calls and the demographic information. You must use both demographics and the overdose call records.
 
-A4: 
+A4:
 
 ```{r}
 
