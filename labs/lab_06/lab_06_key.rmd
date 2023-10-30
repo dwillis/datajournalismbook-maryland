@@ -46,7 +46,7 @@ baltimore_911_with_demographics <- baltimore_911 |> left_join(maryland_zcta, by=
 
 ## Answer questions
 
-Q1. Let's start with our data from Allegany, Harford and Carroll counties. Write code to generate a dataframe that shows the total number of calls for each county. What's the order of counties from most calls to least?
+Q1. Let's start with our data from Allegany, Cecil and Carroll counties. Write code to generate a dataframe that shows the total number of calls for each county. What's the order of counties from most calls to least?
 
 A1. Carroll, Cecil, Allegany - all of them have similar numbers of calls.
 
