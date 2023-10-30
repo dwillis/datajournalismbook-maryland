@@ -88,6 +88,7 @@ As you can see, we have a GEOID, NAME, then variable and value. Variable and val
 p10 |> select(GEOID, NAME, value) |> rename(Population2010=value) -> p10
 
 p00 |> select(GEOID, NAME, value) |> rename(Population2000=value) -> p00
+
 ```
 
 Now we join the data together.
