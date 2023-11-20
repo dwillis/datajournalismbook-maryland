@@ -11,8 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## You will need
 
-* the tidyverse, janitor and tigris libraries
-* the tidycensus library for Q3
+-   the tidyverse, janitor and tigris libraries
+-   the tidycensus library for Q3
 
 ## Load libraries and establish settings
 
@@ -29,11 +29,11 @@ library(tigris)
 
 ```
 
-Let's explore Maryland elections, power outages and electric vehicle data and make some maps! 
+Let's explore Maryland elections, power outages and electric vehicle data and make some maps!
 
-## Questions 
+## Questions
 
-**Q1.** Maryland voters made history in November by electing the state's first two African-American statewide office holders: Wes Moore as governor and Anthony Brown as attorney general. You want to compare the two's electoral performances. Using the `md_statewide_county.csv` file in the data folder, calculate the total number of votes for both the governor's race and the attorney general's race, then percentages for both Moore and Brown _based on the total of their respective contests_. Then calculate the difference between their percentages.
+**Q1.** Maryland voters made history last November by electing the state's first two African-American statewide office holders: Wes Moore as governor and Anthony Brown as attorney general. You want to compare the two's electoral performances. Using the `md_statewide_county.csv` file in the data folder, calculate the total number of votes for both the governor's race and the attorney general's race, then percentages for both Moore and Brown *based on the total of their respective contests*. Then calculate the difference between their percentages.
 
 Get the geometry for Maryland's counties using tigris and, joining that dataframe to your results dataframe, make a county-level map of the differences between Moore and Brown's percentages. What is the story here, and what is the county with the most interesting results?
 
@@ -79,12 +79,6 @@ ggplot() +
 
 ```
 
-```{r}
-outages <- read_csv("~/Downloads/Power_Outages_-_County(1).csv") |> mutate(dt_stamp = mdy_hms(dt_stamp)) |> mutate(month = floor_date(dt_stamp, "month"))
-april_2023 <- outages |> group_by(area) |> summarize(total_customers = sum(outages))
-```
-
-
 **Q3.** You've been assigned a story about the use of electric vehicles in Maryland and you want to make a map of the prevalence of electric vehicles in each county. Load the `ev_2020_2023.csv` file, which has the number of electric and hybrid vehicles per county from July 2020 and March 2023 and calculate a percentage change for each county (remember, that's `new-old/old`). Using the Maryland counties dataframe you made for Q1, make a county map showing the percentage change.What counties stand out to you? What questions do you have about the changes you're seeing?
 
 Next, use tidycensus to retrieve county population data for Maryland from 2021 (you did this in the pre_lab) and join it to your vehicles dataframe. HINT: you may not need to join it on the county name, and you should already have the geometry!
@@ -119,5 +113,3 @@ ggplot() +
   theme_minimal() +
   scale_fill_viridis_b(option="magma", trans='log')
 ```
-
-
