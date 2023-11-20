@@ -191,7 +191,7 @@ Now we can join the zip codes to the foreclosure data.
 **Task** Run the following code. Describe the output in the space below. **Answer**
 
 ```{r}
-zip_codes_with_foreclosures <- md_zips |> left_join(foreclosure_zip_march_2023, join_by(ZIPCODE1=zip))
+zip_codes_with_foreclosures <- md_zips |> left_join(foreclosure_zip_march_2023, join_by(ZIPCODE1==zip))
 ```
 
 Now we can use color to distinguish zip codes from each other. Let's use the number of foreclosure notices to start with:
@@ -213,7 +213,7 @@ With these changes, what can we make out here? First, you can pretty easily spot
 
 ## Chapter 21
 
-In the previous chapter, we looked at foreclosure notices by zip codes to find patterns in Maryland. Let's go further and, instead of using raw numbers, use percentages based on the number of owner-occupied housing units in each zip code.
+In the previous chapter, we looked at foreclosure notices by zip codes to find patterns in Maryland. Let's go further and, instead of using raw numbers, use percentages based on the number of owner-occupied housing units in each county.
 
 First, let's load the libraries we'll need. We're also going to load tidycensus and set an API key for tidycensus.
 
