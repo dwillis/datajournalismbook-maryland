@@ -20,6 +20,7 @@ Turning unstructured text into data to analyze is a whole course in and of itsel
 To do this, we'll need a new library -- [tidytext](https://cran.r-project.org/web/packages/tidytext/vignettes/tidytext.html), which you can guess by the name plays very nicely with the tidyverse. So install it in the console with `install.packages("tidytext")` and we'll get rolling.
 
 ### Task 1: Load libraries and settings
+
 **Task** Run the following code in the gray-colored codeblock below to load the libraries we'll use.
 
 ```{r}
@@ -32,13 +33,13 @@ library(lubridate)
 
 Remember the end of the previous lab, where you scraped all of those press release links from Maryland Sen. Ben Cardin's website? We're going to take that one step further and analyze the actual text of those releases using tidytext. Our starting question: what words or phrases appear most in Cardin's press releases?
 
-To answer this question, we'll use the text of those releases. For the scraping lab we gathered the URLs of 999 of Cardin's press releases, and for this exercise we'll be working with the text of them. 
+To answer this question, we'll use the text of those releases. For the scraping lab we gathered the URLs of 999 of Cardin's press releases, and for this exercise we'll be working with the text of them.
 
 Let's read in this data and examine it:
 
 ### Task 2: Read in data
-**Task** Run the following code and describe the dataframe it outputs.
-**Answer**
+
+**Task** Run the following code and describe the dataframe it outputs. **Answer**
 
 ```{r}
 releases <- read_rds("data/cardin_releases.rds")
@@ -47,6 +48,7 @@ releases <- read_rds("data/cardin_releases.rds")
 As an aside, below is an example of how you would scrape the text from the first 10 press releases. We already have the text in the dataframe, but this lets you know how it was collected.
 
 ### Task 3: Example of gathering text
+
 **Task** Run the following code to gather the text for the first 10 press releases.
 
 ```{r}
@@ -75,6 +77,7 @@ release_text
 What we want to do is to make the `text` column easier to analyze. Let's say we want to find out the most commonly used words. We'll want to remove URLs from the text of the releases since they aren't actual words. Let's use mutate to make that happen:
 
 ### Task 4: Remove URLs from content
+
 **Task** Run the following code.
 
 ```{r}
@@ -85,8 +88,8 @@ releases <- releases |>
 If you are trying to create a list of unique words, R will treat differences in capitalization as unique and also will include punctuation by default, even using its `unique` function:
 
 ### Task 5: Trying out unique
-**Task** Run the following code and describe what the `unique` function does to the original list of words.
-**Answer**
+
+**Task** Run the following code and describe what the `unique` function does to the original list of words. **Answer**
 
 ```{r}
 a_list_of_words <- c("Dog", "dog", "dog", "cat", "cat", ",")
@@ -96,8 +99,8 @@ unique(a_list_of_words)
 Fortunately, this is a solved problem with tidytext, which has a function called `unnest_tokens` that will convert the text to lowercase and remove all punctuation. The way that `unnest_tokens` works is that we tell it what we want to call the field we're creating with this breaking apart, then we tell it what we're breaking apart -- what field has all the text in it. For us, that's the `text` column:
 
 ### Task 6: Trying out unnest_tokens
-**Task** Run the following code and describe the output of using the `unnest_tokens` function.
-**Answer**
+
+**Task** Run the following code and describe the output of using the `unnest_tokens` function. **Answer**
 
 ```{r}
 unique_words <- releases |> select(text) |>
@@ -106,8 +109,8 @@ View(unique_words)
 ```
 
 ### Task 7: Make a column chart
-**Task** Run the following code and describe what the resulting graphic shows. Is it interesting?
-**Answer**
+
+**Task** Run the following code and describe what the resulting graphic shows. Is it interesting? **Answer**
 
 Now we can look at the top words in this dataset. Let's limit ourselves to making a plot of the top 25 words, and we'll use the function `count` to do the counting:
 
@@ -128,6 +131,7 @@ unique_words |>
 Well, that's a bit underwhelming - a lot of very common (and short) words. This also is a solved problem in working with text data, and words like "a" and "the" are known as "stop words". In most cases you'll want to remove them from your analysis since they are so common. Tidytext provides a dataframe of them that we'll load, and then we'll add some of our own.
 
 ### Task 8: Load the stop words
+
 **Task** Run the following code
 
 ```{r}
@@ -155,8 +159,8 @@ Then we're going to use a function we haven't used yet called an `anti_join`, wh
 From there, we can get a simple word frequency by just grouping them together and counting them. We can borrow the percent code from above to get a percent of the words our top 10 words represent.
 
 ### Task 9: Using anti_join
-**Task** Run the following code and describe the results. Is it more interesting than before?
-**Answer**
+
+**Task** Run the following code and describe the results. Is it more interesting than before? **Answer**
 
 ```{r}
 unique_words |>
@@ -170,6 +174,7 @@ unique_words |>
 Those seem like more relevant unique words. Now, here's where we can start to do more interesting and meaningful analysis. Let's create three dataframes of unique words based on time: one for 2021, 2022 and 2023.
 
 ### Task 10: Create dataframes for 2021, 2022 and 2023
+
 **Task** Run the following code
 
 ```{r}
@@ -192,8 +197,8 @@ unique_words_2023 <- releases |>
 Then we can create top 10 lists for both of them and compare:
 
 ### Task 11: Create dataframes with the top 10 words in each year
-**Task** Run the following code and describe the results.
-**Answer**
+
+**Task** Run the following code and describe the results. **Answer**
 
 ```{r}
 unique_words_2021 |>
@@ -228,17 +233,17 @@ The code to make ngrams is similar to what we did above, but involves some more 
 
 So this block is is going to do the following:
 
-1. Use the releases data we created above, and filter for pre-2022 releases.
-2. Unnest the tokens again, but instead we're going to create a field called bigram, break apart summary, but we're going to specify the tokens in this case are ngrams of 2.
-3. We're going to make things easier to read and split bigrams into word1 and word2.
-4. We're going to filter out stopwords again, but this time we're going to do it in both word1 and word2 using a slightly different filtering method.
-5. Because of some weirdness in calculating the percentage, we're going to put bigram back together again, now that the stop words are gone.
-6. We'll then group by, count and create a percent just like we did above.
-7. We'll then use top_n to give us the top 10 bigrams.
+1.  Use the releases data we created above, and filter for pre-2022 releases.
+2.  Unnest the tokens again, but instead we're going to create a field called bigram, break apart summary, but we're going to specify the tokens in this case are ngrams of 2.
+3.  We're going to make things easier to read and split bigrams into word1 and word2.
+4.  We're going to filter out stopwords again, but this time we're going to do it in both word1 and word2 using a slightly different filtering method.
+5.  Because of some weirdness in calculating the percentage, we're going to put bigram back together again, now that the stop words are gone.
+6.  We'll then group by, count and create a percent just like we did above.
+7.  We'll then use top_n to give us the top 10 bigrams.
 
 ### Task 12: Create a dataframe with the top 10 two-word phrases for 2021
-**Task** Run the following code and describe the results.
-**Answer**
+
+**Task** Run the following code and describe the results. **Answer**
 
 ```{r}
 releases |>
@@ -257,8 +262,8 @@ releases |>
 And we already have a different, more nuanced result. Health was among the top single words, and we can see that "health care", "human rights" and "chesapeake bay" are among the top 2-word phrases. What about after 2021?
 
 ### Task 13: Create a dataframe with the top 10 two-word phrases for 2022
-**Task** Run the following code and describe the results.
-**Answer**
+
+**Task** Run the following code and describe the results. **Answer**
 
 ```{r}
 releases |>
@@ -277,8 +282,8 @@ releases |>
 And 2023?
 
 ### Task 14: Create a dataframe with the top 10 two-word phrases for 2023
-**Task** Run the following code and describe the results.
-**Answer**
+
+**Task** Run the following code and describe the results. **Answer**
 
 ```{r}
 releases |>
@@ -303,8 +308,8 @@ There are some potential challenges to doing an analysis. For one, there are var
 Another popular use of text analysis is to measure the sentiment of a word - whether it expresses a positive or negative idea - and tidytext has built-in tools to make that possible. We use word counts like we've already calculated and bring in a dataframe of words (called a lexicon) along with their sentiments using a function called `get_sentiments`. The most common dataframe is called "bing" which has nothing to do with the Microsoft search engine. Let's load it:
 
 ### Task 15: Load the bing lexicon and produce sentiments for our 2021-2023 unique words
-**Task** Run the following code and describe the results. Do any of the sentiments seem incorrect or counter-intuitive?
-**Answer**
+
+**Task** Run the following code and describe the results. Do any of the sentiments seem incorrect or counter-intuitive? **Answer**
 
 ```{r}
 bing <- get_sentiments("bing")
