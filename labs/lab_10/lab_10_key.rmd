@@ -24,6 +24,7 @@ options(scipen=999)
 
 # Load the tidyverse.
 library(tidyverse)
+library(tidycensus)
 library(janitor)
 library(tigris)
 
@@ -33,11 +34,7 @@ Let's explore Maryland elections, power outages and electric vehicle data and ma
 
 ## Questions
 
-<<<<<<< HEAD
-**Q1.** Maryland voters made history in November by electing the state's first two African-American statewide office holders: Wes Moore as governor and Anthony Brown as attorney general. You want to compare the two's electoral performances. Using the `md_statewide_county.csv` file in the data folder, calculate the total number of votes for both the governor's race and the attorney general's race, then percentages for both Moore and Brown *based on the total of their respective contests*. Then calculate the difference between their percentages.
-=======
 **Q1.** Maryland voters made history last November by electing the state's first two African-American statewide office holders: Wes Moore as governor and Anthony Brown as attorney general. You want to compare the two's electoral performances. Using the `md_statewide_county.csv` file in the data folder, calculate the total number of votes for both the governor's race and the attorney general's race, then percentages for both Moore and Brown *based on the total of their respective contests*. Then calculate the difference between their percentages.
->>>>>>> e829fee5651e9274ac0f658b99ac5a75aa24df07
 
 Get the geometry for Maryland's counties using tigris and, joining that dataframe to your results dataframe, make a county-level map of the differences between Moore and Brown's percentages. What is the story here, and what is the county with the most interesting results?
 
