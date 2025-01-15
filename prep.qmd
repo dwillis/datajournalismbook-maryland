@@ -1,0 +1,22 @@
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+ottawa <- read_csv("https://raw.githubusercontent.com/openelections/openelections-data-mi/refs/heads/master/2024/counties/20241105__mi__general__ottawa__precinct.csv")
+
+statewide <- read_csv("https://raw.githubusercontent.com/openelections/openelections-data-mi/refs/heads/master/2024/20241105__mi__general__precinct.csv")
+
+statewide |> 
+  filter(candidate == 'Over Votes') |> 
+  group_by(county, office) |> 
+  summarise(total = sum(votes)) |> 
+  arrange(desc(total))
+
+ov <- ottawa |> filter(candidate == "Over Votes") |> 
+  group_by(county, office) |> 
+  summarise(total = sum(votes)) |> 
+  arrange(desc(total))
+```
+

@@ -19,7 +19,7 @@ library(janitor)
 Let's continue with our Maryland grants and loans data that we worked with in the previous chapter.
 
 ```{r}
-md_grants_loans <- read_csv("data/State_of_Maryland_Grant_and_Loan_Data__FY2009_to_FY2022.csv")
+md_grants_loans <- read_csv("data/State_of_Maryland_Grant_and_Loan_Data__FY2009_to_FY2022_20250115.csv")
 ```
 
 There are a number of issues with this data set that might get in the way of asking questions and receiving accurate answers. They are:
@@ -92,7 +92,7 @@ cleaned_md_grants_loans |>
   get_dupes()
 ```
 
-And the answer is ... maybe? Because the original dataset doesn't have a unique identifier for each grant, it's *possible* that we have duplicates here, as many as 50. If we could confirm that these actually are duplicates, we can fix this by adding the function `distinct()` to our cleaning script. This will keep only one copy of each unique record in our table. But we'd need to confirm that first.
+And the answer is ... maybe? Because the original dataset doesn't have a unique identifier for each grant, it's *possible* that we have duplicates here, as many as 58. If we could confirm that these actually are duplicates, we can fix this by adding the function `distinct()` to our cleaning script. This will keep only one copy of each unique record in our table. But we'd need to confirm that first.
 
 ```{r}
 # cleaning function

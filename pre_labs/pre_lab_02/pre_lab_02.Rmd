@@ -1,7 +1,7 @@
 ---
 title: "pre_lab_02.Rmd"
 author: "Derek Willis"
-date: "2023-09-15"
+date: "2025-01-15"
 output: html_document
 ---
 
@@ -11,11 +11,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## This week's topics
 
-* Using filter() to find specific records
-* Using select() to see only certain columns
-* Using lubridate to work with dates
-* Using mutate() to add and update columns
-* Using case_when() to conditionally populate columns
+-   Using filter() to find specific records
+-   Using select() to see only certain columns
+-   Using lubridate to work with dates
+-   Using mutate() to add and update columns
+-   Using case_when() to conditionally populate columns
 
 ### Task 1: Load libraries
 
@@ -63,14 +63,14 @@ journalism_courses <- umd_courses |> filter(department == "Journalism")
 head(journalism_courses)
 ```
 
-And just like that, we have just Journalism results, which we can verify looking at the head, the first six rows. We also could filter by a numeric column like `term`, so we could see just courses in 2023:
+And just like that, we have just Journalism results, which we can verify looking at the head, the first six rows. We also could filter by a numeric column like `term`, so we could see just courses in 2025:
 
-**Task** Run the following code to limit our courses to those in terms in 2023:
+**Task** Run the following code to limit our courses to those in terms in 2025:
 
 ```{r}
-courses_2023 <- umd_courses |> filter(term > 202300)
+courses_2025 <- umd_courses |> filter(term > 202500)
 
-head(courses_2023)
+head(courses_2025)
 ```
 
 ### Task 5: Select
@@ -105,7 +105,7 @@ theatre_seats_15 <- umd_courses |> filter(department == "Theatre") |> filter(sea
 nrow(theatre_seats_15)
 ```
 
-That gives us 213 records But that's repetitive, no? We can do better using a single filter and boolean operators -- AND and OR. In this case, AND is `&` and OR is `|`.
+That gives us 308 records But that's repetitive, no? We can do better using a single filter and boolean operators -- AND and OR. In this case, AND is `&` and OR is `|`.
 
 **Task** Run the following code
 
@@ -355,7 +355,7 @@ Now that you have seen how to use mutate, filtering and dates, give me three que
 
 **Answer**
 
-1.
+1.  
 
 2.  
 

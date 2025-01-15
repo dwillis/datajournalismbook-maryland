@@ -5,7 +5,7 @@ book:
   title: "Data Journalism with R and the Tidyverse"
   subtitle: "Code, data and visuals for storytellers"
   author: "Derek Willis and Sean Mussenden, based on earlier work by Matt Waite & Sarah Cohen"
-  date: "2023-08-25"
+  date: "2025-01-15"
   chapters:
     - index.qmd
     - start-story.qmd

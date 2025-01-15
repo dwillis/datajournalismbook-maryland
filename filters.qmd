@@ -51,7 +51,7 @@ theatre_seats_15 <- umd_courses |> filter(department == "Theatre") |> filter(sea
 nrow(theatre_seats_15)
 ```
 
-That gives us 231 records But that's repetitive, no? We can do better using a single filter and boolean operators -- AND and OR. In this case, AND is `&` and OR is `|`.
+That gives us 308 records But that's repetitive, no? We can do better using a single filter and boolean operators -- AND and OR. In this case, AND is `&` and OR is `|`.
 
 The difference? With AND, all conditions must be true to be included. With OR, any of those conditions things can be true and it will be included.
 
@@ -71,6 +71,6 @@ and_theatre_seats_15 <- umd_courses |> filter(department == "Theatre" | seats >=
 nrow(and_theatre_seats_15)
 ```
 
-So there's 41,011 rows that are EITHER Theatre classes OR have at least 15 seats. OR is additive; AND is restrictive.
+So there's 54,000 rows that are EITHER Theatre classes OR have at least 15 seats. OR is additive; AND is restrictive.
 
 A general tip about using filter: it's easier to work your way towards the filter syntax you need rather than try and write it once and trust the result. Each time you modify your filter, check the results to see if they make sense. This adds a little time to your process but you'll thank yourself for doing it because it helps avoid mistakes.

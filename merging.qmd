@@ -57,7 +57,7 @@ One of the columns we have is called `county`, which is what we have in our coun
 
 To put the Maryland population data and voter registration data together, we need to use something called a join. There are different kinds of joins. It's better if you think of two tables sitting next to each other. A `left_join` takes all the records from the left table and only the records that match in the right one. A `right_join` does the same thing. An `inner_join` takes only the records where they are equal. There's one other join -- a `full_join` which returns all rows of both, regardless of if there's a match -- but I've never once had a use for a full join.
 
-In the best-case scenario, the two tables we want to join share a common column. In this case, both of our tables have a column called `county` that has the same characteristics: values in both look identical, including how they distinguish Baltimore City from Baltimore County. This is important, because joins work on _exact matches_.
+In the best-case scenario, the two tables we want to join share a common column. In this case, both of our tables have a column called `county` that has the same characteristics: values in both look identical, including how they distinguish Baltimore City from Baltimore County. This is important, because joins work on *exact matches*.
 
 We can do this join multiple ways and get a similar result. We can put the population file on the left and the registration data on the right and use a left join to get them all together. And we use `by=` to join by the correct column. I'm going to count the rows at the end. The reason I'm doing this is important: **Rule 1 in joining data is having an idea of what you are expecting to get**. So with a left join with population on the left, I have 24 rows, so I expect to get 24 rows when I'm done.
 
@@ -87,7 +87,7 @@ Let's try adding more Maryland demographic data to the mix. Using a file describ
 maryland_demographics <- read_csv('data/maryland_demographics.csv')
 ```
 
-Again, we can use a `left_join` to make our demographic data available. This time we'll need to specify the two fields to join because they do not have identical names. We'll use `COUNTY` from our population data and `NAME` from the demographic data, and the order matters - the first column is from the dataframe you name _first_.
+Again, we can use a `left_join` to make our demographic data available. This time we'll need to specify the two fields to join because they do not have identical names. We'll use `COUNTY` from our population data and `NAME` from the demographic data, and the order matters - the first column is from the dataframe you name *first*.
 
 ```{r, error=TRUE}
 maryland_population_with_voters_and_demographics <- maryland_population_with_voters |> left_join(maryland_demographics, join_by(COUNTY == NAME))
@@ -123,12 +123,13 @@ Sometimes joins look like they should work but don't. Often this is due to the t
 maryland_zcta <- read_csv('data/maryland_zcta.csv')
 glimpse(maryland_zcta)
 ```
+
 You can see that ZCTA5N, the column representing the Zip Code Tabulation Area, is a numeric column. But should it be? Do we ever want to know the average zip code in Maryland? Zip codes and ZCTAs look like numbers but really are character columns. Let's change that so that we can be sure to join them correctly with other data where the zip codes are not numbers. We'll use `mutate`:
 
 ```{r}
 maryland_zcta <- maryland_zcta |> mutate(ZCTA5N = as.character(ZCTA5N))
 ```
 
-What's happening here is that we're telling R to take all of the values in the ZCTA5N column and make them "as.character". If we wanted to change a column to numeric, we'd do "as.numeric". When you join two dataframes, the join columns _must_ be the same datatype.
+What's happening here is that we're telling R to take all of the values in the ZCTA5N column and make them "as.character". If we wanted to change a column to numeric, we'd do "as.numeric". When you join two dataframes, the join columns *must* be the same datatype.
 
 Joining datasets allows you to expand the range and sophistication of questions you're able to ask. It is one of the most powerful tools in a journalist's toolkit.

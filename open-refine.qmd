@@ -1,20 +1,16 @@
 # Data Cleaning Part III: Open Refine
 
-Gather 'round kids and let me tell you a tale about one of your authors. In college, this author (Matt Waite) got involved in a project where he mapped crime in Lincoln, Nebraska, looking specifically in the neighborhoods surrounding campus. This was in the mid 1990s. Computers were under powered. Tools were pretty primitive. I was given a database of nearly 50,000 calls for service.
+Gather 'round kids and let me tell you a tale. Back in the previous century, Los Angeles Times journalists Sara Fritz and Dwight Morris wanted to answer this seemingly simple question: what do political campaigns spend their money on?
 
-And then I learned that addresses were not stored in a standard way. However the officer wrote it down, that's how it was recorded.
+While campaigns are required to list a purpose of each expenditure, the problem is that they can choose what words to use. There's no standard dictionary or drop-down menu to choose from. Want to call that donut purchase "Food"? Sure. What about "Supplies for volunteers"? Works for me. How about "Meals"? Mom might disagree, but the FEC won't.
 
-What did that mean?
+In order to answer their initial question, the reporters had to standardize their data. In other words, all food-related purchases had to be labeled "Food". All travel expenses had to be "Travel". It took them months - many months - to do this for every federal candidate.
 
-It meant the Lincoln Police Department came up with dozens of ways to say a single place. And since the mapping software needed the addressed to be in a specific form, I had to fix them. For example, I will go to my grave knowing that Lincoln High School's street address is 2229 J Street. Police officers wrote down LHS, L.H.S., Lincoln HS, Lincoln H.S., LHS (J Street), 2229 J, 2229 J ST, St., Street and on and on and on. That one was relatively easy. The local convenience store chain, with 8 locations around the city, was harder. I had to use the patrol district to locate them.
+I tell you this because if they had Open Refine, it would have taken them a week or two, not months.
 
-It took me four months to clean up more than 30,000 unique addresses and map them.
+I did data standardization before Open Refine, and every time I think about it, I get mad.
 
-I tell you this because if I had Open Refine, it would have taken me a week, not four months.
-
-Every time I talk about Open Refine, I remember this, and I get mad.
-
-Fortunately (unfortunately?) several columns in the PPP loan data we're working with are flawed in exactly the same way. There are dozens of variations on just "Baltimore".
+Fortunately (unfortunately?) several columns in the data we'll work with are flawed in the same way that the LA Times' data was, so we can do this work in a better, faster way.
 
 We're going to explore two ways into Open Refine: Through R, and through Open Refine itself.
 
@@ -37,7 +33,7 @@ Let's load that Maryland state government grants and loan data that we've been w
 
 ```{r include=FALSE}
 
-md_grant_loans <- read_csv("data/State_of_Maryland_Grant_and_Loan_Data__FY2009_to_FY2022.csv") |> 
+md_grant_loans <- read_csv("data/State_of_Maryland_Grant_and_Loan_Data__FY2009_to_FY2022_20250115.csv") |> 
   mutate(Grantee = str_to_upper(Grantee))
 
 ```

@@ -88,7 +88,7 @@ fentanyl_deaths <- read_csv("data/tabula-Annual_2020_Drug_Intox_Report.csv", col
 fentanyl_deaths
 ```
 
-Ok, now we have all the data. But we need actual headers. Let's add those using `rename()`, keeping in mind that the new name comes _first_.
+Ok, now we have all the data. But we need actual headers. Let's add those using `rename()`, keeping in mind that the new name comes *first*.
 
 ```{r}
 fentanyl_deaths <- read_csv("data/tabula-Annual_2020_Drug_Intox_Report.csv", col_names = FALSE) |> 
@@ -110,11 +110,12 @@ fentanyl_deaths <- read_csv("data/tabula-Annual_2020_Drug_Intox_Report.csv", col
 
 fentanyl_deaths
 ```
+
 There are a few important things to explain here:
 
-1. Because we're replacing a literal period (.), we need to make sure that R knows that. Hence the '\\.' Why? Because '.' is a valid expression meaning "any character", so if we didn't have the backslashes the above code would make the entire column blank (try it!)
-2. The `str_squish` function cleans up any excess spaces, at the beginning, middle or end of a character column. If we then use filter, we can do so with confidence.
-3. I put "deaths_" in front of each yearly column because R likes it when columns don't begin with a number. You can have a column called `2011`, but you literally have to use the backticks (`2011`) to refer to it in code.
+1.  Because we're replacing a literal period (.), we need to make sure that R knows that. Hence the '\\.' Why? Because '.' is a valid expression meaning "any character", so if we didn't have the backslashes the above code would make the entire column blank (try it!)
+2.  The `str_squish` function cleans up any excess spaces, at the beginning, middle or end of a character column. If we then use filter, we can do so with confidence.
+3.  I put "deaths\_" in front of each yearly column because R likes it when columns don't begin with a number. You can have a column called `2011`, but you literally have to use the backticks (`2011`) to refer to it in code.
 
 All things considered, that was pretty easy. Many - most? - electronic PDFs aren't so easy to parse. Sometimes you'll need to open the exported CSV file and clean things up before importing into R. Other times you'll be able to do that cleaning in R itself.
 

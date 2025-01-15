@@ -50,7 +50,7 @@ We're also going to introduce a new argument to our function that reads in the d
 
 ```{r}
 # Load the data
-payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2024.csv", guess_max=10)
+payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2024_20250115.csv", guess_max=10)
 ```
 
 Pay attention to the red warning that signals "one or more parsing issues." It advises us to run the problems() function to see what went wrong. Let's do that.
@@ -59,12 +59,12 @@ Pay attention to the red warning that signals "one or more parsing issues." It a
 problems(payments)
 ```
 
-It produces a table of all the parsing problems. It has 280 rows, which means we have that some problems but not a huge number considering we have 322,000 rows. In almost every case here, the `readr` library has guessed that a given column was of a "double" data type -- a number. It did it based on very limited information -- only 10 rows. So, when it hit a value that looked like a date, or a character string, it didn't know what to do. So it just didn't read in that value correctly.
+It produces a table of all the parsing problems. It has 369 rows, which means we have that some problems but not a huge number considering we have 369,000 rows. In almost every case here, the `readr` library has guessed that a given column was of a "double" data type -- a number. It did it based on very limited information -- only 10 rows. So, when it hit a value that looked like a date, or a character string, it didn't know what to do. So it just didn't read in that value correctly.
 
 The easy way to fix this is to set the guess_max argument higher. It will take a little longer to load, but we'll use every single row in the data set to guess the column type -- all 322,138 of them.
 
 ```{r}
-payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2024.csv", guess_max=373564)
+payments <- read_csv("data/State_of_Maryland_Payments_Data__FY2008_to_FY2024_20250115.csv", guess_max=369008)
 ```
 
 No parsing errors this time! You can see what the columns are using the `glimpse` function:
@@ -98,8 +98,9 @@ So, yes, we definitely have some zip codes that are less than 5 characters long,
 Let's now look at **gaps in data**. These often occur when you have a date or time element in your data, but there are other potential gaps, too. To illustrate those, we're going to introduce some Maryland state grant and loan data from 2009 forward. Let's load it and take a look:
 
 ```{r}
-md_grants_loans <- read_csv("data/State_of_Maryland_Grant_and_Loan_Data__FY2009_to_FY2022.csv")
+md_grants_loans <- read_csv("data/State_of_Maryland_Grant_and_Loan_Data__FY2009_to_FY2022_20250115.csv")
 ```
+
 Each row represents a recipient of state grant or loan, along with information about their location and the state agency that provided the money. When we talk about gaps, often they indicate the administrative rules. Here's an example: let's count the number of payments in each category (Grant or Loan) by year in this dataset:
 
 ```{r}
@@ -108,6 +109,7 @@ md_grants_loans |>
   summarize(count = n()) |> 
   arrange(`Fiscal Year`)
 ```
+
 We can see a couple of issues here: first, there is no loan data for FY 2009. That's mentioned in [the source page for the data](https://opendata.maryland.gov/Budget/State-of-Maryland-Grant-and-Loan-Data-FY2009-to-FY/absk-avps). It's good to be aware of all gaps in data, but they don't always represent a problem. Second, and more problematic, there are a few records where the Category is NA - that data is missing. There also are some inconsistent values - there are 50 records in FY2013 with the category of "L" (probably loans) and one in FY 2017 that is listed as "Contract".
 
 ## Unusual Outliers
@@ -119,4 +121,4 @@ md_grants_loans |>
   arrange(Amount)
 ```
 
-There are two grants for less than $100, which might not be problematic at all, but given that just two of 17,000 are for very small amounts you might wonder if there are suggested amounts for applicants and how tiny ones get evaluated compared to very large requests. As journalists, we should be skeptical of information put in front of us and ask why or what it says about the data itself.
+There are two grants for less than \$100, which might not be problematic at all, but given that just two of 19,000 are for very small amounts you might wonder if there are suggested amounts for applicants and how tiny ones get evaluated compared to very large requests. As journalists, we should be skeptical of information put in front of us and ask why or what it says about the data itself.

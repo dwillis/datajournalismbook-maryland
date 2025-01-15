@@ -1,7 +1,7 @@
 ---
 title: "pre_lab_01.Rmd"
 author: "Derek Willis"
-date: "2023-01-05"
+date: "2025-01-15"
 output: html_document
 ---
 
@@ -12,7 +12,7 @@ options(scipen=999)
 
 ## About this notebook
 
-This notebook contains code and explanatory text that your should review and run as you read through chapters 13 and 15 of the course textbook, "Data Journalism with R and the Tidyverse". Answer questions and edit the document as directed.
+This notebook contains code and explanatory text that your should review and run as you read through chapters 8 and 10 of the course textbook, "Data Journalism with R and the Tidyverse". Answer questions and edit the document as directed.
 
 Running this notebook will help you understand key data analysis methods and concepts that you will put into practice during this week's lab. When you come across a new command or verb in R, you should add it to your class reference notebook file along with what it's used for.
 
@@ -30,10 +30,10 @@ The library function loads an R library such as the tidyverse, providing access 
 
 -   Load this notebook, and provide overview of R, RStudio (text editor, console, environment window, file explorer), Rmarkdown data notebooks, the reference notebook.
 -   Work through the code below, chapter by chapter.
-    -   Chapter 13: explain the console and the concept of variables. Explain packages, the Tidyverse, how to install them.
-    -   Chapter 15: explain loading libraries, the concept of functions, loading data, the importance of having questions to guide data analysis, and aggregation and summarization.
+    -   Chapter 8: explain the console and the concept of variables. Explain packages, the Tidyverse, how to install them.
+    -   Chapter 10: explain loading libraries, the concept of functions, loading data, the importance of having questions to guide data analysis, and aggregation and summarization.
 
-## Chapter 13
+## Chapter 8
 
 ### Task 1: The console
 
@@ -83,6 +83,8 @@ install.packages('rmarkdown')
 library(tidyverse)
 ```
 
+## Chapter 10
+
 ### Task 5: Load data
 
 **Task** Load the UMD courses data by running the following codeblock. The data is contained in an .rds file, which is a binary format for R data.
@@ -123,7 +125,7 @@ In the space below, write the name of the business from the first row of the "na
 
 So what if we wanted to know how many classes were offered in each term?
 
-To do that by hand, we'd have to take each of the 60,672 individual rows (or observations or records) and sort them into a pile. We'd put them in groups -- one for each term -- and then count them. To do this, we'll take our dataset and we'll introduce a new operator: `|>`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." The keyboard shortcut for this is cmd-shift-m on the Mac and ctrl-shift-m on Windows. Don't like that character? R now has a new one that does the same thing: `|>`.
+To do that by hand, we'd have to take each of the 79,366 individual rows (or observations or records) and sort them into a pile. We'd put them in groups -- one for each term -- and then count them. To do this, we'll take our dataset and we'll introduce a new operator: `|>`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." The keyboard shortcut for this is cmd-shift-m on the Mac and ctrl-shift-m on Windows. Don't like that character? R now has a new one that does the same thing: `|>`.
 
 **Task** Run the following codeblock:
 

@@ -102,9 +102,9 @@ To do that by hand, we'd have to take each of the 60,672 individual rows (or obs
 
 `dplyr` has a group by function in it that does just this. A massive amount of data analysis involves grouping like things together and then doing simple things like counting them, or averaging them together. So it's a good place to start.
 
-So to do this, we'll take our dataset and we'll introduce a new operator: `|>`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." This is called the "pipe operator" and it's a huge part of writing R statements. So much so that there's a keyboard shortcut for this: cmd-shift-m on the Mac and ctrl-shift-m on Windows. In order to enable this shortcut, you'll need to set an option under Tools -> Global Options. Make sure you check the box labeled "Use native pipe operator" and then click "Apply", like so: 
+So to do this, we'll take our dataset and we'll introduce a new operator: `|>`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." This is called the "pipe operator" and it's a huge part of writing R statements. So much so that there's a keyboard shortcut for this: cmd-shift-m on the Mac and ctrl-shift-m on Windows. In order to enable this shortcut, you'll need to set an option under Tools -\> Global Options, in the "Code" section. Make sure you check the box labeled "Use native pipe operator" and then click "Apply", like so:
 
-![](images/rstudio_pipe_operator.png){width="100%"}
+![](images/rstudio_pipe_operator.png)
 
 Don't like that character? R also has one that does the same thing: `%>%`. They both work.
 
@@ -136,7 +136,7 @@ Inside the parentheses in summarize, we set up the summaries we want. In this ca
 
 When we run that, we get a list of terms with a count next to them. But it's not in any order.
 
-So we'll add another "and then do this" symbol -- %\>% -- and use a new function called `arrange()`. Arrange does what you think it does -- it arranges data in order. By default, it's in ascending order -- smallest to largest. But if we want to know the term with the most classes, we need to sort it in descending order. That looks like this:
+So we'll add another "and then do this" symbol -- \|\> -- and use a new function called `arrange()`. Arrange does what you think it does -- it arranges data in order. By default, it's in ascending order -- smallest to largest. But if we want to know the term with the most classes, we need to sort it in descending order. That looks like this:
 
 ```{r}
 umd_courses |>
@@ -147,7 +147,7 @@ umd_courses |>
   arrange(desc(count_classes))
 ```
 
-The term labeled `202208`, representing the Fall 2022 term, has the most classes.
+The term labeled `202408`, representing the Fall 2024 term, has the most classes.
 
 We can, if we want, group by more than one thing. The courses data contains a column detailing the department.
 
