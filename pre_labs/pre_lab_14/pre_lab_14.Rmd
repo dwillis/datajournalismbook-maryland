@@ -1,7 +1,7 @@
 ---
 title: "pre_lab_14.Rmd"
 author: "Derek Willis"
-date: "2024-11-20"
+date: "2025-01-16"
 output: html_document
 ---
 
@@ -36,7 +36,7 @@ Then we can load that library and, using your API key, setup your credentials:
 **Task** Run the following code, then restart R using the "Session" drop-down menu:
 
 ```{r}
-create_credentials(GROQ_API_KEY = "YOUR API KEY HERE")
+create_credentials(GROQ_API_KEY = "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")
 ```
 
 See that "Please restart your R session for changes to take effect."? Go ahead and do that; you'll need to rerun the `library()` function above.
@@ -52,7 +52,7 @@ Let's make sure that worked. We'll be using the [Llama 3.1 model released by Met
 ```{r}
 groq_response <- axolotr::ask(
   prompt = "Give me 20 names for a pet lemur",
-  model = "llama-3.1-8b-instant"
+  model = "llama-3.3-70b-versatile"
 )
 
 cat(groq_response)
@@ -93,7 +93,7 @@ text = "Gabriela Nunes Herman and Tyson Charles Evans were married Saturday at t
 
 evans_response <- axolotr::ask(
   prompt = paste("Given the following text, extract information into a CSV file with the following structure with no yapping: celebrant1,celebrant2,location,officiant,celebrant1_age,celebrant2_age,celebrant1_parent1,celebrant1_parent2,celebrant2_parent1,celebrant2_parent2. Omit quotemarks", text),
-  model = "llama-3.1-8b-instant"
+  model = "llama-3.3-70b-versatile"
 )
 
 cat(evans_response)
@@ -140,7 +140,7 @@ a rolling basis as received. No phone calls or drop-ins please."
 
 housejob_response <- axolotr::ask(
   prompt = paste("Given the following text, extract information into a CSV file with the following structure with no yapping: member,party,state,district,job_title,location,hill_experience,portfolio", text),
-  model = "llama-3.1-8b-instant"
+  model = "llama-3.3-70b-versatile"
 )
 
 cat(housejob_response)
@@ -159,7 +159,7 @@ When you're writing code and run into error messages, you should read them. But 
 ```{r}
 debug_response <- axolotr::ask(
   prompt = "Explain the following R error message using brief, simple language and suggest a single fix. I am using the tidyverse library: could not find function '|>'",
-  model = "llama-3.1-8b-instant"
+  model = "llama-3.3-70b-versatile"
 )
 
 cat(debug_response)
@@ -180,7 +180,7 @@ Let's say that you have some data that you want to interview, but aren't sure ho
 ```{r}
 idea_response <- axolotr::ask(
   prompt = "I have a CSV file of voter registration data, including the date of birth of the voter and the registration date, political party and the voter's address. Using R and the tidyverse, suggest some ways that I could find patterns in the data. Use the new-style pipe operator (|>) and lubridate in any code examples",
-  model = "llama-3.1-8b-instant"
+  model = "llama-3.3-70b-versatile"
 )
 
 cat(idea_response)
