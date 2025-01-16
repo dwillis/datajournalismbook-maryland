@@ -1,7 +1,7 @@
 ---
 title: "lab_08"
-author: "derek willis"
-date: "2023-04-03"
+author: "Derek Willis"
+date: "2025-01-16"
 output: html_document
 ---
 
@@ -13,69 +13,65 @@ knitr::opts_chunk$set(echo = TRUE)
 
 **Task** Create a codeblock and load appropriate packages and settings for this lab. We'll be making some charts, working with dates and retrieving Census data.
 
-
 ## Load and modify data
 
 **Task** Create a codeblock and load the following data from the data folder:
 
-* Prince George's County 911 Overdose Calls
+-   Prince George's County 911 Overdose Calls
 
 You will need to create columns for the date, week and month based on the existing `datetime` column.
 
-
-
-## Questions 
+## Questions
 
 **Q1.** Which month saw the greatest percentage of total calls? Create a dataframe that calculates the percentage of all calls that each month's calls represents. Make a bar chart from that dataframe. Your bar chart must have:
 
-* A clear title that states the main idea/finding
-* Good labels for the x & y axis and a caption for the source, which is Prince George's County EMS.
-* Readable bars - the values shouldn't be overlapping
+-   A clear title that states the main idea/finding
+-   Good labels for the x & y axis and a caption for the source, which is Prince George's County EMS.
+-   Readable bars - the values shouldn't be overlapping
 
 Compare the results here to those from the pre_lab_08 bar chart - are there major differences in the months with the highest and lowest figures? Describe that below.
 
-**A1.** 
+**A1.**
 
 ```{r}
 ```
 
 **Q2.** Let's visualize this data on a weekly basis using a line chart. As in Q1, generate a dataframe with the total number of calls for each week, and then create a line chart to show the distribution of calls over time. Your line chart must have:
 
-* A clear title that states the main idea/finding
-* Good labels for the x & y axis and a caption for the source, which is Prince George's County EMS.
-* Readable labels
+-   A clear title that states the main idea/finding
+-   Good labels for the x & y axis and a caption for the source, which is Prince George's County EMS.
+-   Readable labels
 
 Describe the pattern of results; you may want to look at the data to dig into particular outliers.
 
-**A2.** 
-
+**A2.**
 
 ```{r}
 ```
 
-**Q3.**  A scatterplot is a type of chart that helps us see relationships between two variables. One variable goes on the x axis, the other on the y axis.  For each row/observation in our data, a scatterplot puts a circle (or a "point") where the two variables intersect on a grid. 
+**Q3.** A scatterplot is a type of chart that helps us see relationships between two variables. One variable goes on the x axis, the other on the y axis. For each row/observation in our data, a scatterplot puts a circle (or a "point") where the two variables intersect on a grid.
 
-Statisticians use scatterplots to show graphically whether one variable is correlated -- related, in a statistical sense -- with another variable.  A classic example is the [relationship between ice cream sales and temperature](https://www.mathsisfun.com/data/scatter-xy-plots.html). The scatterplot below -- press play to load the image -- shows that relationship, that an increase in temperature is associated with an increase in ice cream sales. When it's 12C, sales are 200 dollars, and when it's hotter, 25C, sales are 600 dollars.
+Statisticians use scatterplots to show graphically whether one variable is correlated -- related, in a statistical sense -- with another variable. A classic example is the [relationship between ice cream sales and temperature](https://www.mathsisfun.com/data/scatter-xy-plots.html). The scatterplot below -- press play to load the image -- shows that relationship, that an increase in temperature is associated with an increase in ice cream sales. When it's 12C, sales are 200 dollars, and when it's hotter, 25C, sales are 600 dollars.
 
 ```{r}
 knitr::include_graphics("https://www.mathsisfun.com/data/images/scatter-ice-cream1.svg")
 ```
 
-We're going to use a scatterplot a little differently, to get a visual sense of two key variables: 
+We're going to use a scatterplot a little differently, to get a visual sense of two key variables:
 
 Our question is: does the median income in a zip code have any relationship to the number of overdose 911 calls in that zip code?
 
 To answer this question, do the following:
 
-1. Generate a dataframe with the number of 911 calls for each zip code.
-2. Get data from the Census Bureau showing median household income for Maryland zip codes.
-3. Join those two dataframes on their zip code columns, starting with the 911 calls dataframe.
-4. Make a scatterplot showing the total calls and median income. I didn't show you how to do this, so look it up! Googling "ggplot scatterplot" is a good start.
-5. Give it an appropriate title, source, and x and y axis titles.
-6. Add a label for each point that shows the zip code using geom_text() - see some examples of its use at https://ggplot2.tidyverse.org/reference/geom_text.html#ref-examples. Try to make the names as easy to read as possible by avoiding overlap.
-7. In the answer space below, describe what you see and answer the questions posed above. In a general sense, what do you think this means? Feel free to consider the actual raw values: how would you report out the main point(s) of this chart?
+1.  Generate a dataframe with the number of 911 calls for each zip code.
+2.  Get data from the Census Bureau showing median household income for Maryland zip codes.
+3.  Join those two dataframes on their zip code columns, starting with the 911 calls dataframe.
+4.  Make a scatterplot showing the total calls and median income. I didn't show you how to do this, so look it up! Googling "ggplot scatterplot" is a good start.
+5.  Give it an appropriate title, source, and x and y axis titles.
+6.  Add a label for each point that shows the zip code using geom_text() - see some examples of its use at <https://ggplot2.tidyverse.org/reference/geom_text.html#ref-examples>. Try to make the names as easy to read as possible by avoiding overlap.
+7.  In the answer space below, describe what you see and answer the questions posed above. In a general sense, what do you think this means? Feel free to consider the actual raw values: how would you report out the main point(s) of this chart?
 
-**A3.**  
+**A3.**
 
 ```{r}
 ```

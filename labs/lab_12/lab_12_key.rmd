@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## You will need
 
-* tidytext and our usual libraries
+-   tidytext and our usual libraries
 
 ## Load libraries and establish settings
 
@@ -31,7 +31,7 @@ library(dplyr)
 
 **Q1.** You've been assigned to report a story about the leading reasons that Maryland attorneys get sanctioned by the state for misconduct. The state [publishes lists of sanctions](https://www.courts.state.md.us/attygrievance/sanctions) that contain a short text description about the situation. Load the CSV file in the data folder containing records from fiscal year 2011 onwards. Make a list of unique words from the text column, then following the example in the pre_lab, remove common "stop words" from that list and create a list of the top 25 words containing the percentage of occurrences each word represents. What's the leading word in that answer and, broadly, what do you think the top 25 words describe?
 
-**A1.** 
+**A1.**
 
 ```{r}
 md_attorney_sanctions <- read_csv("data/md_attorney_sanctions.csv")

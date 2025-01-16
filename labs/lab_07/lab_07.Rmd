@@ -1,7 +1,7 @@
 ---
 title: "lab_07"
-author: "derek willis"
-date: "2023-03-28"
+author: "Derek Willis"
+date: "2025-01-16"
 output: html_document
 ---
 
@@ -37,7 +37,7 @@ You'll need your Census API Key:
 
 ## Load and view ACS variables
 
-You'll also need to load the list of American Community Survey variables from the 2021 5-year estimates so you can identify the codes you need:
+You'll also need to load the list of American Community Survey variables from the 2023 5-year estimates so you can identify the codes you need:
 
 **Task** load the variables from the 2021 5-year ACS (which is called "acs5") and save them to a dataframe
 
@@ -46,42 +46,39 @@ You'll also need to load the list of American Community Survey variables from th
 
 ## Answer questions
 
-**Q1** What is the Maryland jurisdiction with the lowest median age, according to the ACS 2021 5-year estimates? You will need to find the variable for median age first. 
-**A1** 
+**Q1** What is the Maryland jurisdiction with the lowest median age, according to the ACS 2023 5-year estimates? You will need to find the variable for median age first. **A1**
 
 ```{r}
 ```
 
-**Q2** Which Maryland counties have a median age of at least 50? You can use the dataframe you just made to answer this, but you must write code to display only those counties with a median age of at least 50. 
-**A2** 
+**Q2** Which Maryland counties have a median age of at least 50? You can use the dataframe you just made to answer this, but you must write code to display only those counties with a median age of at least 50. **A2**
 
 ```{r}
 ```
 
 **Q3** We're interested in knowing more about Montgomery County zip codes where overdose calls are coming from and the demographic characteristics they possess. In particular, we want to calculate a rate of calls per 1,000 population. To do this, you'll need to:
 
-1. Load the Montgomery County 911 overdose calls data.
-2. Create a new dataframe with the total number of calls for each zip code.
-3. Find the ACS variable pertaining to the total 18 and up population (there are several choices here; you want the simplest one).
-4. Get from the ACS data from all Maryland zip codes using that variable.
-5. Join the ACS data to the Montgomery County zip code totals dataframe and rename the estimate column to a meaningful name you've given the ACS variable.
-6. Add a column to the joined dataframe that calculates a rate of calls per 1,000 population.
+1.  Load the Montgomery County 911 overdose calls data.
+2.  Create a new dataframe with the total number of calls for each zip code.
+3.  Find the ACS variable pertaining to the total 18 and up population (there are several choices here; you want the simplest one).
+4.  Get from the ACS data from all Maryland zip codes using that variable - you will need to specify an earlier year to get the data.
+5.  Join the ACS data to the Montgomery County zip code totals dataframe and rename the estimate column to a meaningful name you've given the ACS variable.
+6.  Add a column to the joined dataframe that calculates a rate of calls per 1,000 population.
 
 Which zip code has the highest rate of calls? Which has the lowest?
 
-**A3** 
+**A3**
 
 ```{r}
 ```
 
 **Q4** Using [CensusReporter.org](https://censusreporter.org/), examine the zip codes with the highest and lowest rates and compare and contrast their demographic profiles. Is there a story here?
 
-**A4** 
+**A4**
 
 **Q5** Go back to your joined dataframe from Q3 and add two more columns representing the minimum and maximum populations based on the estimate and margin of error, then calculate per capita rates for each. Do you get the same two zip codes for the highest and lowest as you did before? Does that give you more or less confidence in your answers to Q3?
 
-**A5** 
+**A5**
 
 ```{r}
 ```
-

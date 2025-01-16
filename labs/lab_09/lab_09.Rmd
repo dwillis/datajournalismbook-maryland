@@ -1,7 +1,7 @@
 ---
 title: "lab_09.Rmd"
-author: "derek willis"
-date: "2023-04-12"
+author: "Derek Willis"
+date: "2025-01-15"
 output: html_document
 ---
 
@@ -11,8 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## You will need
 
-* A Datawrapper account
-* Data in CSV files in the `data` folder
+-   A Datawrapper account
+-   Data in CSV files in the `data` folder
 
 ## Load libraries and establish settings
 
@@ -26,18 +26,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 **Q1.** You want to explore the differences between the electoral performances of Dan Cox in 2022 and Larry Hogan in 2018. Except a map is probably not the best way to show that. Let's make a chart instead, and the type is up to you, but the goal is to clearly show the differences between the two.
 
-You MUST do the following things when answering this question:
-* Load the md_gov_county.csv and md_gov_county_18.csv files from the data folder
-* Join those dataframes, specifying the join column. 
-* Add columns to generate percentages for Cox and Hogan.
-* Export that joined dataframe to a CSV file using `write_csv`.
-* Using that exported CSV, make a chart with Datawrapper. What kind of chart is up to you, so experiment with a few kinds of charts to see what answers the question above in the clearest way. Your chart MUST:
-  * Have a title, description and source that tells readers about the data. The title and description should highlight the most newsworthy or important aspect.
-  * Easily readable labels and values
-* Publish your chart
-* Describe your thought process below - why you chose to make the chart you did - and add the URL of your chart.
+You MUST do the following things when answering this question: \* Load the md_gov_county.csv and md_gov_county_18.csv files from the data folder \* Join those dataframes, specifying the join column. \* Add columns to generate percentages for Cox and Hogan. \* Export that joined dataframe to a CSV file using `write_csv`. \* Using that exported CSV, make a chart with Datawrapper. What kind of chart is up to you, so experiment with a few kinds of charts to see what answers the question above in the clearest way. Your chart MUST: \* Have a title, description and source that tells readers about the data. The title and description should highlight the most newsworthy or important aspect. \* Easily readable labels and values \* Publish your chart \* Describe your thought process below - why you chose to make the chart you did - and add the URL of your chart.
 
-**A1.** 
+**A1.**
 
 ```{r}
 ```
@@ -48,25 +39,24 @@ HINT: In Datawrapper's "Check and Describe" tab, you can click on a column to ge
 
 What do you think the story here is? Put the answer below along with the URL of your chart.
 
-**A2.** 
+**A2.**
 
 ```{r}
 ```
 
-
 **Q3.** You want to know more about the geography of 911 overdose calls in Montgomery County, Maryland, in 2022. To do that, you'll make a choropleth map in Datawrapper. You will need to:
 
-* Read the file into R and create columns for the number of calls in each zip code and the percentage of all calls that number represents and then export that CSV to use in your map.
-* Search for Maryland zip codes (use the 2020 data) as the base map.
-* Upload the CSV file.
-* Change the tooltip to show both the number and the percentage (you can put them side by side or put one under the other). Make sure to properly format both numbers to make them readable.
-* Add labels to your map that locate prominent places in the county.
-* Have a title, description and source that tells readers about the data. The title and description should highlight the most newsworthy or important aspect.
-* Make any other changes to data that helps you make a more accurate map.
+-   Read the file into R and create columns for the number of calls in each zip code and the percentage of all calls that number represents and then export that CSV to use in your map.
+-   Search for Maryland zip codes (use the 2020 zip codes) as the base map.
+-   Upload the CSV file.
+-   Change the tooltip to show both the number and the percentage (you can put them side by side or put one under the other). Make sure to properly format both numbers to make them readable.
+-   Add labels to your map that locate prominent places in the county.
+-   Have a title, description and source that tells readers about the data. The title and description should highlight the most newsworthy or important aspect.
+-   Make any other changes to data that helps you make a more accurate map.
 
 What do you think the story here is, and what would you want to know more about? Put the answer below along with the URL of your map.
 
-**A3.** 
+**A3.**
 
 ```{r}
 ```
