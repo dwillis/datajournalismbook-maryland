@@ -1,7 +1,7 @@
 ---
 title: "pre_lab_13.Rmd"
 author: "Derek Willis"
-date: "2023-08-10"
+date: "2024-01-16"
 output: html_document
 ---
 
@@ -17,10 +17,10 @@ Here's an example: an elected official claims that more money spent on education
 
 We'll be using state-by-state data on education spending, economic activity and population growth from 2021, plus the presidential winner from the 2020 election.
 
-
-First, let's load libraries.  We're going to load janitor, the tidyverse and a new package, [corrr](https://corrr.tidymodels.org/), which will help us do linear regression a bit easier than base R.
+First, let's load libraries. We're going to load janitor, the tidyverse and a new package, [corrr](https://corrr.tidymodels.org/), which will help us do linear regression a bit easier than base R.
 
 ### Task 1: Load libraries and settings
+
 **Task** Run the following code in the gray-colored codeblock below to load the libraries we'll use.
 
 ```{r}
@@ -39,8 +39,9 @@ Now let's load the data we'll be using. It has five fields:
 -   vote_2020: the winner of the state's popular vote in the 2020 presidential election.
 
 ### Task 2: Read in data
-**Task** Run the following code and describe the dataframe it outputs.
-**Answer**
+
+**Task** Run the following code and describe the dataframe it outputs. **Answer**
+
 ```{r}
 
 state_data <- read_csv("data/regression_data.csv")
@@ -56,8 +57,9 @@ Let's start with this question: did states that had the greatest population grow
 Let's start by plotting them to get a sense of the pattern.
 
 ### Task 3: Plot data
-**Task** Run the following code. Describe the plot. What pattern do you see?
-**Answer**
+
+**Task** Run the following code. Describe the plot. What pattern do you see? **Answer**
+
 ```{r}
 
 state_data |>
@@ -66,13 +68,15 @@ state_data |>
   geom_smooth(aes(x=pop_change_2021,y=gdp_growth_2021), method="lm")
 
 ```
+
 It's a bit messy, but we can see something of a pattern here in the blob of dots. Generally, the dots are moving from the lower left (states with lower population growth) to upper right (states with higher population growth). The blue "line of best fit" shows the general direction of the relationship. It appears that those two things might be at least somewhat related.
 
 Let's test another variable, the per-pupil education spending amount per state.
 
 ### Task 4: Plot data
-**Task** Run the following code. Describe the plot. What do you see?
-**Answer**
+
+**Task** Run the following code. Describe the plot. What do you see? **Answer**
+
 ```{r}
 
 state_data |>
@@ -81,23 +85,24 @@ state_data |>
   geom_smooth(aes(x=per_pupil_2021,y=gdp_growth_2021), method="lm")
 
 ```
+
 This one is messier. There may be a slight downward slope in this blob of dots, but it's not quite as apparent. It seems less certain that there's a relationship between these two variables.
 
-We can be a bit more precise by calculating a statistic called the correlation coefficient, also called "r".  r is a value between 1 and -1. An r of 1 indicates a strong positive correlation.  
+We can be a bit more precise by calculating a statistic called the correlation coefficient, also called "r". r is a value between 1 and -1. An r of 1 indicates a strong positive correlation.
 
-An increase in air temperature and air conditioning use at home is strongly-positively correlated: the hotter it gets, the more we have to use air conditioning.  If we were to plot those two variables, we might not get 1, but we'd get close to it.
+An increase in air temperature and air conditioning use at home is strongly-positively correlated: the hotter it gets, the more we have to use air conditioning. If we were to plot those two variables, we might not get 1, but we'd get close to it.
 
 An r of -1 indicates a strong negative correlation. An increase in temperature and home heating use is strongly negatively correlated: the hotter it gets, the less heat we use indoors. We might not hit -1, but we'd probably get close to it.
 
-A correlation of 0 indicates no relationship.  
+A correlation of 0 indicates no relationship.
 
 All r values will fall somewhere on this scale, and how to interpret them isn't always straightforward. They're best used to give general guidance when exploring patterns.
 
-We can calculate r with a function from the corrr package called "correlate()". First, we remove the non-numeric values from our state_data (state and vote_2020), then we correlate. 
+We can calculate r with a function from the corrr package called "correlate()". First, we remove the non-numeric values from our state_data (state and vote_2020), then we correlate.
 
 ### Task 5: Correlate data
-**Task** Run the following code. Describe the table output in terms of the strength of relationships between the variables. What do you see?
-**Answer**
+
+**Task** Run the following code. Describe the table output in terms of the strength of relationships between the variables. What do you see? **Answer**
 
 ```{r}
 state_data |>
@@ -112,8 +117,9 @@ The relationship between population growth and GDP growth seems slightly positiv
 The relationship between a state's per-pupil education spending and population growth is a bit stronger (in a negative direction), if moderate, -.41 (on a scale of -1 to 1). Is this finding statistically valid? We can get a general sense of that by calculating the p-value of this correlation, a test of statistical significance. For that, we can use the cor.test function.
 
 ### Task 6: Correlate data
-**Task** Run the following code. Describe the model output. What do you see?
-**Answer**
+
+**Task** Run the following code. Describe the model output. What do you see? **Answer**
+
 ```{r}
 
 cor.test(state_data$per_pupil_2021, state_data$pop_change_2021)
@@ -125,8 +131,9 @@ This output is quite a bit uglier, but for our purposes there are two key pieces
 Now let's test another one, the relationship between the per_pupil_2021 and gdp_growth_2021.
 
 ### Task 7: Correlate data
-**Task** Run the following code. Describe the model output. What do you see?
-**Answer**
+
+**Task** Run the following code. Describe the model output. What do you see? **Answer**
+
 ```{r}
 
 cor.test(state_data$per_pupil_2021, state_data$gdp_growth_2021)
@@ -135,7 +142,7 @@ cor.test(state_data$per_pupil_2021, state_data$gdp_growth_2021)
 
 Again, it shows our r value of -0.06, which was weaker. And the p-value here is a much larger 0.6795. That indicates a much greater chance of our finding being a statistical aberration, high enough that I wouldn't rely on its validity.
 
-p < .05 is accepted in many scientific disciplines -- and by many data journalists -- as the cutoff for statistical significance.  But there's heated debate about that level, and some academics question whether p-values should be relied on so heavily.  
+p \< .05 is accepted in many scientific disciplines -- and by many data journalists -- as the cutoff for statistical significance. But there's heated debate about that level, and some academics question whether p-values should be relied on so heavily.
 
 And to be clear, a low p-value does not prove that we've found what we set out to find. There's nothing on this graph or in the regression model output that proves that education spending alone has a direct impact on GDP growth or population change. It's entirely possible that there's some other variable -- or variables -- not considered here that explain this pattern.
 
@@ -150,8 +157,9 @@ We can do this because, in our data, we have a column with two possible categori
 We could just calculate the averages like we're used to doing.
 
 ### Task 8: Average data
-**Task** Run the following code. Describe the table. What do you see?
-**Answer**
+
+**Task** Run the following code. Describe the table. What do you see? **Answer**
+
 ```{r}
 state_data |>
   group_by(vote_2020) |>
@@ -161,6 +169,7 @@ state_data |>
     mean_pop_growth = mean(pop_change_2021)
   )
 ```
+
 Examining this, it appears that in all three categories there's a difference.
 
 The average GDP growth was higher in Biden states than Trump states (5.8% to 4.3%). The average amount of per-pupil education spending in Biden states was larger -- \$16,578 -- than Trump states -- \$12,378. And states that backed Trump saw higher population growth in 2021. Should we report these as meaningful findings?
@@ -168,18 +177,21 @@ The average GDP growth was higher in Biden states than Trump states (5.8% to 4.3
 A t-test can help us answer that question. It can tell us where there's a statistically significant difference between the means of two groups. Have we found a real difference, or have we chanced upon a statistical aberration? Let's see by calculating it for the population growth.
 
 ### Task 9: Run t-test
-**Task** Run the following code. Describe the output. What do you see?
-**Answer**
+
+**Task** Run the following code. Describe the output. What do you see? **Answer**
+
 ```{r}
 t.test(pop_change_2021 ~ vote_2020, data = state_data)
 ```
+
 We see our two means, for Trump and Biden, the same as we calculated above. The t-value is approximately -1.8, the p-value here is 0.07411, both of which should give us pause that that we've found something meaningful. [More on t-tests here](https://conjointly.com/kb/statistical-student-t-test/)
 
 Let's try per-pupil education spending.
 
 ### Task 10: Run t-test
-**Task** Run the following code. Describe the output. What do you see?
-**Answer**
+
+**Task** Run the following code. Describe the output. What do you see? **Answer**
+
 ```{r}
 t.test(per_pupil_2021 ~ vote_2020, data = state_data)
 ```

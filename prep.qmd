@@ -1,7 +1,8 @@
 ```{r}
 library(tidyverse)
+library(DBI)
+library(RSQLite)
 ```
-
 
 ```{r}
 ottawa <- read_csv("https://raw.githubusercontent.com/openelections/openelections-data-mi/refs/heads/master/2024/counties/20241105__mi__general__ottawa__precinct.csv")
@@ -18,5 +19,18 @@ ov <- ottawa |> filter(candidate == "Over Votes") |>
   group_by(county, office) |> 
   summarise(total = sum(votes)) |> 
   arrange(desc(total))
+```
+
+```{r}
+mydb <- dbConnect(RSQLite::SQLite(), "~/code/rathore-finalproj-baddocs/bad_docs.db")
+dbListTables(mydb)
+
+alerts <- dbGetQuery(mydb, "select * from clean_alerts")
+text <- dbGetQuery(mydb, "select * from text")
+
+alerts_with_text <- alerts |> inner_join(text)
+
+write_rds(alerts_with_text, "data/md_doc_alerts.rds")
+
 ```
 

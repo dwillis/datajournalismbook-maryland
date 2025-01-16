@@ -1,7 +1,7 @@
 ---
 title: "pre_lab_08.Rmd"
 author: "Derek Willis"
-date: "2023-03-30"
+date: "2025-01-16"
 output: html_document
 ---
 
@@ -28,7 +28,7 @@ library(tidyverse)
 library(lubridate)
 ```
 
-The dataset we'll use is 911 overdose calls from Baltimore County. Let's load it.
+The dataset we'll use is 911 overdose calls from Baltimore County in 2022. Let's load it.
 
 ### Task 2: Load data
 
@@ -244,7 +244,7 @@ It's not super pretty, but there's a bit of a pattern here: the number of calls 
 
 Right now, it's kind of hard to see specifics, though. When did some of those smaller spikes and troughs happen?
 
-We can't really tell. So let's modify the x axis to have one tick mark and label per month. We can do that with a function called scale_x\_date().
+We can't really tell. So let's modify the x axis to have one tick mark and label per month. We can do that with a function called scale_x_date().
 
 We'll set the date_breaks to appear for every week; if we wanted every month, we'd say date_breaks = "1 month". We can set the date to appear as month abbreviated name (%b) and day (%d).
 
