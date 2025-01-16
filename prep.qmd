@@ -2,6 +2,7 @@
 library(tidyverse)
 library(DBI)
 library(RSQLite)
+library(lubridate)
 ```
 
 ```{r}
@@ -33,4 +34,13 @@ alerts_with_text <- alerts |> inner_join(text)
 write_rds(alerts_with_text, "data/md_doc_alerts.rds")
 
 ```
+
+```{r}
+outages <- read_csv("~/Downloads/Power_Outages_-_County_20250116.csv") |> mutate(dt_stamp = mdy_hms(dt_stamp))
+
+
+outages_nov_24 <- outages |> 
+
+```
+
 

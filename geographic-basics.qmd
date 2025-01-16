@@ -123,8 +123,6 @@ Let's dive back into zip codes and this time bring along data on notices of inte
 foreclosure_zip <- read_csv("data/Maryland_Notices_of_Intent_to_Foreclose_by_Zip_Code.csv") |> clean_names()
 foreclosure_zip_march_2023 <- foreclosure_zip |> 
   select(zip, march_2023)
-
-View(foreclosure_zip_march_2023)
 ```
 
 Now we can join the zip codes to the foreclosure data.

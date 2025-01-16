@@ -51,7 +51,6 @@ Fortunately, this is a solved problem with tidytext, which has a function called
 ```{r}
 unique_words <- alerts |> select(text) |>
   unnest_tokens(word, text)
-View(unique_words)
 ```
 
 Now we can look at the top words in this dataset. Let's limit ourselves to making a plot of the top 25 words:
@@ -200,8 +199,6 @@ bing_word_counts_2022 <- unique_words_2022 |>
   inner_join(bing) |>
   count(word, sentiment, sort = TRUE)
 
-View(bing_word_counts_2023)
-View(bing_word_counts_2022)
 ```
 
 Gauging the sentiment of a word can be heavily dependent on the context, and as with other types of text analysis sometimes larger patterns are more meaningful than individual results. But the potential with text analysis is vast: knowing what words and phrases that public officials employ can be a way to evaluate their actions and priorities. And those words and phrases are data.
