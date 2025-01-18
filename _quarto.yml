@@ -38,6 +38,7 @@ book:
     - textanalysis.qmd
     - rvest.qmd
     - basicstats.qmd
+    - ai_and_llms.qmd
     - writingwithdata.qmd
 
 format:
