@@ -1,4 +1,6 @@
-# Writing with numbers
+---
+title: "Writing with numbers"
+---
 
 The number one sin of all early career data journalist is to get really, really, really attached to the analysis you've done and include every number you find.
 

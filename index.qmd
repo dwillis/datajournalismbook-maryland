@@ -1,4 +1,6 @@
-# Introduction
+---
+title: "Introduction"
+---
 
 If you were at all paying attention in pre-college science classes, you have probably seen this equation:
 

@@ -1,4 +1,6 @@
-# Combining and joining
+---
+title: "Combining and joining"
+---
 
 Often, as data journalists, we're looking at data across time or at data stored in multiple tables. And to do that, we need to often need to merge that data together.
 

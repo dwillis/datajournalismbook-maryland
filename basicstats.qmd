@@ -1,4 +1,6 @@
-# Basic Stats: Linear Regression and The T-Test
+---
+title: "Basic Stats: Linear Regression and The T-Test"
+---
 
 Many stories that rely on data use basic descriptive statistics: journalists often are calculating rates, creating rankings and computing averages. That's often in service of finding patterns that could yield interesting stories, but there are useful ways to go beyond patterns and try to establish whether there is a relationship between two things and, if so, how strong that relationship is.
 

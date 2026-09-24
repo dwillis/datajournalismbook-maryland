@@ -1,4 +1,6 @@
-# Scraping data with Rvest
+---
+title: "Scraping data with Rvest"
+---
 
 Sometimes, governments put data online on a page or in a searchable database. And when you ask them for a copy of the data underneath the website, they say no.
 

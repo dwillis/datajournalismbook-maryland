@@ -1,4 +1,6 @@
-# Aggregates
+---
+title: "Aggregates"
+---
 
 ## Libraries
 

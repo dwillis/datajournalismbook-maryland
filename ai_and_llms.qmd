@@ -1,4 +1,6 @@
-# AI and Data Journalism
+---
+title: "AI and Data Journalism"
+---
 
 The first thing to know about the large language models that have attracted so much attention, money and coverage is this: they are not fact machines.
 
@@ -13,8 +15,7 @@ But they are - mostly - very useful for people who write code and for those tryi
 We'll be using a service called Groq for the examples here. You should [sign up for a free account](https://www.groq.com) and [create an API key](https://console.groq.com/docs/quickstart). Make sure you copy that key. We'll also need to install an R package to handle the responses:
 
 ```{r}
-#| warning: false
-#| output: false
+#| eval: false
 # install.packages("devtools")
 devtools::install_github("heurekalabsco/axolotr")
 ```

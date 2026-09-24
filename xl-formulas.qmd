@@ -1,4 +1,6 @@
-# Formulas in Google Sheets {#xl-formulas}
+---
+title: "Formulas in Google Sheets"
+---
 
 The quick review of math in Google Sheets uses the City of Phoenix's budgeted spending for the 2018 fiscal year, compared with previous years.
 

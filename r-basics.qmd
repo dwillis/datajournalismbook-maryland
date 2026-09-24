@@ -1,4 +1,6 @@
-# R Basics
+---
+title: "R Basics"
+---
 
 [R](https://www.r-project.org/about.html) is a programming language, one specifically geared toward data analysis.
 

@@ -22,8 +22,17 @@ jobs:
 
       - uses: quarto-dev/quarto-actions/setup@v2
 
-      # Pages are rendered from _freeze/, so no R installation is needed here.
-      # If a page's source changed without re-rendering locally, this step fails.
+      # Chapter code never runs here: results come from the committed _freeze/.
+      # R is only needed for code-link, which adds function-reference links.
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Install code-link packages
+        run: Rscript -e 'install.packages(c("rmarkdown", "downlit", "xml2"))'
+
+      # If a page's source changed without re-rendering locally, this step
+      # tries to execute it and fails for lack of packages, data or API keys.
       - name: Render site
         run: quarto render
 

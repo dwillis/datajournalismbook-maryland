@@ -1,4 +1,6 @@
-# Data Cleaning Part I: Data smells
+---
+title: "Data Cleaning Part I: Data smells"
+---
 
 Any time you are given a dataset from anyone, you should immediately be suspicious. Is this data what I think it is? Does it include what I expect? Is there anything I need to know about it? Will it produce the information I expect?
 

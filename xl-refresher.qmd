@@ -1,4 +1,6 @@
-# An Excel Refresher
+---
+title: "An Excel Refresher"
+---
 
 Spreadsheets are everywhere, so it's worth re-learning how to use them well. Reporters usually use spreadsheets in three ways:
 

@@ -1,4 +1,6 @@
-# Learn a new way to read {#start-story}
+---
+title: "Learn a new way to read"
+---
 
 Getting started in data journalism often feels as if you've left the newsroom and entered the land of statistics, computer programming and data science. This chapter will help you start seeing data reporting in a new way, by learning how to study great works of the craft as a writer rather than a reader.
 

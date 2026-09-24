@@ -1,4 +1,6 @@
-# Mutating data
+---
+title: "Mutating data"
+---
 
 Often the data you have will prompt questions that it doesn't immediately answer. Election results, for example, have raw vote totals but we often don't use those to make comparisons between candidates unless the numbers are small. We need percentages!
 

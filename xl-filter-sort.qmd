@@ -1,4 +1,6 @@
-# Sorting and filtering to find stories
+---
+title: "Sorting and filtering to find stories"
+---
 
 ## A sorting miracle
 

@@ -1,4 +1,6 @@
-# Visualizing your data for reporting
+---
+title: "Visualizing your data for reporting"
+---
 
 Visualizing data is becoming a much greater part of journalism. Large news organizations are creating graphics desks that create complex visuals with data to inform the public about important events.
 

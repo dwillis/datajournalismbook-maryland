@@ -1,4 +1,6 @@
-# Practice exercise {#xl-practice-noc}
+---
+title: "Practice exercise"
+---
 
 This exercise helps you understand the difference between filtering and grouping, or, in Excel terms, filtering and pivot tables. In general, you'll use filtering to look up the details of cases based on a criteria. These are the stories. You'll use pivot tables to create aggregated data -- count, sum, average, and the like.
 

@@ -1,4 +1,6 @@
-# Using GitHub
+---
+title: "Using GitHub"
+---
 
 GitHub is a platform for managing and storing files, data and code built atop Git, a popular open source version control software. GitHub accounts are free and it's [easy to get started](https://docs.github.com/en/get-started/quickstart). The one prerequisite is that you have [Git installed on your local computer](https://docs.github.com/en/get-started/quickstart/set-up-git). There are installers for Mac, Windows and Linux.
 

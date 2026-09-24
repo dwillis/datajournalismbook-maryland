@@ -1,4 +1,6 @@
-# An intro to text analysis
+---
+title: "An intro to text analysis"
+---
 
 Throughout this course, we've been focused on finding information in structured data. We've learned a lot of techniques to do that, and we've learned how the creative mixing and matching of those skills can find new insights.
 
