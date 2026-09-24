@@ -47,3 +47,18 @@ labs/labs_01/lab_01_video/*
 index.log
 
 /.quarto/
+
+# Quarto render output (the site is built by GitHub Actions; _freeze/ IS committed)
+/_site/
+/_book/
+/site_libs/
+/*.html
+/*_files/
+/*.rmarkdown
+
+# LaTeX leftovers from old PDF builds
+/*.aux
+/*.log
+/*.tex
+/*.toc
+/*.pdf
