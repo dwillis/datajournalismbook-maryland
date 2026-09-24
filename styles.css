@@ -34,3 +34,8 @@
 
 /* The home page has no title block, only the site-wide modified date */
 .home #title-block-header { display: none; }
+
+/* Footer: give the credit line room instead of an equal third (phones already stack) */
+@media (min-width: 576px) {
+  .nav-footer-left { flex: 3 1 0px; }
+}
