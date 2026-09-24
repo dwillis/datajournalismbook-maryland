@@ -3,6 +3,7 @@ project:
   # Only these pages are rendered; keep this list in sync with the sidebar below.
   render:
     - index.qmd
+    - introduction.qmd
     - start-story.qmd
     - start-math.qmd
     - start-data-def.qmd
@@ -54,10 +55,6 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - text: Labs
-        href: https://github.com/dwillis/datajournalismbook-maryland/tree/main/labs
-      - text: Pre-labs
-        href: https://github.com/dwillis/datajournalismbook-maryland/tree/main/pre_labs
     right:
       - icon: github
         href: https://github.com/dwillis/datajournalismbook-maryland
@@ -65,7 +62,9 @@ website:
   sidebar:
     style: docked
     contents:
-      - index.qmd
+      - text: Home
+        href: index.qmd
+      - introduction.qmd
       - section: "Getting started"
         contents:
           - start-story.qmd
@@ -118,6 +117,7 @@ website:
 format:
   html:
     theme: simplex
+    css: styles.css
     toc: true
     code-copy: true
     code-link: true
