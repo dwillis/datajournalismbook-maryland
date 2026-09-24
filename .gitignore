@@ -62,3 +62,5 @@ index.log
 /*.tex
 /*.toc
 /*.pdf
+
+**/*.quarto_ipynb
