@@ -226,7 +226,7 @@ library(tidyverse)
 library(sf)
 library(janitor)
 library(tidycensus)
-#census_api_key("549950d36c22ff16455fe196bbbd01d63cfbe6cf")
+#census_api_key("YOUR API KEY HERE")
 ```
 
 For the rest of this chapter, we're going to work on building a map that will help us gain insight into geographic patterns in foreclosure notices by county in Maryland. What geographic patterns can we identify?
