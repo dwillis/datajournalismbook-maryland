@@ -1,4 +1,6 @@
-# Data journalism in the age of replication
+---
+title: "Data journalism in the age of replication"
+---
 
 A single word in a single job ad for [Buzzfeed News](https://www.buzzfeednews.com/) posted in 2017 offered an indication of a profound shift in how data journalism is both practiced and taught.
 

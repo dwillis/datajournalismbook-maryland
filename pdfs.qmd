@@ -1,4 +1,6 @@
-# Cleaning Data Part IV: PDFs
+---
+title: "Cleaning Data Part IV: PDFs"
+---
 
 The next circle of Hell on the Dante's Inferno of Data Journalism is the PDF. Governments everywhere love the PDF and publish all kinds of records in a PDF. The problem is a PDF isn't a data format -- it's a middle finger, saying I've Got Your Accountability Right Here, Pal.
 

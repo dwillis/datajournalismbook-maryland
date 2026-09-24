@@ -1,4 +1,6 @@
-# Newsroom math {#start-math}
+---
+title: "Newsroom math"
+---
 
 > *Statistics are people with the tears washed off*
 >

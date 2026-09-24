@@ -1,4 +1,6 @@
-# Ethics in data journalism
+---
+title: "Ethics in data journalism"
+---
 
 [This originally appeared on Open News in March 2013](https://source.opennews.org/articles/public-info-doesnt-always-want-be-free/). 
 

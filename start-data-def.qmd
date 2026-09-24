@@ -1,4 +1,6 @@
-# Defining "Data" { #start-data-def}
+---
+title: "Defining \"Data\""
+---
 
 >data /ˈdeɪ.tə/ :
 >

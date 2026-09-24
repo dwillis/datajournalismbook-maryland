@@ -1,12 +1,7 @@
 project:
-  type: book
-
-book:
-  title: "Data Journalism with R and the Tidyverse"
-  subtitle: "Code, data and visuals for storytellers"
-  author: "Derek Willis and Sean Mussenden, based on earlier work by Matt Waite & Sarah Cohen"
-  date: "2025-01-16"
-  chapters:
+  type: website
+  # Only these pages are rendered; keep this list in sync with the sidebar below.
+  render:
     - index.qmd
     - start-story.qmd
     - start-math.qmd
@@ -40,14 +35,92 @@ book:
     - basicstats.qmd
     - ai_and_llms.qmd
     - writingwithdata.qmd
+  resources:
+    - pdfs/
+
+# Code runs only when you render locally and a page's source has changed.
+# Results are stored in _freeze/, which is committed so CI never executes R.
+execute:
+  freeze: auto
+
+website:
+  title: "Data Journalism with R and the Tidyverse"
+  description: "Code, data and visuals for storytellers"
+  repo-url: https://github.com/dwillis/datajournalismbook-maryland
+  repo-actions: [issue]
+  page-navigation: true
+  search: true
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - text: Labs
+        href: https://github.com/dwillis/datajournalismbook-maryland/tree/main/labs
+      - text: Pre-labs
+        href: https://github.com/dwillis/datajournalismbook-maryland/tree/main/pre_labs
+    right:
+      - icon: github
+        href: https://github.com/dwillis/datajournalismbook-maryland
+        aria-label: GitHub
+  sidebar:
+    style: docked
+    contents:
+      - index.qmd
+      - section: "Getting started"
+        contents:
+          - start-story.qmd
+          - start-math.qmd
+          - start-data-def.qmd
+      - section: "Spreadsheets"
+        contents:
+          - xl-intro.qmd
+          - xl-refresher.qmd
+          - xl-filter-sort.qmd
+          - xl-formulas.qmd
+          - xl-practice-noc.qmd
+      - section: "Reporting foundations"
+        contents:
+          - ethics.qmd
+          - publicrecords.qmd
+          - github.qmd
+      - section: "R fundamentals"
+        contents:
+          - r-basics.qmd
+          - replication.qmd
+          - aggregates.qmd
+          - filters.qmd
+          - workingwithdates.qmd
+          - mutating.qmd
+      - section: "Cleaning and combining data"
+        contents:
+          - data-cleaning-part-i.qmd
+          - data-cleaning-part-ii.qmd
+          - open-refine.qmd
+          - pdfs.qmd
+          - merging.qmd
+          - census.qmd
+      - section: "Visualization and maps"
+        contents:
+          - visualizing-for-reporting.qmd
+          - visualizing-for-publication.qmd
+          - geographic-basics.qmd
+          - geographicanalysis.qmd
+      - section: "Advanced topics"
+        contents:
+          - textanalysis.qmd
+          - rvest.qmd
+          - basicstats.qmd
+          - ai_and_llms.qmd
+          - writingwithdata.qmd
+  page-footer:
+    left: "Derek Willis and Sean Mussenden, based on earlier work by Matt Waite & Sarah Cohen"
 
 format:
   html:
     theme: simplex
-  pdf:
-    documentclass: scrreprt
-  epub:
-    cover-image: cover.png
+    toc: true
+    code-copy: true
+    code-link: true
+    date-modified: last-modified
 
 editor: visual
-

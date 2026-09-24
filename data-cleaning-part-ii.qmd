@@ -1,4 +1,6 @@
-# Data Cleaning Part II: Janitor
+---
+title: "Data Cleaning Part II: Janitor"
+---
 
 The necessary bane of every data journalist's existence is data cleaning.
 

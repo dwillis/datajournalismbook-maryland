@@ -1,4 +1,6 @@
-# Data Cleaning Part III: Open Refine
+---
+title: "Data Cleaning Part III: Open Refine"
+---
 
 Gather 'round kids and let me tell you a tale. Back in the previous century, Los Angeles Times journalists Sara Fritz and Dwight Morris wanted to answer this seemingly simple question: what do political campaigns spend their money on?
 

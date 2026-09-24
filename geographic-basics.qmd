@@ -1,4 +1,6 @@
-# Geographic data basics
+---
+title: "Geographic data basics"
+---
 
 Up to now, we've been looking at patterns in data for what is more than this, or what's the middle look like. We've calculated metrics like percentages, or looked at how data changes over time.
 

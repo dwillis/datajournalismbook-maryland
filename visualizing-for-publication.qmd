@@ -1,4 +1,6 @@
-# Visualizing your data for publication
+---
+title: "Visualizing your data for publication"
+---
 
 Doing data visualization well, and at professional level, takes time, skill and practice to perfect. Understanding it and doing it at a complex level is an entire class on it's own. It uses some of the same skills here -- grouping, filtering, calculating -- but then takes that data and turns it into data pictures.
 
